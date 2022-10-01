@@ -1,0 +1,88 @@
+@import "./color";
+@mixin objectFixed {
+  position: fixed;
+  z-index: 500;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+@mixin menuCenter($width, $height) {
+  display: flex;
+  width: $width;
+  height: $height;
+  margin: auto;
+}
+@mixin menuFixed {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  background-color: $sp-background-color-white;
+}
+@mixin fontText($size) {
+  font-size: $size;
+  font-style: normal;
+  line-height: 24px;
+  color: #242424;
+  font-weight: 500;
+}
+@mixin textOverflow($lineText) {
+  width: 100%;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $lineText;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+@mixin activeCategorySearch {
+  &:checked + label::before {
+    border: 2px solid #fff;
+    border-radius: 0.3em;
+    background: $sp-background-color-primary-2;
+    box-shadow: 2px 1px 0 #7eccff;
+  }
+}
+@mixin pagination() {
+  .pagination {
+    margin-top: 20px;
+    &___main {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      .prev {
+        border: 2px solid $sp-color-text-danger !important;
+        color: $sp-color-text-danger !important;
+      }
+      .next {
+        border: 2px solid $sp-color-text-danger !important;
+        color: $sp-color-text-danger !important;
+      }
+      .active {
+        border: 2px solid $sp-color-text-primary !important;
+      }
+      .item {
+        padding: 5px 12px;
+        color: $sp-color-text-primary;
+        margin-right: 2px;
+        border: 1px solid #ddd;
+        border-width: 2px;
+        border-color: transparent;
+        cursor: pointer;
+        &:hover {
+          border: 2px solid $sp-color-text-primary !important;
+        }
+        &:last-child {
+          margin-right: 0;
+        }
+      }
+    }
+  }
+}
+
+@mixin fontAwesomeCode($code) {
+  content: $code;
+  font-weight: 900;
+  font-family: "Font Awesome 6 Free";
+}

@@ -5,7 +5,10 @@ const Error404 = () => {
     <div className="bdError">
       <div className="image">
         <picture>
-          <img src="/image/Error404.svg" alt="404" />
+          <img
+            src="https://res.cloudinary.com/practicaldev/image/fetch/s--upMfnEaM--/c_imagga_scale,f_auto,fl_progressive,h_900,q_auto,w_1600/https://dev-to-uploads.s3.amazonaws.com/i/7aqcppklh6bexoa70320.jpg"
+            alt="404"
+          />
         </picture>
       </div>
       <h2>Oops! Page Not Found</h2>

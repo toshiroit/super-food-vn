@@ -1,0 +1,244 @@
+@keyframes slider {
+  10% {
+    transform: translateX(0px);
+  }
+  45% {
+    transform: translateX(-750px);
+  }
+  90% {
+    transform: translateX(-1500px);
+  }
+}
+@mixin sliderAnimation {
+  animation-name: slider;
+  animation-duration: 10s;
+  animation-iteration-count: infinite;
+}
+@keyframes animationSupportWeb {
+}
+@keyframes animationScrollShowCheckOut {
+  0% {
+    height: 0;
+  }
+  20% {
+    height: 80.2px;
+  }
+  40% {
+    height: 160.4px;
+  }
+  60% {
+    height: 240.4px;
+  }
+  80% {
+    height: 320.6px;
+  }
+  100% {
+    height: 401px;
+  }
+}
+.showFilterProductSearch {
+  animation: showFilterProductSearch 0.6s ease-in;
+}
+@keyframes showFilterProductSearch {
+  from {
+    left: -240px;
+  }
+  to {
+    left: 0;
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes menuSlideAdm {
+  from {
+    transform: translateX(0px);
+    width: 100% !important;
+    transition-timing-function: ease-in;
+  }
+  to {
+    transform: translateX(67px);
+    width: 0% !important;
+    transition-timing-function: ease-out;
+  }
+}
+
+@keyframes menuSlideOutAdm {
+  from {
+    transform: translateX(67px);
+
+    transition-timing-function: ease-in;
+  }
+  to {
+    transform: translateX(0px);
+    width: 0% !important;
+    transition-timing-function: ease-out;
+  }
+}
+@keyframes SliderProduct {
+  from {
+    transform: translateX(195px);
+    transition-timing-function: ease-in;
+  }
+  to {
+    transform: translateX(0px);
+    transition-timing-function: ease-out;
+  }
+}
+.slideInAdm {
+  width: 100% !important;
+  animation: menuSlideAdm 0.5s 1;
+  animation-fill-mode: forwards;
+}
+
+.slideOutAdm {
+  width: 0% !important;
+  animation: menuSlideOutAdm 0.5s 1;
+}
+@keyframes isActiveMrrTopAdm {
+  100% {
+    margin-top: -1px;
+  }
+  0% {
+    margin-top: 13px;
+  }
+}
+
+@keyframes showAddCategoryAdmin {
+  0% {
+    height: 0;
+  }
+  100% {
+    height: 100%;
+  }
+}
+@keyframes hideAddCategoryAdmin {
+  0% {
+    height: 100%;
+  }
+  100% {
+    height: 0;
+  }
+}
+@keyframes showFormConfirmPass {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+@keyframes showOpacity{
+  from {
+    opacity:0;
+    
+  }
+  to{
+    opacity:1;
+  }
+}
+@keyframes hideOpacity{
+  from {
+    opacity:1;
+    
+  }
+  to{
+    opacity:0;
+  }
+}
+.showFormOpacity {
+  //display:flex !important;
+  visibility:visible;
+  animation: showOpacity 0.3s ease-in;
+}
+.hideFormOpacity {
+  //display:none !important;
+  visibility:hidden;
+  animation: hideOpacity 0.3s forwards;
+}
+.isActiveMrrTopAdm {
+  visibility: visible !important;
+  animation-name: isActiveMrrTopAdm;
+  animation-fill-mode: both;
+  transform: translateY(-1px);
+  animation-duration: 0.3s;
+}
+
+.showAddCategoryAdmin {
+  visibility: visible !important;
+  animation-name: showAddCategoryAdmin;
+  animation-fill-mode: both;
+  transition: all 0.3s;
+  animation-duration: 0.3s;
+
+  max-height: 100% !important;
+}
+
+.sliderProductAnimation {
+  animation-name: SliderProduct;
+  transition: all 0.3s;
+  animation-duration: 0.3s;
+}
+.hideAddCategoryAdmin {
+  visibility: hidden !important;
+  animation-name: hideAddCategoryAdmin;
+  animation-fill-mode: both;
+  animation-duration: 0.3s;
+  // animation: showAddCategoryAdmin 0.3s;
+  max-height: 0 !important;
+}
+.hideAddBCategoryAdminFk {
+  visibility: hidden;
+  // transition: all 0.3s;
+  max-height: 0;
+}
+.SliderLeftProductShop {
+  transform: translateX(-195px);
+}
+@keyframes SliderLeftNotification  {
+    0% {
+      left:120%;
+      display:none;
+    }
+    100% {
+      left:0;
+      display:flex !important;
+    }
+}
+@keyframes SliderRightNotification  {
+    0% {
+      left:0%;
+      display:flex;
+    }
+    100% {
+      left:120%;
+      display:none;
+    }
+}
+@keyframes showBackgroundOpacity {
+  0%{
+  opacity:0; 
+  scale:0.2;
+ }
+ 100%{
+  scale:1;
+  opacity:1;
+ }
+}
+.showBackgroundOpacity {
+  animation:showBackgroundOpacity 0.3s;
+  animation-iteration-count:inherit;
+  animation-timing-function: ease-in;
+}
+@keyframes shine {
+  to {
+    background-position-x: -200%;
+  }
+}

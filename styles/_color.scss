@@ -1,0 +1,143 @@
+$theme-background-color-light: #ffff;
+$theme-background-color-dark: rgb(0, 0, 0);
+$sp-color-white-1: #ffff;
+$sp-color-white-2: #e2e5de;
+$sp-color-white-3: #f2f3f2;
+$sp-color-black-1: #0000;
+$sp-color-black-2: #0000;
+$sp-color-black-3: #0000;
+$sp-color-text-primary: #007bff;
+$sp-color-text-secondary: #6c757d;
+$sp-color-text-success: #28a745;
+$sp-color-text-danger: #dc3545;
+$sp-color-text-warning: #ffc107;
+$sp-color-text-info: #17a2b8;
+$sp-color-text-light: #f8f9fa;
+$sp-color-text-dark: #343a40;
+$sp-color-text-muted: #6c757d;
+$sp-color-text-white: #ffff;
+$sp-color-text-blue-1: #1a94ff;
+$sp-color-text-black: #000;
+$sp-color-text-orange-1: #ffbd24;
+$sp-color-text-price: #f9ae00;
+$sp-color-star-yellow: #f1b500;
+
+/* Background Color */
+
+$sp-background-color-gray-1: #333333;
+$sp-background-color-primary: rgb(0, 123, 255);
+$sp-background-color-primary-2: rgba(41, 143, 251, 1);
+$sp-background-color-secondary: rgb(255, 255, 255);
+$sp-background-color-success: rgb(40, 167, 69);
+$sp-background-color-danger: rgb(220, 53, 69);
+$sp-background-color-warning: rgb(255, 193, 7);
+$sp-background-color-info: rgb(23, 162, 184);
+$sp-background-color-light: rgb(248, 249, 250);
+$sp-background-color-dark: rgb(52, 58, 64);
+$sp-background-color-white: rgb(255, 255, 255);
+$sp-background-color-white-3: rgb(246, 246, 246);
+
+$sp-background-color-transparent-table: transparent;
+$sp-background-color-white-admin-2: rgb(243, 243, 249);
+$sp-color-text-dark-admin-2: #404040;
+
+:root {
+  --data-color-success-opt-01: rgba(40, 167, 69, 0.1);
+  --data-color-success-opt-02: rgba(40, 167, 69, 0.2);
+  --data-color-success-opt-03: rgba(40, 167, 69, 0.3);
+  --data-color-success-opt-04: rgba(40, 167, 69, 0.4);
+  --data-color-success-opt-05: rgba(40, 167, 69, 0.5);
+  --data-color-success-opt-06: rgba(40, 167, 69, 0.6);
+  --data-color-success-opt-07: rgba(40, 167, 69, 0.7);
+  --data-color-success-opt-08: rgba(40, 167, 69, 0.8);
+  --data-color-success-opt-09: rgba(40, 167, 69, 0.9);
+  --data-color-success-opt-1: rgba(40, 167, 69, 1);
+  ////
+  --data-color-warring-opt-1: rgba(255, 193, 7, 1);
+  --data-color-warring-opt-01: rgba(255, 193, 7, 0.1);
+  --data-color-warring-opt-02: rgba(255, 193, 7, 0.2);
+  --data-color-warring-opt-03: rgba(255, 193, 7, 0.3);
+  --data-color-warring-opt-04: rgba(255, 193, 7, 0.4);
+  --data-color-warring-opt-05: rgba(255, 193, 7, 0.5);
+  --data-color-warring-opt-06: rgba(255, 193, 7, 0.6);
+  --data-color-warring-opt-07: rgba(255, 193, 7, 0.7);
+  --data-color-warring-opt-08: rgba(255, 193, 7, 0.8);
+  --data-color-warring-opt-09: rgba(255, 193, 7, 0.9);
+  ////
+  --data-color-danger-opt-01: rgba(220, 53, 69, 0.1);
+  --data-color-danger-opt-02: rgba(220, 53, 69, 0.2);
+  --data-color-danger-opt-03: rgba(220, 53, 69, 0.3);
+  --data-color-danger-opt-04: rgba(220, 53, 69, 0.4);
+  --data-color-danger-opt-05: rgba(220, 53, 69, 0.5);
+  --data-color-danger-opt-06: rgba(220, 53, 69, 0.6);
+  --data-color-danger-opt-07: rgba(220, 53, 69, 0.7);
+  --data-color-danger-opt-08: rgba(220, 53, 69, 0.8);
+  --data-color-danger-opt-09: rgba(220, 53, 69, 0.9);
+  --data-color-danger-opt-1: rgba(220, 53, 69, 1);
+  /////////
+  --data-color-primary-opt-01: rgba(0, 123, 255, 0.1);
+  --data-color-primary-opt-02: rgba(0, 123, 255, 0.2);
+  --data-color-primary-opt-03: rgba(0, 123, 255, 0.3);
+  --data-color-primary-opt-04: rgba(0, 123, 255, 0.4);
+  --data-color-primary-opt-05: rgba(0, 123, 255, 0.5);
+  --data-color-primary-opt-06: rgba(0, 123, 255, 0.6);
+  --data-color-primary-opt-07: rgba(0, 123, 255, 0.7);
+  --data-color-primary-opt-08: rgba(0, 123, 255, 0.8);
+  --data-color-primary-opt-09: rgba(0, 123, 255, 0.9);
+  --data-color-primary-opt-1: rgba(0, 123, 255, 1);
+  ////////
+  --data-color-pink-opt-01: rgba(246, 114, 167, 0.1);
+  --data-color-pink-opt-02: rgba(246, 114, 167, 0.2);
+  --data-color-pink-opt-03: rgba(246, 114, 167, 0.3);
+  --data-color-pink-opt-04: rgba(246, 114, 167, 0.4);
+  --data-color-pink-opt-05: rgba(246, 114, 167, 0.5);
+  --data-color-pink-opt-06: rgba(246, 114, 167, 0.6);
+  --data-color-pink-opt-07: rgba(246, 114, 167, 0.7);
+  --data-color-pink-opt-08: rgba(246, 114, 167, 0.8);
+  --data-color-pink-opt-09: rgba(246, 114, 167, 0.9);
+  --data-color-pink-opt-1: rgba(246, 114, 167, 1);
+  /////
+  --data-color-indigo-opt-01: rgba(75, 0, 130, 0.1);
+  --data-color-indigo-opt-02: rgba(75, 0, 130, 0.2);
+  --data-color-indigo-opt-03: rgba(75, 0, 130, 0.3);
+  --data-color-indigo-opt-04: rgba(75, 0, 130, 0.4);
+  --data-color-indigo-opt-05: rgba(75, 0, 130, 0.5);
+  --data-color-indigo-opt-06: rgba(75, 0, 130, 0.6);
+  --data-color-indigo-opt-07: rgba(75, 0, 130, 0.7);
+  --data-color-indigo-opt-08: rgba(75, 0, 130, 0.8);
+  --data-color-indigo-opt-09: rgba(75, 0, 130, 0.9);
+  --data-color-indigo-opt-1: rgba(75, 0, 130, 1);
+  /////
+  --data-color-orange-opt-01: rgba(241, 150, 59, 0.1);
+  --data-color-orange-opt-02: rgba(241, 150, 59, 0.2);
+  --data-color-orange-opt-03: rgba(241, 150, 59, 0.3);
+  --data-color-orange-opt-04: rgba(241, 150, 59, 0.4);
+  --data-color-orange-opt-05: rgba(241, 150, 59, 0.5);
+  --data-color-orange-opt-06: rgba(241, 150, 59, 0.6);
+  --data-color-orange-opt-07: rgba(241, 150, 59, 0.7);
+  --data-color-orange-opt-08: rgba(241, 150, 59, 0.8);
+  --data-color-orange-opt-09: rgba(241, 150, 59, 0.9);
+  --data-color-orange-opt-1: rgba(241, 150, 59, 1);
+  //*Admin
+  --data-color-background-white-opt-01: rgba(255, 255, 255, 0.1);
+  --data-color-background-white-opt-02: rgba(255, 255, 255, 0.2);
+  --data-color-background-white-opt-03: rgba(255, 255, 255, 0.3);
+  --data-color-background-white-opt-04: rgba(255, 255, 255, 0.4);
+  --data-color-background-white-opt-05: rgba(255, 255, 255, 0.5);
+  --data-color-background-white-opt-06: rgba(255, 255, 255, 0.6);
+  --data-color-background-white-opt-07: rgba(255, 255, 255, 0.7);
+  --data-color-background-white-opt-08: rgba(255, 255, 255, 0.8);
+  --data-color-background-white-opt-09: rgba(255, 255, 255, 0.9);
+  --data-color-background-white-opt-1: rgba(255, 255, 255, 1);
+  //*
+  --data-color-background-primary-opt-01: rgba(0, 123, 255, 0.1);
+  --data-color-background-primary-opt-02: rgba(0, 123, 255, 0.2);
+  --data-color-background-primary-opt-03: rgba(0, 123, 255, 0.3);
+  --data-color-background-primary-opt-04: rgba(0, 123, 255, 0.4);
+  --data-color-background-primary-opt-05: rgba(0, 123, 255, 0.5);
+  --data-color-background-primary-opt-06: rgba(0, 123, 255, 0.6);
+  --data-color-background-primary-opt-07: rgba(0, 123, 255, 0.7);
+  --data-color-background-primary-opt-08: rgba(0, 123, 255, 0.8);
+  --data-color-background-primary-opt-09: rgba(0, 123, 255, 0.9);
+  --data-color-background-primary-opt-01: rgba(0, 123, 255, 1);
+}

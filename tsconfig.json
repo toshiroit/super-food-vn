@@ -7,7 +7,9 @@
       "@/types/*": ["src/types/*"],
       "@/config/*": ["src/config/*"],
       "@/lib/*": ["src/lib/*"],
-      "@/constants/*": ["src/constants/*"]
+      "@/constants/*": ["src/constants/*"],
+      "@/interfaces/*": ["src/interfaces/*"],
+      "@/redux/*": ["src/redux/*"]
     },
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],

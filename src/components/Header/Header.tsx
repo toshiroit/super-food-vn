@@ -67,7 +67,7 @@ const Header = () => {
         <div className="container">
           <div className="bottombar">
             <div className="bottombar__left">
-              <Link href={""}>
+              <Link href={"/"}>
                 {/** 
 <a>
                     <div className="logo">

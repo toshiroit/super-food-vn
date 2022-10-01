@@ -1,7 +1,7 @@
 import { clientRoutes } from "@/constants/router/client/client";
 import { formatPriceVND } from "@/lib/formatPrice";
 import { slug } from "@/lib/slug";
-import { ProductItem, ProductItemProps } from "@/types/product/product";
+import { ProductItemProps } from "@/types/product/product";
 import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";

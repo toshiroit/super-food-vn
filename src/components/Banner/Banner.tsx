@@ -17,7 +17,10 @@ const Banner = () => {
                   type="text"
                   placeholder="Tìm đồ ăn vặt buối tối - trà sữa - đồ ăn đêm ngay bây giờ nào "
                 />
-                <ul className="wrapper__search___listSearch">
+                <ul
+                  style={{ display: "none" }}
+                  className="wrapper__search___listSearch"
+                >
                   <h4>Kết quả tìm kiếm </h4>
                   <li className="itemSearch">
                     <i className="fa-regular fa-hand-point-right" />
