@@ -1,716 +1,203 @@
 import { useState } from "react";
 import Breadcrumb from "../Breadcrumb/Breadcrumb";
+import CommentItem from "./Comment/CommentItem";
 
 const ProductDetailComment = () => {
   const [dataProductDetail] = useState(null);
+  const [isActive] = useState<any>();
+  const onSortComment = (name: string) => {};
   return (
     <>
-      {/* <NotificationRoot data={dataNotification} /> */}
-      <div className="detail">
-        <div className="container">
-          <div className="detail__content breadcrumb">
-            <div className="detail__content___breadcrumb breadcrumb__content">
-              <Breadcrumb />
-            </div>
-            <div
-              className={`detail__content___product ${
-                dataProductDetail ? "" : "productDetailLoading"
-              }`}
-            >
-              {/* {<ProductDetailRoot />} */}
-            </div>
-            <div className="detail__content___wop">
-              {/* <ProductDetailContent /> */}
-            </div>
-            <div className="detail__content___comment">
-              <div className="title">
-                <h4>
-                  <i className="fa-solid fa-comments fa-size" /> Đánh giá từ
-                  khách hàng
-                </h4>
-              </div>
-              <div className="evaluate">
-                {/* <ProductDetailComment
-                  codeProduct={
-                    dataProductDetail &&
-                    dataProductDetail[0] &&
-                    dataProductDetail[0].codeProduct
-                  }
-                /> */}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="productAbout">
-        <div className="container">
-          <div className="productAbout__opw">
+      <div className="evaluate__point">
+        <div className="evaluate__point___user evaluate__point___top">
+          <div className="left">
             <div className="title">
-              <h4>Thức ăn đi kèm</h4>
+              <h4>4.9</h4>
+              <div className="w">
+                <div className="star">
+                  <i className="fa-solid fa-star fa-size" />
+                  <i className="fa-solid fa-star fa-size" />
+                  <i className="fa-solid fa-star fa-size" />
+                  <i className="fa-solid fa-star fa-size" />
+                  <i className="fa-solid fa-star fa-size" />
+                </div>
+                <span>1041+ nhận xét </span>
+              </div>
             </div>
+            <ul className="point">
+              <li className="point__item">
+                <div className="star">
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                </div>
+                <div className="wp">
+                  <div className="wp__after" />
+                </div>
+                <div className="text">
+                  <span>914.914+</span>
+                </div>
+              </li>
+              <li className="point__item">
+                <div className="star">
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                </div>
+                <div className="wp" />
+                <div className="text">
+                  <span>12.000+</span>
+                </div>
+              </li>
+              <li className="point__item">
+                <div className="star">
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                </div>
+                <div className="wp" />
+                <div className="text">
+                  <span>912</span>
+                </div>
+              </li>
+              <li className="point__item">
+                <div className="star">
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                </div>
+                <div className="wp" />
+                <div className="text">
+                  <span>120</span>
+                </div>
+              </li>
+              <li className="point__item">
+                <div className="star">
+                  <i className="fa-size fa-solid fa-star" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                  <i className="fa-size fa-solid fa-star not-active" />
+                </div>
+                <div className="wp" />
+                <div className="text">
+                  <span>40</span>
+                </div>
+              </li>
+            </ul>
           </div>
-          <div className="productAbout__product">
-            <div className="productAbout__product___overScroll">
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <picture>
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </picture>
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <img
-                    src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <img
-                    src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <img
-                    src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <img
-                    src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <img
-                    src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <img
-                    src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
-              <li className="product__wp___item">
-                <div className="point">
-                  <span>9.4</span>
-                </div>
-                <div className="image">
-                  <img
-                    src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                    alt=""
-                  />
-                </div>
-                <div className="name">
-                  <p>Set cơm việt buổi trưa</p>
-                </div>
-                <div className="price">
-                  <span className="t1 text">300.000đ</span>
-                  <span className="t2 text">120.000đ</span>
-                </div>
-                <div className="sellable">
-                  <h4>Đã bán :</h4>
-                  <b>465K</b>
-                </div>
-                <div className="description">
-                  <div className="lw">
-                    <img
-                      src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                      alt=""
-                    />
-                  </div>
-                  <div className="addressLength">
-                    <i className="fa-size fa-solid fa-location-dot" />
-                    <h4>4.2km</h4>
-                  </div>
-                </div>
-                <div className="btn">
-                  <button type="button">
-                    <i className="fa-solid fa-basket-shopping fa-size" />
-                    Chọn mua
-                  </button>
-                </div>
-              </li>
+          <div className="right">
+            <div className="title">
+              <h4>Tất cả hình ảnh (6)</h4>
+            </div>
+            <ul className="image">
+              {/* <li
+                          onClick={() =>
+                            onShowBackgroundFixed(
+                              item_w.link,
+                              item_w.code,
+                              "image"
+                            )
+                          }
+                          className="image__item"
+                        >
+                          <picture>
+                            <img src={item_w.link} alt="" />
+                          </picture>
+                        </li> */}
+            </ul>
+            <div className="sort">
+              <h3 className="w">Lọc theo :</h3>
+              <ul className="sort__main">
+                <li
+                  onClick={() => onSortComment("sortaz")}
+                  className={`sort__main___item ${
+                    isActive === "sortaz" ? "active" : ""
+                  }`}
+                >
+                  Đánh giá thấp đến cao
+                </li>
+                <li
+                  onClick={() => onSortComment("sortza")}
+                  className={`sort__main___item ${
+                    isActive === "sortza" ? "active" : ""
+                  }`}
+                >
+                  Đánh giá cao đến thấp
+                </li>
+                <li
+                  onClick={() => onSortComment("sort5s")}
+                  className={`sort__main___item ${
+                    isActive === "sort5s" ? "active" : ""
+                  }`}
+                >
+                  5 <i className="fa-solid fa-star fa-size" />
+                </li>
+                <li
+                  onClick={() => onSortComment("sort4s")}
+                  className={`sort__main___item ${
+                    isActive === "sort4s" ? "active" : ""
+                  }`}
+                >
+                  4 <i className="fa-solid fa-star fa-size" />
+                </li>
+                <li
+                  onClick={() => onSortComment("sort3s")}
+                  className={`sort__main___item ${
+                    isActive === "sort3s" ? "active" : ""
+                  }`}
+                >
+                  3 <i className="fa-solid fa-star fa-size" />
+                </li>
+                <li
+                  onClick={() => onSortComment("sort2s")}
+                  className={`sort__main___item ${
+                    isActive === "sort2s" ? "active" : ""
+                  }`}
+                >
+                  2 <i className="fa-solid fa-star fa-size" />
+                </li>
+                <li
+                  onClick={() => onSortComment("sort1s")}
+                  className={`sort__main___item ${
+                    isActive === "sort1s" ? "active" : ""
+                  }`}
+                >
+                  1 <i className="fa-solid fa-star fa-size" />
+                </li>
+              </ul>
             </div>
           </div>
         </div>
-        <div className="productAbout">
-          <div className="container">
-            <div className="productAbout__opw">
-              <div className="title">
-                <h4>Có thể bạn yêu thích</h4>
-              </div>
-            </div>
-            <div className="productAbout__product">
-              <div className="productAbout__product___overScroll">
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <img
-                        src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                        alt=""
-                      />
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <img
-                        src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                        alt=""
-                      />
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <img
-                        src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                        alt=""
-                      />
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <img
-                        src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                        alt=""
-                      />
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <img
-                        src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                        alt=""
-                      />
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <img
-                        src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                        alt=""
-                      />
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <img
-                        src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                        alt=""
-                      />
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-                <li className="product__wp___item">
-                  <div className="point">
-                    <span>9.4</span>
-                  </div>
-                  <div className="image">
-                    <img
-                      src="https://image.cooky.vn/posproduct/g0/17280/s400x400/5048d46e-2b7e-430d-a750-6c99929f76cd.jpeg"
-                      alt=""
-                    />
-                  </div>
-                  <div className="name">
-                    <p>Set cơm việt buổi trưa</p>
-                  </div>
-                  <div className="price">
-                    <span className="t1 text">300.000đ</span>
-                    <span className="t2 text">120.000đ</span>
-                  </div>
-                  <div className="sellable">
-                    <h4>Đã bán :</h4>
-                    <b>465K</b>
-                  </div>
-                  <div className="description">
-                    <div className="lw">
-                      <picture>
-                        <img
-                          src="https://afamilycdn.com/150157425591193600/2021/10/5/frame-11-16334083966771950318703.png"
-                          alt=""
-                        />
-                      </picture>
-                    </div>
-                    <div className="addressLength">
-                      <i className="fa-size fa-solid fa-location-dot" />
-                      <h4>4.2km</h4>
-                    </div>
-                  </div>
-                  <div className="btn">
-                    <button type="button">
-                      <i className="fa-solid fa-basket-shopping fa-size" />
-                      Chọn mua
-                    </button>
-                  </div>
-                </li>
-              </div>
-            </div>
-          </div>
-        </div>
+        {/* Item Comment */}
+
+        <>{/* <CommentItem /> */}</>
+        <div />
+      </div>
+      <div className="evaluate__pagination">
+        <ul className="evaluate__pagination___main">
+          <li className="item prev">
+            <i className="fa-solid fa-angle-left" />
+          </li>
+          <li className="item active">1</li>
+          <li className="item">1</li>
+          <li className="item">1</li>
+          <li className="item">...</li>
+          <li className="item">1</li>
+          <li className="item">1</li>
+          <li className="item">1</li>
+          <li className="item next">
+            <i className="fa-solid fa-angle-right" />
+          </li>
+        </ul>
       </div>
     </>
   );

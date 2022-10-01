@@ -1,4 +1,8 @@
+import { NextPage } from "next";
+
 export type UserChildren = {
-  menuUser: React.ReactNode;
-  contentUser: React.ReactNode;
+  contentUser?: React.ReactNode;
+};
+export type UserHomeChildren = {
+  children: React.ReactNode;
 };

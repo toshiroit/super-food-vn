@@ -17,7 +17,7 @@ const UserSlider = () => {
               </li>
             </a>
           </Link>
-          <Link href={clientRoutes.USER_INFO}>
+          <Link href={clientRoutes.USER_SHOP}>
             <a>
               <li className="content__main___wp____item">
                 <i className="fa-solid fa-shop fa-size" />
@@ -25,7 +25,7 @@ const UserSlider = () => {
               </li>
             </a>
           </Link>
-          <Link href={clientRoutes.USER_INFO}>
+          <Link href={clientRoutes.USER_BALANCE}>
             <a>
               <li className="content__main___wp____item">
                 <i className="fa-solid fa-money-bill fa-size" />
@@ -38,7 +38,7 @@ const UserSlider = () => {
           <div className="nameFx">
             <span>Giao dịch </span>
           </div>
-          <Link href={clientRoutes.USER_INFO}>
+          <Link href={clientRoutes.USER_ORDER}>
             <a>
               <li className="content__main___wp____item">
                 <i className="fa-solid fa-truck-fast fa-size" />
@@ -60,7 +60,7 @@ const UserSlider = () => {
           <div className="nameFx">
             <span>Địa chỉ và thanh toán </span>
           </div>
-          <Link href={clientRoutes.USER_INFO}>
+          <Link href={clientRoutes.USER_ADDRESS}>
             <li className="content__main___wp____item">
               <i className="fa-solid fa-location-dot fa-size" />
               <span>Địa chỉ thanh toán </span>
@@ -92,7 +92,7 @@ const UserSlider = () => {
           <div className="nameFx">
             <span>Thông báo </span>
           </div>
-          <Link href={clientRoutes.USER_INFO}>
+          <Link href={clientRoutes.USER_NOTIFY}>
             <a>
               <li className="content__main___wp____item">
                 <i className="fa-solid fa-envelope-open-text fa-size" />

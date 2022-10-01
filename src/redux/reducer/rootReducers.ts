@@ -1,3 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
-
-export default combineReducers({});
+import displaySlice from "../features/display/display-slice";
+export default combineReducers({
+  displaySlice,
+});

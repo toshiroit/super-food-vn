@@ -1,13 +1,35 @@
 import { LayoutPropsArr } from "@/interfaces/layout";
 import { UserChildrenProps } from "@/interfaces/user";
+import useWindowSize from "@/lib/windowSize";
 import { NextPage } from "next";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import UserSlider from "./UserSlider/UserSlider";
 
 const User: NextPage<UserChildrenProps> = ({
   UserChildrenProps,
 }: UserChildrenProps) => {
-  const [isActive] = useState(1);
-  const [sizeWindow] = useState(400);
+  const [isActive, setIsActive] = useState<boolean>(false);
+  const sizeWindow = useWindowSize().width;
+  useEffect(() => {
+    if (sizeWindow) {
+      if (sizeWindow < 654) {
+        if (document.getElementById("userMenuLeftIdx")) {
+          const data = document.getElementById("userMenuLeftIdx");
+          if (data) {
+            data.style.width = "100%";
+          }
+        }
+        if (document.getElementById("userMenuRightIdx")) {
+          const data = document.getElementById("userMenuRightIdx");
+          if (data) {
+            data.style.width = "100%";
+          }
+        }
+      } else {
+        console.log("VO");
+      }
+    }
+  }, [isActive, sizeWindow]);
   return (
     <div className="user">
       <div className="container">
@@ -19,10 +41,21 @@ const User: NextPage<UserChildrenProps> = ({
               <li className="main__item">Thông tin</li>
             </ul>
           </div>
-          {sizeWindow > 654 ? (
+          <div className="user__content___flex">
+            <div className="user__content___flex____left">
+              <UserSlider />
+            </div>
+            <div
+              id="userMenuRightIdx"
+              className="user__content___flex____right"
+            >
+              {UserChildrenProps.contentUser}
+            </div>
+          </div>
+          {/* {sizeWindow > 654 ? (
             <div className="user__content___flex">
               <div className="user__content___flex____left">
-                {UserChildrenProps.menuUser}
+                <UserSlider />
               </div>
               <div
                 id="userMenuRightIdx"
@@ -33,13 +66,13 @@ const User: NextPage<UserChildrenProps> = ({
             </div>
           ) : (
             <>
-              {isActive === 0 ? (
+              {isActive ? (
                 <div className="user__content___flex">
                   <div
                     id="userMenuLeftIdx"
                     className="user__content___flex____left"
                   >
-                    {UserChildrenProps.menuUser}
+                    <UserSlider />
                   </div>
                 </div>
               ) : (
@@ -53,7 +86,7 @@ const User: NextPage<UserChildrenProps> = ({
                 </div>
               )}
             </>
-          )}
+          )} */}
         </div>
       </div>
     </div>

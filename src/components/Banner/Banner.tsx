@@ -1,4 +1,12 @@
+import { useRouter } from "next/router";
+import { EventHandler, FormEvent } from "react";
+
 const Banner = () => {
+  const router = useRouter();
+  const onSearchProduct = (e: FormEvent<EventTarget>) => {
+    e.preventDefault();
+    router.push("/search?q=12124");
+  };
   return (
     <div className="banner">
       <div className="banner__inner">
@@ -7,7 +15,7 @@ const Banner = () => {
             <h4>TÌM VÀ ĐẶT MÓN</h4>
             <h4>TÍCH ĐIỂM GIẢM GIÁ</h4>
           </div>
-          <form>
+          <form onSubmit={onSearchProduct}>
             <div className="wrapper">
               <div className="wrapper__search">
                 <span className="iconSearch">

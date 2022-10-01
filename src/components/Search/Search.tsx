@@ -2,7 +2,7 @@ import { useState } from "react";
 import ProductList from "../Product/ProductList";
 
 const Search = () => {
-  const [loadingSearch] = useState(null);
+  const [loadingSearch] = useState(true);
   return (
     <div className="search">
       <div className="container">

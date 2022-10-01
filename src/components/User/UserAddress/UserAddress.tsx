@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { useState } from "react";
+import UserAddressItem from "./UserAddressItem";
 
 const UserAddress = () => {
   const [userAddressArr] = useState([
@@ -21,6 +22,7 @@ const UserAddress = () => {
       </div>
       <div className="content__address">
         <ul className="content__address___main">
+          <UserAddressItem />
           {/* {userAddressArr &&
             userAddressArr.address.map((item: any) => {
               return (
