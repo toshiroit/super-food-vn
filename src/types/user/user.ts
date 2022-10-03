@@ -6,3 +6,10 @@ export type UserChildren = {
 export type UserHomeChildren = {
   children: React.ReactNode;
 };
+
+export type UserLoginPassword = {
+  phone: number | string;
+  email?: string;
+  password: string;
+  passwordConfirmation: string;
+};

@@ -1,11 +1,51 @@
-import { LoginFormError } from "@/types/login/login";
-import { useState } from "react";
+import { REGEX_NAME } from "@/constants/validation/regex";
+import { authLogin } from "@/redux/features/auth/auth-thunks";
+import { onDisplayLogin } from "@/redux/features/display/display-slice";
+import { selectLoginPhone } from "@/redux/features/login/login-selects";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { LoginConfirmation, LoginFormError } from "@/types/login/login";
+import { Formik, FormikHelpers, FormikProps, useFormik } from "formik";
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { Resolver, SubmitHandler, useForm } from "react-hook-form";
+import { validationRegister } from "src/schemas/userSchema";
 
 const LoginConfirmation = () => {
-  const [formError, setFormError] = useState<LoginFormError>();
-  const hideFromLogin = () => {};
-  const onConfirmRegister = () => {};
-  const onChangeUser = () => {};
+  const router = useRouter();
+  const dispatch = useAppDispatch();
+  const phoneConfirmation = useAppSelector(selectLoginPhone);
+
+  const [dataFormConfirmation, setDataFormConfirmation] =
+    useState<LoginConfirmation>({
+      fullName: "",
+      username: "",
+      phone: phoneConfirmation,
+      passwordConfirmation: "",
+      password: "",
+      role: "USER",
+    });
+
+  const hideFromLogin = () => {
+    dispatch(onDisplayLogin({ isShowFixed: false }));
+  };
+  const formik = useFormik({
+    initialValues: dataFormConfirmation,
+    validationSchema: validationRegister,
+    onSubmit(values) {},
+  });
+
+  const onRegister = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    console.log(formik.values);
+    console.log(formik.errors);
+    if (formik.isValid) {
+      dispatch(authLogin(formik.values));
+      // router.push("/user");
+      // dispatch(
+      //   onDisplayLogin({ isShowFixed: false, isShowConfirmation: false })
+      // );
+    }
+  };
   return (
     <div className="fixedLogin" style={{}}>
       <div className="fixedLogin__inner">
@@ -26,17 +66,17 @@ const LoginConfirmation = () => {
           <p>Điền các thông tin đầy đủ để sử dụng hệ thống</p>
         </div>
         <div className="inputLogin">
-          <form onSubmit={onConfirmRegister} className="regUser" action="">
+          <form onSubmit={onRegister} className="regUser">
             <div className="regUser__item">
               <label htmlFor="user">Tên của bạn </label>
               <input
-                onChange={onChangeUser}
-                className={formError?.fullName ? "error" : ""}
                 type="text"
+                onChange={formik.handleChange}
+                value={formik.values.fullName}
                 name="fullName"
                 id=""
               />
-              {formError?.fullName ? (
+              {formik.errors.fullName ? (
                 <p
                   className="error"
                   style={{
@@ -45,7 +85,7 @@ const LoginConfirmation = () => {
                     color: "#f70e0e",
                   }}
                 >
-                  {formError.fullName}
+                  {formik.errors.fullName}
                 </p>
               ) : (
                 ""
@@ -54,13 +94,14 @@ const LoginConfirmation = () => {
             <div className="regUser__item">
               <label htmlFor="user">Tên đăng nhập </label>
               <input
-                onChange={onChangeUser}
-                className={formError?.username ? "error" : ""}
+                // className={formError?.username ? "error" : ""}
                 type="text"
-                name="userName"
+                value={formik.values.username}
+                onChange={formik.handleChange}
+                name="username"
                 id=""
               />
-              {formError?.username ? (
+              {formik.errors.username ? (
                 <p
                   className="error"
                   style={{
@@ -69,7 +110,7 @@ const LoginConfirmation = () => {
                     color: "#f70e0e",
                   }}
                 >
-                  {formError?.username}{" "}
+                  {formik.errors.username}
                 </p>
               ) : (
                 ""
@@ -78,13 +119,14 @@ const LoginConfirmation = () => {
             <div className="regUser__item">
               <label htmlFor="user">Mật khẩu </label>
               <input
-                onChange={onChangeUser}
-                className={formError?.password ? "error" : ""}
+                onChange={formik.handleChange}
+                value={formik.values.password}
+                // className={formError?.password ? "error" : ""}
                 type="password"
-                name="passWord1"
+                name="password"
                 id=""
               />
-              {formError?.password ? (
+              {formik.errors.password ? (
                 <p
                   className="error"
                   style={{
@@ -93,7 +135,7 @@ const LoginConfirmation = () => {
                     color: "#f70e0e",
                   }}
                 >
-                  {formError?.password}
+                  {formik.errors.password}
                 </p>
               ) : (
                 ""
@@ -102,13 +144,14 @@ const LoginConfirmation = () => {
             <div className="regUser__item">
               <label htmlFor="user">Xác nhận mật khẩu </label>
               <input
-                onChange={onChangeUser}
-                className={formError?.passwordConfirmation ? "error" : ""}
+                value={formik.values.passwordConfirmation}
+                // className={formError?.passwordConfirmation ? "error" : ""}
+                onChange={formik.handleChange}
                 type="password"
-                name="passWord"
+                name="passwordConfirmation"
                 id=""
               />
-              {formError?.passwordConfirmation ? (
+              {formik.errors.passwordConfirmation ? (
                 <p
                   className="error"
                   style={{
@@ -117,7 +160,7 @@ const LoginConfirmation = () => {
                     color: "#f70e0e",
                   }}
                 >
-                  {formError.passwordConfirmation}{" "}
+                  {formik.errors.passwordConfirmation}
                 </p>
               ) : (
                 ""
@@ -127,9 +170,7 @@ const LoginConfirmation = () => {
               <button type="reset" className="sendCode">
                 Đặt lại
               </button>
-              <a href="">
-                <button type="submit">XÁC NHẬN</button>
-              </a>
+              <button type="submit">XÁC NHẬN</button>
             </div>
           </form>
         </div>

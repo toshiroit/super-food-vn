@@ -1,19 +1,55 @@
-import { useState } from "react";
+import { authLogin } from "@/redux/features/auth/auth-thunks";
+import { onDisplayLogin } from "@/redux/features/display/display-slice";
+import { selectLoginFullData } from "@/redux/features/login/login-selects";
+import { addPassword } from "@/redux/features/login/login-slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 const LoginPassword = () => {
-  const [dataPassword, setDataPassword] = useState({
-    password: "",
-    passwordConfirmation: "",
+  const [errorPassword, setErrorPassword] = useState({
+    isActive: false,
+    message: "",
   });
-  const onSubmitLogin = () => {};
+  const dataLogin = useAppSelector(selectLoginFullData);
+  const dispatch = useAppDispatch();
+  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
+    dispatch(
+      addPassword({
+        ...dataLogin,
+        [e.target.name]: e.target.value,
+      })
+    );
+  };
+  const onSubmitLogin = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (dataLogin) {
+      if (dataLogin.password !== dataLogin.passwordConfirmation) {
+        setErrorPassword({
+          isActive: true,
+          message: "Mật khẩu không trùng nhau ",
+        });
+      } else if (
+        dataLogin.password.length > 100 ||
+        dataLogin.passwordConfirmation.length > 100
+      ) {
+        setErrorPassword({
+          isActive: true,
+          message: "Mật khẩu quá dài  ",
+        });
+      }
+      dispatch(authLogin);
+    }
+  };
+  const onHideLogin = () => {
+    dispatch(onDisplayLogin({ isShowFixed: false }));
+  };
   return (
     <>
       <div className="fixedLogin" style={{}}>
         <div className="fixedLogin__inner">
-          <div className="close">
+          <div onClick={onHideLogin} className="close">
             <i className="fa-solid fa-xmark fa-size" />
           </div>
-
           <div className="logo">
             <picture>
               <img
@@ -31,30 +67,42 @@ const LoginPassword = () => {
               <div className="regUser__item">
                 <label htmlFor="user"> Mật khẩu của bạn </label>
                 <input
-                  onChange={(e) =>
-                    setDataPassword({
-                      ...dataPassword,
-                      password: e.target.value,
-                    })
-                  }
+                  onChange={onChangePassword}
+                  className={errorPassword.isActive ? "error" : ""}
                   type="password"
                   name="password"
                   id=""
                 />
+                <p
+                  className="error"
+                  style={{
+                    marginTop: "5px",
+                    fontSize: "0.9rem",
+                    color: "#f70e0e",
+                  }}
+                >
+                  {errorPassword.message}
+                </p>
               </div>
               <div className="regUser__item">
                 <label htmlFor="user"> Nhập lại mật khẩu </label>
                 <input
-                  onChange={(e) =>
-                    setDataPassword({
-                      ...dataPassword,
-                      passwordConfirmation: e.target.value,
-                    })
-                  }
+                  onChange={onChangePassword}
                   type="password"
+                  className={errorPassword.isActive ? "error" : ""}
                   name="passwordConfirmation"
                   id=""
                 />
+                <p
+                  className="error"
+                  style={{
+                    marginTop: "5px",
+                    fontSize: "0.9rem",
+                    color: "#f70e0e",
+                  }}
+                >
+                  {errorPassword.message}
+                </p>
               </div>
               <div className="btnLogin">
                 <a href="">

@@ -1,6 +1,8 @@
 import { checkPhone } from "@/lib/checkPhone";
 import { selectDisplayShowLogin } from "@/redux/features/display/display-selects";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
+import { selectLoginPhone } from "@/redux/features/login/login-selects";
+import { addPhone } from "@/redux/features/login/login-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import {
   ChangeEvent,
@@ -10,7 +12,10 @@ import {
 } from "react";
 
 const LoginPhone = () => {
-  const [phoneLogin, setPhoneLogin] = useState<string>();
+  const phoneConfirmation = useAppSelector(selectLoginPhone);
+  const [phoneLogin, setPhoneLogin] = useState<string>(
+    phoneConfirmation && phoneConfirmation
+  );
   const [loadingSendCode] = useState(true);
   const [isLogin, setIsLogin] = useState({
     isPhone: true,
@@ -22,15 +27,29 @@ const LoginPhone = () => {
     setPhoneLogin(e.target.value);
   };
   const hideFromLogin = () => {
-    dispatch(onDisplayLogin({ isShow: false }));
+    dispatch(onDisplayLogin({ isShowFixed: false }));
   };
   const onRegPhone = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(phoneLogin);
     if (checkPhone(phoneLogin as string, "VIE")) {
+      setIsLogin({
+        ...isLogin,
+        isPhone: true,
+        errorPhone: true,
+        message: "",
+      });
+      dispatch(
+        onDisplayLogin({
+          isShowFixed: true,
+          isShowPhone: false,
+          isShowCode: true,
+        })
+      );
+      dispatch(addPhone({ phone: phoneLogin }));
     } else {
       setIsLogin({
         ...isLogin,
+        isPhone: false,
         errorPhone: false,
         message: "Số điện không đúng định dạng ",
       });
@@ -70,7 +89,7 @@ const LoginPhone = () => {
                 <input
                   type="number"
                   onChange={onChangePhone}
-                  defaultValue={phoneLogin && phoneLogin}
+                  value={phoneLogin}
                   className={isLogin.isPhone ? "" : "errorPhone"}
                   placeholder="Nhập số điện thoại của bạn "
                   name="phone"

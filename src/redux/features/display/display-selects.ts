@@ -1,4 +1,5 @@
 import { RootState } from "@/types/redux/redux";
-export const selectDisplayIsShow = (state: RootState) => state.displaySlice;
+export const selectDisplayIsShowLogin = (state: RootState) =>
+  state.displaySlice.displayLogin;
 export const selectDisplayShowLogin = (state: RootState) =>
-  state.displaySlice.displayLogin.isShow;
+  state.displaySlice.displayLogin.isShowPhone;

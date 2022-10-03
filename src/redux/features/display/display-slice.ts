@@ -2,7 +2,11 @@ import { DisplayState, ShowDisplayLogin } from "@/types/display/display";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: DisplayState | null = {
   displayLogin: {
-    isShow: false,
+    isShowFixed: false,
+    isShowPhone: false,
+    isShowCode: false,
+    isShowConfirmation: false,
+    isShowPassword: false,
   },
 };
 const displaySlice = createSlice({
@@ -10,7 +14,14 @@ const displaySlice = createSlice({
   initialState,
   reducers: {
     onDisplayLogin: (state, action: PayloadAction<ShowDisplayLogin>) => {
-      state.displayLogin.isShow = action.payload.isShow;
+      state.displayLogin.isShowFixed = action.payload.isShowFixed || false;
+      state.displayLogin.isShowPhone = action.payload.isShowPhone || false;
+      state.displayLogin.isShowCode = action.payload.isShowCode || false;
+      state.displayLogin.isShowConfirmation =
+        action.payload.isShowConfirmation || false;
+      action.payload.isShowConfirmation;
+      state.displayLogin.isShowPassword =
+        action.payload.isShowPassword || false;
       return state;
     },
   },

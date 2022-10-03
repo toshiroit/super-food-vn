@@ -1,5 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-
+import { authLogin } from "@/redux/features/auth/auth-thunks";
+import { createAction, createSlice } from "@reduxjs/toolkit";
+const incrementBy = createAction("incrementBy");
 const authSlice = createSlice({
   name: "authSlice",
   initialState: {
@@ -9,6 +10,9 @@ const authSlice = createSlice({
     loginUserPhone: (state, action) => {
       state.name = "124";
     },
+  },
+
+  extraReducers: {
   },
 });
 

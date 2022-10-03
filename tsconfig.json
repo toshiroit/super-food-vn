@@ -9,7 +9,8 @@
       "@/lib/*": ["src/lib/*"],
       "@/constants/*": ["src/constants/*"],
       "@/interfaces/*": ["src/interfaces/*"],
-      "@/redux/*": ["src/redux/*"]
+      "@/redux/*": ["src/redux/*"],
+      "@/services/*": ["src/services/*"]
     },
     "target": "es6",
     "lib": ["dom", "dom.iterable", "esnext"],

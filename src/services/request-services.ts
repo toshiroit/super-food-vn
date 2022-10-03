@@ -23,7 +23,7 @@ const setHeader = (
   return axios.defaults.headers.common;
   //   return axios.defaults.headers;
 };
-const createRequest = ({
+const createRequest: any = ({
   method,
   url,
   body,

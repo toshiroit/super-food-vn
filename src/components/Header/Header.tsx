@@ -1,27 +1,31 @@
-import { selectDisplayShowLogin } from "@/redux/features/display/display-selects";
+import {
+  selectDisplayIsShowLogin,
+  selectDisplayShowLogin,
+} from "@/redux/features/display/display-selects";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
 import { useState } from "react";
+import Login from "../Login/Login";
 import LoginPhone from "../Login/LoginPhone";
 
 const Header = () => {
   const [user, setUser] = useState(false);
-  const isShowFormLogin = useAppSelector(selectDisplayShowLogin);
+  const isDisplayLogin = useAppSelector(selectDisplayIsShowLogin);
   const dispatch = useAppDispatch();
   const onFormLogin = () => {
-    dispatch(onDisplayLogin({ isShow: !isShowFormLogin }));
+    dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
   };
   return (
     <>
       <div
         className={
-          isShowFormLogin
+          isDisplayLogin.isShowFixed
             ? "fixedLogin showFormOpacity"
             : "fixedLogin hideFormOpacity"
         }
       >
-        <LoginPhone />
+        <Login />
       </div>
       <div className="navbar">
         <div className="navbar__top">

@@ -1,8 +1,16 @@
 export type ShowDisplayLogin = {
-  isShow: boolean;
+  isShowFixed?: boolean;
+  isShowPhone?: boolean;
+  isShowCode?: boolean;
+  isShowConfirmation?: boolean;
+  isShowPassword?: boolean;
 };
 export type DisplayState = {
   displayLogin: {
-    isShow: boolean;
+    isShowFixed?: boolean;
+    isShowPhone: boolean;
+    isShowCode: boolean;
+    isShowConfirmation: boolean;
+    isShowPassword: boolean;
   };
 };

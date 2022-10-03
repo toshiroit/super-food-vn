@@ -1,34 +1,58 @@
+import { onDisplayLogin } from "@/redux/features/display/display-slice";
+import { selectLoginPhone } from "@/redux/features/login/login-selects";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import {
   ErrorLoginCode,
   IsCheckCodeLogin,
   LoginCodeValue,
 } from "@/types/login/login";
-import { useState } from "react";
+import { useFormik } from "formik";
+import { FormEvent, useState } from "react";
+import { validationCodeSchema } from "src/schemas/userSchema";
 
 const LoginCode = () => {
   const [code, setCode] = useState<LoginCodeValue>({
-    code1: undefined,
-    code2: undefined,
-    code3: undefined,
-    code4: undefined,
-    code5: undefined,
-    code6: undefined,
+    code1: "",
+    code2: "",
+    code3: "",
+    code4: "",
+    code5: "",
+    code6: "",
   });
   const [errorCode, setErrorCode] = useState<ErrorLoginCode>({
-    isCode: true,
+    isCode: false,
     message: null,
   });
   const [isCheckCode, setIsCheckCode] = useState<IsCheckCodeLogin>({
     isCheckCodeSubmit: false,
     message: null,
   });
+  const formik = useFormik({
+    initialValues: code,
+    validationSchema: validationCodeSchema,
+    onSubmit: (value) => {
+      if (formik.isValid) {
+        dispatch(
+          onDisplayLogin({ isShowFixed: true, isShowConfirmation: true })
+        );
+      }
+    },
+  });
+  const phoneLoginRdx = useAppSelector(selectLoginPhone);
+  const dispatch = useAppDispatch();
   const onGetCode = () => {};
-  const hideFromLogin = () => {};
-  const onCheckCode = () => {};
+  const hideFromLogin = () => {
+    dispatch(onDisplayLogin({ isShowFixed: false }));
+  };
+
+  const onCheckCode = (e: FormEvent<HTMLFormElement>) => {};
+  const onPrevLogin = () => {
+    dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
+  };
   return (
     <div className="fixedLogin">
       <div className="fixedLogin__inner">
-        <div className="prev">
+        <div onClick={onPrevLogin} className="prev">
           <i className="fa-size fa-solid fa-angle-left" />
         </div>
         <div onClick={hideFromLogin} className="close">
@@ -46,22 +70,24 @@ const LoginCode = () => {
           <h4>Xác nhận số điện thoại</h4>
           <p>Xem mã được gửi qua số điện thoại của bạn có 6 chữ số</p>
         </div>
-        <form onSubmit={onCheckCode} method="POST">
+        <form onSubmit={formik.handleSubmit} method="POST">
           <div className="inputCode">
             <ul className="inputLogin__code" style={{ overflowX: "scroll" }}>
               <li className="inputLogin__code___item">
                 <input
-                  onChange={onGetCode}
-                  value={code.code1}
+                  value={formik.values.code1}
+                  onChange={formik.handleChange}
                   type="text"
                   name="code1"
+                  maxLength={1}
                   className="codew1"
                 />
               </li>
               <li className="inputLogin__code___item">
                 <input
-                  onChange={onGetCode}
-                  value={code.code2}
+                  value={formik.values.code2}
+                  maxLength={1}
+                  onChange={formik.handleChange}
                   type="text"
                   name="code2"
                   className="codew1"
@@ -69,42 +95,46 @@ const LoginCode = () => {
               </li>
               <li className="inputLogin__code___item">
                 <input
-                  onChange={onGetCode}
-                  value={code.code3}
+                  value={formik.values.code3}
+                  onChange={formik.handleChange}
                   type="text"
+                  maxLength={1}
                   name="code3"
                   className="codew1"
                 />
               </li>
               <li className="inputLogin__code___item">
                 <input
-                  onChange={onGetCode}
-                  value={code.code4}
+                  value={formik.values.code4}
+                  onChange={formik.handleChange}
                   type="text"
                   name="code4"
+                  maxLength={1}
                   className="codew1"
                 />
               </li>
               <li className="inputLogin__code___item">
                 <input
-                  onChange={onGetCode}
-                  value={code.code5}
+                  value={formik.values.code5}
+                  onChange={formik.handleChange}
                   type="text"
                   name="code5"
+                  maxLength={1}
                   className="codew1"
                 />
               </li>
               <li className="inputLogin__code___item">
                 <input
-                  onChange={onGetCode}
-                  value={code.code6}
+                  value={formik.values.code6}
+                  onChange={formik.handleChange}
                   type="text"
                   name="code6"
+                  maxLength={1}
                   className="codew1"
                 />
               </li>
             </ul>
-            {errorCode.isCode ? (
+            {formik.isValid ? (
               ""
             ) : (
               <div
@@ -115,44 +145,22 @@ const LoginCode = () => {
                   color: "#f70e0e",
                 }}
               >
-                <p>{errorCode.message} </p>
+                <p>{"Không được để trống "} </p>
               </div>
             )}{" "}
-            {isCheckCode.isCheckCodeSubmit ? (
-              ""
-            ) : (
-              <div
-                className="error"
-                style={{
-                  textAlign: "center",
-                  fontSize: "0.9rem",
-                  color: "#f70e0e",
-                }}
-              >
-                <p>Mã xác nhận hết hạn hoặc không tổn tại </p>
-              </div>
-            )}
-            {/* <div className="btnLogin">
-              <p style={{ fontSize: "0.9rem" }}>
-                {!isNaN(Number(second))
-                  ? `Mã chỉ tồn tại trong ${second}`
-                  : second}
-              </p>
-              <button
+            <div className="btnLogin">
+              {/* <button
                 style={{ marginTop: "5px" }}
                 href="#"
                 onClick={onRestSendCode}
                 className="sendCode"
               >
                 {loadingSendCode ? "Đang gửi" : " Gửi lại mã xác nhận"}
-              </button>
+              </button> */}
               <a href="">
                 <button type="submit">XÁC NHẬN</button>
               </a>
-            </div> */}
-            <a href="">
-              <button type="submit">XÁC NHẬN</button>
-            </a>
+            </div>
           </div>
         </form>
       </div>
