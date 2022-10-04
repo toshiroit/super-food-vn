@@ -21,3 +21,13 @@ export const validationCodeSchema = Yup.object({
   code5: Yup.string().required("Error").max(1),
   code6: Yup.string().required("Error").max(1),
 });
+export const validationLogin = Yup.object().shape({
+  phone: Yup.string().required("Số điện thoại không tồn tại "),
+  password: Yup.string()
+    .required("Mật khẩu không được để trống ")
+    .min(6, "Mật khẩu tối thiểu phải 6 kí tự "),
+  passwordConfirmation: Yup.string()
+    .required("Mật khẩu không được để trống")
+    .min(6, "Mật khẩu tối thiểu phải 6 kí tự ")
+    .oneOf([Yup.ref("password")], "Mật khẩu không giống nhau"),
+});

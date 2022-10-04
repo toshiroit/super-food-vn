@@ -1,3 +1,9 @@
+import {
+  selectAuthData,
+  selectAuthLoading,
+} from "@/redux/features/auth/auth-selects";
+import { restartAuth } from "@/redux/features/auth/auth-slice";
+import { authCheckPhone } from "@/redux/features/auth/auth-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectLoginPhone } from "@/redux/features/login/login-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
@@ -7,7 +13,7 @@ import {
   LoginCodeValue,
 } from "@/types/login/login";
 import { useFormik } from "formik";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { validationCodeSchema } from "src/schemas/userSchema";
 
 const LoginCode = () => {
@@ -19,22 +25,35 @@ const LoginCode = () => {
     code5: "",
     code6: "",
   });
-  const [errorCode, setErrorCode] = useState<ErrorLoginCode>({
-    isCode: false,
-    message: null,
-  });
+  const loadingCheckPhone = useAppSelector(selectAuthLoading);
+  const dataCheckPhone = useAppSelector(selectAuthData);
+  const phoneLogin = useAppSelector(selectLoginPhone);
   const [isCheckCode, setIsCheckCode] = useState<IsCheckCodeLogin>({
     isCheckCodeSubmit: false,
     message: null,
   });
+  useEffect(() => {
+    if (dataCheckPhone) {
+      if (!loadingCheckPhone && dataCheckPhone?.data === 0) {
+        dispatch(
+          onDisplayLogin({ isShowFixed: true, isShowConfirmation: true })
+        );
+        dispatch(restartAuth());
+      } else {
+        dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
+        dispatch(restartAuth());
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadingCheckPhone, dataCheckPhone]);
   const formik = useFormik({
     initialValues: code,
     validationSchema: validationCodeSchema,
     onSubmit: (value) => {
       if (formik.isValid) {
-        dispatch(
-          onDisplayLogin({ isShowFixed: true, isShowConfirmation: true })
-        );
+        dispatch(authCheckPhone({ phone: phoneLogin }));
+        dispatch(restartAuth());
+        // onDisplayLogin({ isShowFixed: true, isShowConfirmation: true })
       }
     },
   });
@@ -43,6 +62,7 @@ const LoginCode = () => {
   const onGetCode = () => {};
   const hideFromLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: false }));
+    dispatch(restartAuth());
   };
 
   const onCheckCode = (e: FormEvent<HTMLFormElement>) => {};
@@ -51,6 +71,7 @@ const LoginCode = () => {
   };
   return (
     <div className="fixedLogin">
+      <></>
       <div className="fixedLogin__inner">
         <div onClick={onPrevLogin} className="prev">
           <i className="fa-size fa-solid fa-angle-left" />
@@ -158,7 +179,28 @@ const LoginCode = () => {
                 {loadingSendCode ? "Đang gửi" : " Gửi lại mã xác nhận"}
               </button> */}
               <a href="">
-                <button type="submit">XÁC NHẬN</button>
+                <button type="submit">
+                  {loadingCheckPhone ? (
+                    <div className="loadingio-spinner-spinner-bbeydwj1ls">
+                      <div className="ldio-m09wsst1j2">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  ) : (
+                    "XÁC NHẬN"
+                  )}
+                </button>
               </a>
             </div>
           </div>

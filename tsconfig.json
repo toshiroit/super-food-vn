@@ -10,6 +10,7 @@
       "@/constants/*": ["src/constants/*"],
       "@/interfaces/*": ["src/interfaces/*"],
       "@/redux/*": ["src/redux/*"],
+      "@/schema/*": ["src/schemas/*"],
       "@/services/*": ["src/services/*"]
     },
     "target": "es6",

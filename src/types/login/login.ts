@@ -45,3 +45,8 @@ export type LoginPayloadAction = {
   password?: string;
   passwordConfirmation?: string;
 };
+export type LoginPhone = {
+  phone: string;
+  password: string;
+  passwordConfirmation: string;
+};

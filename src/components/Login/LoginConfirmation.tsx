@@ -36,8 +36,6 @@ const LoginConfirmation = () => {
 
   const onRegister = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(formik.values);
-    console.log(formik.errors);
     if (formik.isValid) {
       dispatch(authLogin(formik.values));
       // router.push("/user");

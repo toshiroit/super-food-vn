@@ -1,50 +1,64 @@
-import { authLogin } from "@/redux/features/auth/auth-thunks";
+import {
+  selectAuthData,
+  selectAuthError,
+  selectAuthLoading,
+} from "@/redux/features/auth/auth-selects";
+import { authLoginPhone } from "@/redux/features/auth/auth-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
-import { selectLoginFullData } from "@/redux/features/login/login-selects";
+import {
+  selectLoginFullData,
+  selectLoginPhone,
+} from "@/redux/features/login/login-selects";
 import { addPassword } from "@/redux/features/login/login-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { validationLogin } from "@/schema/userSchema";
+import { LoginPhone } from "@/types/login/login";
+import { UserLoginPassword } from "@/types/user/user";
+import { useFormik } from "formik";
+import { useRouter } from "next/router";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const LoginPassword = () => {
+  const phoneConfirmation = useAppSelector(selectLoginPhone);
+  const loadingAuth = useAppSelector(selectAuthLoading);
+  const authDataLogin = useAppSelector(selectAuthData);
+  const errorAuthLogin = useAppSelector(selectAuthError);
+  const router = useRouter();
   const [errorPassword, setErrorPassword] = useState({
     isActive: false,
     message: "",
   });
-  const dataLogin = useAppSelector(selectLoginFullData);
+  const [dataLogin, setDataLogin] = useState<LoginPhone>({
+    phone: phoneConfirmation,
+    password: "",
+    passwordConfirmation: "",
+  });
+  useEffect(() => {
+    if (!loadingAuth && authDataLogin) {
+      dispatch(onDisplayLogin({ isShowFixed: false }));
+      router.push("/");
+    }
+  }, [loadingAuth, authDataLogin]);
   const dispatch = useAppDispatch();
-  const onChangePassword = (e: ChangeEvent<HTMLInputElement>) => {
-    dispatch(
-      addPassword({
-        ...dataLogin,
-        [e.target.name]: e.target.value,
-      })
-    );
-  };
+  const formik = useFormik({
+    initialValues: dataLogin,
+    validationSchema: validationLogin,
+    onSubmit(values, formikHelpers) {
+      if (!authDataLogin) {
+        dispatch(authLoginPhone(values));
+      }
+    },
+  });
   const onSubmitLogin = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (dataLogin) {
-      if (dataLogin.password !== dataLogin.passwordConfirmation) {
-        setErrorPassword({
-          isActive: true,
-          message: "Mật khẩu không trùng nhau ",
-        });
-      } else if (
-        dataLogin.password.length > 100 ||
-        dataLogin.passwordConfirmation.length > 100
-      ) {
-        setErrorPassword({
-          isActive: true,
-          message: "Mật khẩu quá dài  ",
-        });
-      }
-      dispatch(authLogin);
-    }
   };
   const onHideLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: false }));
   };
   return (
     <>
+      {console.log("authDataLogin : ", errorAuthLogin)}
+
       <div className="fixedLogin" style={{}}>
         <div className="fixedLogin__inner">
           <div onClick={onHideLogin} className="close">
@@ -63,11 +77,12 @@ const LoginPassword = () => {
             <p>Vui lòng nhập mật khẩu của bạn </p>
           </div>
           <div className="inputLogin">
-            <form onSubmit={onSubmitLogin} className="regUser" action="">
+            <form onSubmit={formik.handleSubmit} className="regUser" action="">
               <div className="regUser__item">
                 <label htmlFor="user"> Mật khẩu của bạn </label>
                 <input
-                  onChange={onChangePassword}
+                  onChange={formik.handleChange}
+                  value={formik.values.password}
                   className={errorPassword.isActive ? "error" : ""}
                   type="password"
                   name="password"
@@ -81,14 +96,15 @@ const LoginPassword = () => {
                     color: "#f70e0e",
                   }}
                 >
-                  {errorPassword.message}
+                  {formik.errors.password}
                 </p>
               </div>
               <div className="regUser__item">
                 <label htmlFor="user"> Nhập lại mật khẩu </label>
                 <input
-                  onChange={onChangePassword}
+                  onChange={formik.handleChange}
                   type="password"
+                  value={formik.values.passwordConfirmation}
                   className={errorPassword.isActive ? "error" : ""}
                   name="passwordConfirmation"
                   id=""
@@ -101,13 +117,55 @@ const LoginPassword = () => {
                     color: "#f70e0e",
                   }}
                 >
-                  {errorPassword.message}
+                  {formik.errors.passwordConfirmation}
                 </p>
               </div>
+              <p
+                className="error"
+                style={{
+                  marginTop: "5px",
+                  fontSize: "0.9rem",
+                  color: "#f70e0e",
+                }}
+              >
+                {formik.errors.phone}
+              </p>
               <div className="btnLogin">
-                <a href="">
-                  <button type="submit">XÁC NHẬN</button>
-                </a>
+                <p
+                  className="error"
+                  style={{
+                    marginTop: "5px",
+                    fontSize: "0.9rem",
+                    color: "#f70e0e",
+                  }}
+                >
+                  {errorAuthLogin &&
+                    errorAuthLogin.response &&
+                    errorAuthLogin.response.data?.message}
+                  {/* {formik.errors.phone} */}
+                </p>
+                <button type="submit">
+                  {loadingAuth ? (
+                    <div className="loadingio-spinner-spinner-bbeydwj1ls">
+                      <div className="ldio-m09wsst1j2">
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                        <div></div>
+                      </div>
+                    </div>
+                  ) : (
+                    "XÁC NHẬN"
+                  )}
+                </button>
               </div>
             </form>
           </div>

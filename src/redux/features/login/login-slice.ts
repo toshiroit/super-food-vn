@@ -2,7 +2,7 @@ import { LoginPayloadAction, LoginState } from "@/types/login/login";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: LoginState = {
   fullName: "",
-  userName: "",
+  username: "",
   phone: "",
   email: "",
   password: "",

@@ -13,3 +13,13 @@ export type UserLoginPassword = {
   password: string;
   passwordConfirmation: string;
 };
+
+export type AuthUserState = {
+  loading: boolean;
+  data: any | null;
+  error: any | null;
+  checkPhone: boolean;
+};
+export type AuthCheckPhone = {
+  phone: string;
+};
