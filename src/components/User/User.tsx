@@ -2,14 +2,16 @@ import { LayoutPropsArr } from "@/interfaces/layout";
 import { UserChildrenProps } from "@/interfaces/user";
 import useWindowSize from "@/lib/windowSize";
 import { NextPage } from "next";
+import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import UserSlider from "./UserSlider/UserSlider";
 
-const User: NextPage<UserChildrenProps> = ({
-  UserChildrenProps,
-}: UserChildrenProps) => {
+const User = ({ UserChildrenProps }: UserChildrenProps) => {
   const [isActive, setIsActive] = useState<boolean>(false);
+  const { data, isLogged } = useAuthContext();
   const sizeWindow = useWindowSize().width;
+  const router = useRouter();
   useEffect(() => {
     if (sizeWindow) {
       if (sizeWindow < 654) {
@@ -26,7 +28,6 @@ const User: NextPage<UserChildrenProps> = ({
           }
         }
       } else {
-        console.log("VO");
       }
     }
   }, [isActive, sizeWindow]);
@@ -92,4 +93,5 @@ const User: NextPage<UserChildrenProps> = ({
     </div>
   );
 };
+
 export default User;

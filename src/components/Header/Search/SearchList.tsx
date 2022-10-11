@@ -1,5 +1,5 @@
+import { searchListProps } from "@/types/search/search";
 import React, { Ref, useRef, useState } from "react";
-import { searchListProps } from "@types/search/search";
 
 const SearchList = ({ nameSearch, refInputSearch }: searchListProps) => {
   const refSearch = useRef<HTMLDivElement>(null);

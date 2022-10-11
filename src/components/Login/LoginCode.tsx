@@ -1,9 +1,14 @@
 import {
   selectAuthData,
+  selectAuthDataCheckPhone,
   selectAuthLoading,
+  selectAuthVerifyCode,
 } from "@/redux/features/auth/auth-selects";
 import { restartAuth } from "@/redux/features/auth/auth-slice";
-import { authCheckPhone } from "@/redux/features/auth/auth-thunks";
+import {
+  authCheckPhone,
+  authVerifyCode,
+} from "@/redux/features/auth/auth-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectLoginPhone } from "@/redux/features/login/login-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
@@ -17,6 +22,7 @@ import { FormEvent, useEffect, useState } from "react";
 import { validationCodeSchema } from "src/schemas/userSchema";
 
 const LoginCode = () => {
+  const dispatch = useAppDispatch();
   const [code, setCode] = useState<LoginCodeValue>({
     code1: "",
     code2: "",
@@ -26,52 +32,42 @@ const LoginCode = () => {
     code6: "",
   });
   const loadingCheckPhone = useAppSelector(selectAuthLoading);
-  const dataCheckPhone = useAppSelector(selectAuthData);
+  const dataVerifyCode = useAppSelector(selectAuthVerifyCode);
+  const dataCheckPhone = useAppSelector(selectAuthDataCheckPhone);
   const phoneLogin = useAppSelector(selectLoginPhone);
-  const [isCheckCode, setIsCheckCode] = useState<IsCheckCodeLogin>({
-    isCheckCodeSubmit: false,
-    message: null,
-  });
-  useEffect(() => {
-    if (dataCheckPhone) {
-      if (!loadingCheckPhone && dataCheckPhone?.data === 0) {
-        dispatch(
-          onDisplayLogin({ isShowFixed: true, isShowConfirmation: true })
-        );
-        dispatch(restartAuth());
-      } else {
-        dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
-        dispatch(restartAuth());
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadingCheckPhone, dataCheckPhone]);
   const formik = useFormik({
     initialValues: code,
     validationSchema: validationCodeSchema,
     onSubmit: (value) => {
       if (formik.isValid) {
         dispatch(authCheckPhone({ phone: phoneLogin }));
-        dispatch(restartAuth());
-        // onDisplayLogin({ isShowFixed: true, isShowConfirmation: true })
+        dispatch(authVerifyCode({ code: "666666" }));
       }
     },
   });
-  const phoneLoginRdx = useAppSelector(selectLoginPhone);
-  const dispatch = useAppDispatch();
-  const onGetCode = () => {};
+
   const hideFromLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: false }));
     dispatch(restartAuth());
   };
-
-  const onCheckCode = (e: FormEvent<HTMLFormElement>) => {};
   const onPrevLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
+    dispatch(restartAuth());
   };
+  useEffect(() => {
+    if (dataCheckPhone) {
+      if (dataCheckPhone.data === 0) {
+        dispatch(
+          onDisplayLogin({ isShowConfirmation: true, isShowFixed: true })
+        );
+      } else if (dataCheckPhone.data === 1) {
+        dispatch(onDisplayLogin({ isShowPassword: true, isShowFixed: true }));
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataCheckPhone]);
   return (
     <div className="fixedLogin">
-      <></>
       <div className="fixedLogin__inner">
         <div onClick={onPrevLogin} className="prev">
           <i className="fa-size fa-solid fa-angle-left" />

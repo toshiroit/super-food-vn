@@ -1,7 +1,6 @@
 import Banner from "@/components/Banner/Banner";
 import BannerGift from "@/components/Banner/BannerGift";
 import ProductList from "@/components/Product/ProductList";
-import authSlice from "@/redux/features/auth/authSlice";
 import type { NextPage } from "next";
 import Head from "next/head";
 import Image from "next/image";
@@ -236,5 +235,4 @@ const Home: NextPage = () => {
     </div>
   );
 };
-
 export default Home;

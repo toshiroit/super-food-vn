@@ -19,6 +19,8 @@ export type AuthUserState = {
   data: any | null;
   error: any | null;
   checkPhone: boolean;
+  dataCheckPhone?: any;
+  verifyCode?: any;
 };
 export type AuthCheckPhone = {
   phone: string;

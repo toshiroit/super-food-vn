@@ -16,9 +16,7 @@ const SearchPage: NextPage = ({ data }: any) => {
 };
 export const getServerSideProps = async () => {
   return {
-    props: {
-      data: "124",
-    },
+    props: {},
   };
 };
 export default SearchPage;

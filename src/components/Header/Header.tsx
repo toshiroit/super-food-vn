@@ -1,3 +1,6 @@
+import { clientRoutes } from "@/constants/router/client/client";
+import { selectAuthError } from "@/redux/features/auth/auth-selects";
+import { authLogout } from "@/redux/features/auth/auth-thunks";
 import {
   selectDisplayIsShowLogin,
   selectDisplayShowLogin,
@@ -6,15 +9,21 @@ import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
 import { useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import Login from "../Login/Login";
 import LoginPhone from "../Login/LoginPhone";
 
 const Header = () => {
-  const [user, setUser] = useState(false);
-  const isDisplayLogin = useAppSelector(selectDisplayIsShowLogin);
+  const { data, isLogged, toggleLogged } = useAuthContext();
+  const authError = useAppSelector(selectAuthError);
   const dispatch = useAppDispatch();
+  const isDisplayLogin = useAppSelector(selectDisplayIsShowLogin);
   const onFormLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
+  };
+  const onLogout = () => {
+    dispatch(authLogout());
+    toggleLogged(false);
   };
   return (
     <>
@@ -166,15 +175,21 @@ const Header = () => {
                     </a>
                   </Link>
                   <div className="text user">
-                    {user ? (
+                    {isLogged ? (
                       <div className="owp-w1 login-active">
                         <i className="fa-size fa-solid fa-user" />
-                        <div className="inner">
-                          <span className="name">Đâu Văn Nam </span>
-                          <div className="woi">
-                            <li className="woi__item">Số dư : 0</li>
-                          </div>
-                        </div>
+                        <Link href={clientRoutes.USER_INFO}>
+                          <a>
+                            <div className="inner">
+                              <span className="name">
+                                {data?.data?.payload?.phone}{" "}
+                              </span>
+                              <div className="woi">
+                                <li className="woi__item">Số dư : 0</li>
+                              </div>
+                            </div>
+                          </a>
+                        </Link>
                         <ul className="info">
                           <li className="info__item">
                             <i className="fa-solid fa-info fa-size-1" />
@@ -200,9 +215,9 @@ const Header = () => {
                             <i className="fa-solid fa-credit-card fa-size-1" />
                             <p>Nạp tiền +</p>
                           </li>
-                          <li className="info__item">
+                          <li onClick={onLogout} className="info__item">
                             <i className="fa-solid fa-credit-card fa-size-1" />
-                            <p>Quản lí thanh toán</p>
+                            <p>Đăng xuất </p>
                           </li>
                         </ul>
                       </div>

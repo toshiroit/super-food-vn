@@ -5,10 +5,15 @@ const Cart: NextPage = () => {
   return (
     <>
       <Head>
-        <title>Gio hang</title>
+        <title>Giỏ hàng </title>
       </Head>
       <CartLayout />
     </>
   );
 };
+// export const getServerSideProps = async (ctx: any) => {
+//   return {
+//     props: {},
+//   };
+// };
 export default Cart;

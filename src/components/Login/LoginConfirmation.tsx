@@ -1,4 +1,5 @@
 import { REGEX_NAME } from "@/constants/validation/regex";
+import { restartAuth } from "@/redux/features/auth/auth-slice";
 import { authLogin } from "@/redux/features/auth/auth-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectLoginPhone } from "@/redux/features/login/login-selects";
@@ -27,6 +28,7 @@ const LoginConfirmation = () => {
 
   const hideFromLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: false }));
+    dispatch(restartAuth());
   };
   const formik = useFormik({
     initialValues: dataFormConfirmation,

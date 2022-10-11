@@ -14,7 +14,6 @@ const UserInfoPage = () => {
       </Head>
       <User
         UserChildrenProps={{
-          menuUser: <UserSlider />,
           contentUser: <UserInfo />,
         }}
       ></User>

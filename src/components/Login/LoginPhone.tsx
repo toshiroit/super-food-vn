@@ -1,4 +1,10 @@
 import { checkPhone } from "@/lib/checkPhone";
+import {
+  selectAuthData,
+  selectAuthDataCheckPhone,
+  selectAuthLoading,
+} from "@/redux/features/auth/auth-selects";
+import { authSendCode } from "@/redux/features/auth/auth-thunks";
 import { selectDisplayShowLogin } from "@/redux/features/display/display-selects";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectLoginPhone } from "@/redux/features/login/login-selects";
@@ -8,11 +14,14 @@ import {
   ChangeEvent,
   FormEvent,
   HTMLInputTypeAttribute,
+  useEffect,
   useState,
 } from "react";
 
 const LoginPhone = () => {
   const phoneConfirmation = useAppSelector(selectLoginPhone);
+  const loadingCheckPhone = useAppSelector(selectAuthLoading);
+  const dataCheckPhone = useAppSelector(selectAuthDataCheckPhone);
   const [phoneLogin, setPhoneLogin] = useState<string>(
     phoneConfirmation && phoneConfirmation
   );
@@ -38,14 +47,9 @@ const LoginPhone = () => {
         errorPhone: true,
         message: "",
       });
-      dispatch(
-        onDisplayLogin({
-          isShowFixed: true,
-          isShowPhone: false,
-          isShowCode: true,
-        })
-      );
       dispatch(addPhone({ phone: phoneLogin }));
+      // dispatch(authSendCode({ phone: phoneLogin }));
+      dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
     } else {
       setIsLogin({
         ...isLogin,
@@ -55,6 +59,12 @@ const LoginPhone = () => {
       });
     }
   };
+  useEffect(() => {
+    if (dataCheckPhone && !loadingCheckPhone) {
+      // dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loadingCheckPhone, dataCheckPhone]);
   return (
     <>
       <div className="fixedLogin__inner">
@@ -105,7 +115,7 @@ const LoginPhone = () => {
 
             <div className="btnLogin">
               <button type="submit">
-                {loadingSendCode ? (
+                {loadingCheckPhone ? (
                   <div className="loadingio-spinner-spinner-bbeydwj1ls">
                     <div className="ldio-m09wsst1j2">
                       <div></div>
@@ -124,9 +134,8 @@ const LoginPhone = () => {
                   </div>
                 ) : (
                   <>
-                    {" "}
                     <i className="fa-solid fa-right-to-bracket" />
-                    ĐĂNG NHẬP{" "}
+                    ĐĂNG NHẬP
                   </>
                 )}
               </button>
@@ -137,10 +146,6 @@ const LoginPhone = () => {
             <h4 className="tw">Hoặc</h4>
           </div>
           <div className="orLogin">
-            <button type="button" className="loginFacebook">
-              {/* <i className="fa-brands fa-facebook" /> */}
-              ĐĂNG KÍ TÀI KHOẢN
-            </button>
             <button type="button" className="loginGoogle">
               Quên mật khẩu
             </button>

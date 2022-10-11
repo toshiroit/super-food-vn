@@ -4,14 +4,17 @@ import UserSlider from "@/components/User/UserSlider/UserSlider";
 import { UserChildrenProps } from "@/interfaces/user";
 import useWindowSize from "@/lib/windowSize";
 import { UserHomeChildren } from "@/types/user/user";
-import { NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { parseCookies } from "nookies";
+import { ChangeEvent, useEffect, useState } from "react";
 
 const UserHomePage = ({ children }: UserHomeChildren) => {
   const router = useRouter();
   const sizeWindow = useWindowSize().width;
+
+  const onChangeSetTextSearch = (e: ChangeEvent<HTMLInputElement>) => {};
 
   useEffect(() => {
     if (sizeWindow) {
@@ -21,7 +24,7 @@ const UserHomePage = ({ children }: UserHomeChildren) => {
         router.push("/user/info");
       }
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sizeWindow]);
   return (
     <>
@@ -32,4 +35,9 @@ const UserHomePage = ({ children }: UserHomeChildren) => {
     </>
   );
 };
+// export const getServerSideProps = async (ctx: any) => {
+//   return {
+//     props: {},
+//   };
+// };
 export default UserHomePage;

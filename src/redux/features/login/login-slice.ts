@@ -12,8 +12,6 @@ const initialState: LoginState = {
   token: "",
   verifyCodeUser: "",
 };
-{
-}
 const loginSlice = createSlice({
   name: "loginSlice",
   initialState,

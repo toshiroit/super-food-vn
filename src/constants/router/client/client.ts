@@ -18,3 +18,4 @@ export const clientRoutes = {
   USER_SECURITY: "/user/security",
   USER_REST_PASS: "/user/rest-pass",
 };
+export const PRIVATE_ROUTES = ["/user/"];

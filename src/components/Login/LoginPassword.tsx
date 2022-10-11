@@ -3,6 +3,7 @@ import {
   selectAuthError,
   selectAuthLoading,
 } from "@/redux/features/auth/auth-selects";
+import { restartAuth } from "@/redux/features/auth/auth-slice";
 import { authLoginPhone } from "@/redux/features/auth/auth-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import {
@@ -33,12 +34,6 @@ const LoginPassword = () => {
     password: "",
     passwordConfirmation: "",
   });
-  useEffect(() => {
-    if (!loadingAuth && authDataLogin) {
-      dispatch(onDisplayLogin({ isShowFixed: false }));
-      router.push("/");
-    }
-  }, [loadingAuth, authDataLogin]);
   const dispatch = useAppDispatch();
   const formik = useFormik({
     initialValues: dataLogin,
@@ -54,11 +49,16 @@ const LoginPassword = () => {
   };
   const onHideLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: false }));
+    dispatch(restartAuth());
   };
+  useEffect(() => {
+    if (!loadingAuth && authDataLogin) {
+      dispatch(onDisplayLogin({ isShowFixed: false }));
+      router.push("/");
+    }
+  }, [loadingAuth, authDataLogin]);
   return (
     <>
-      {console.log("authDataLogin : ", errorAuthLogin)}
-
       <div className="fixedLogin" style={{}}>
         <div className="fixedLogin__inner">
           <div onClick={onHideLogin} className="close">

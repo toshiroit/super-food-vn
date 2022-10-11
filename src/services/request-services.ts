@@ -12,13 +12,13 @@ const setHeader = (
   }
   axios.defaults.headers.common["Access-Control-Allow-Credentials"] = true;
   //   axios.defaults.headers.common["Access-Control-Allow-Origin"] = [];
-  //   axios.defaults.headers.common["Access-Control-Allow-Headers"] = [
-  //     "Origin",
-  //     "X-Requested-With",
-  //     "Content-Type",
-  //     "Accept",
-  //     "Authorization",
-  //   ];
+  // axios.defaults.headers.common["Access-Control-Allow-Headers"] = [
+  //   "Origin",
+  //   "X-Requested-With",
+  //   "Content-Type",
+  //   "Accept",
+  //   "Authorization",
+  // ];
   axios.defaults.headers.common["Content-Type"] = contentType;
   return axios.defaults.headers.common;
   //   return axios.defaults.headers;
