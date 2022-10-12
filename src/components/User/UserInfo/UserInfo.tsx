@@ -1,11 +1,85 @@
-import { NextPage } from "next";
+import { formDateVN } from "@/lib/formatDate";
+import { addInfoUser } from "@/redux/features/user/user-slice";
+import { useAppDispatch } from "@/redux/hooks/hooks";
+import { ChangeInfoUser, UserDate, UserInfoFull } from "@/types/user/user";
 import Link from "next/link";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 
 const UserInfo = () => {
-  const onChangeUser = () => {};
-  const onSubmitUser = () => {};
-  const onChangeUpdate = () => {};
+  const { data } = useAuthContext();
+  const dispatch = useAppDispatch()
+  const month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const [settingUser, setSettingUser] = useState<ChangeInfoUser>({
+    isChangeEmail: false,
+    isChangePhone: false,
+    isPasswordV1: false,
+    isPasswordV2: false
+  })
+  const [sex, setSex] = useState<boolean>(false)
+  const [date, setDate] = useState<UserDate>({
+    day: formDateVN(data && data.data.payload.date_birth).getDay().toString(),
+    month: formDateVN(data && data.data.payload.date_birth).getMonth().toString(),
+    five: formDateVN(data && data.data.payload.date_birth).getFullYear().toString()
+  })
+  const [dataUser, setDataUser] = useState<UserInfoFull | undefined>()
+  const onChangeDate = (e: ChangeEvent<HTMLSelectElement>) => {
+    setDate({
+      ...date,
+      [e.target.name]: e.target.value
+    })
+  }
+  const onCheckSex = (e: ChangeEvent<HTMLInputElement>) => {
+    console.log(e)
+    if (e.target.name === 'female') {
+      setSex(true)
+    }
+    else {
+      setSex(false)
+    }
+  }
+  const onChangeUser = (e: ChangeEvent<HTMLInputElement>) => {
+    setDataUser({
+      ...dataUser,
+      [e.target.name]: e.target.value
+    })
+  };
+  const onSubmitUser = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    let newDataUser = { ...dataUser };
+    newDataUser.date = `${date?.day + '/' + date?.month + '/' + date?.five}`;
+    newDataUser.sex = sex;
+    dispatch(addInfoUser(newDataUser));
+  };
+  const onChangeSetting = (nameSetting: 'phone' | 'email' | 'passv1' | 'passv2') => {
+    if (nameSetting === 'phone') {
+      setSettingUser({
+        ...settingUser,
+        isChangePhone: !settingUser.isChangePhone
+      })
+    }
+    if (nameSetting === 'email') {
+      setSettingUser({
+        ...settingUser,
+        isChangeEmail: !settingUser.isChangeEmail
+      })
+    }
+    if (nameSetting === 'passv1') {
+      setSettingUser({
+        ...settingUser,
+        isPasswordV1: !settingUser.isPasswordV1
+      })
+    }
+    if (nameSetting === 'passv2') {
+      setSettingUser({
+        ...settingUser,
+        isPasswordV2: !settingUser.isPasswordV2
+      })
+    }
+  }
+  const onChangeUpdate = () => {
 
+  };
   return (
     <div className="content">
       <div className="title">
@@ -25,7 +99,7 @@ const UserInfo = () => {
             <i className="fa-solid fa-pen fa-size" />
           </div>
           <ul className="infoUser inline">
-            <form onSubmit={onSubmitUser} onChange={onChangeUser}>
+            <form onSubmit={onSubmitUser} >
               <li className="infoUser__item">
                 <label htmlFor="">
                   <i className="fa-solid fa-signature fa-size" />
@@ -34,6 +108,8 @@ const UserInfo = () => {
                 <input
                   type="text"
                   name="fullName"
+                  onChange={onChangeUser}
+                  defaultValue={data && data.data.payload.full_name}
                   placeholder="Thêm tên người dùng "
                 />
               </li>
@@ -43,17 +119,123 @@ const UserInfo = () => {
                   Ngày sinh
                 </label>
                 <div className="date">
-                  <select name="day" id="">
+                  <select
+                    name="day"
+                    id=""
+                    onChange={onChangeDate}
+                    defaultValue={
+                      data && formDateVN(data.data.payload.date_birth).getDay()
+                    }
+                  >
                     <option value={-1}>Ngày</option>
                     <option value={1}>1</option>
+                    <option value={2}>2</option>
+                    <option value={3}>3</option>
+                    <option value={4}>4</option>
+                    <option value={5}>5</option>
+                    <option value={6}>6</option>
+                    <option value={7}>7</option>
+                    <option value={8}>8</option>
+                    <option value={9}>9</option>
+                    <option value={10}>10</option>
+                    <option value={11}>11</option>
+                    <option value={12}>12</option>
                   </select>
-                  <select name="month" id="">
-                    <option value={-1}>Tháng</option>
-                    <option value={1}>1</option>
+                  <select
+                    name="month"
+                    onChange={onChangeDate}
+                    id=""
+                    defaultValue={
+                      data &&
+                      month[formDateVN(data.data.payload.date_birth).getMonth()]
+                    }
+                  >
+                    <>
+                      <option value={1}>1</option>
+                      <option value={2}>2</option>
+                      <option value={3}>3</option>
+                      <option value={4}>4</option>
+                      <option value={5}>5</option>
+                      <option value={6}>6</option>
+                      <option value={7}>7</option>
+                      <option value={8}>8</option>
+                      <option value={9}>9</option>
+                      <option value={10}>10</option>
+                      <option value={11}>11</option>
+                      <option value={12}>12</option>
+                      <option value={13}>13</option>
+                      <option value={14}>14</option>
+                      <option value={15}>15</option>
+                      <option value={16}>16</option>
+                      <option value={17}>17</option>
+                      <option value={18}>18</option>
+                      <option value={19}>19</option>
+                      <option value={20}>20</option>
+                      <option value={21}>21</option>
+                      <option value={22}>22</option>
+                      <option value={23}>23</option>
+                      <option value={24}>24</option>
+                      <option value={25}>25</option>
+                      <option value={26}>26</option>
+                      <option value={27}>27</option>
+                      <option value={28}>28</option>
+                      <option value={29}>29</option>
+                      <option value={30}>30</option>
+                    </>
                   </select>
-                  <select name="five" id="">
+                  <select
+                    name="five"
+                    onChange={onChangeDate}
+                    id=""
+                    defaultValue={
+                      data &&
+                      formDateVN(data.data.payload.date_birth).getFullYear()
+                    }
+                  >
                     <option value={-1}>Năm</option>
+                    <option value={1980}>1980</option>
+                    <option value={1981}>1981</option>
+                    <option value={1982}>1982</option>
+                    <option value={1983}>1983</option>
+                    <option value={1984}>1984</option>
+                    <option value={1985}>1985</option>
+                    <option value={1986}>1986</option>
+                    <option value={1987}>1987</option>
+                    <option value={1988}>1988</option>
+                    <option value={1989}>1989</option>
+                    <option value={1990}>1990</option>
+                    <option value={1991}>1991</option>
+                    <option value={1992}>1992</option>
+                    <option value={1993}>1993</option>
+                    <option value={1994}>1994</option>
+                    <option value={1995}>1995</option>
+                    <option value={1996}>1996</option>
+                    <option value={1997}>1997</option>
+                    <option value={1998}>1998</option>
+                    <option value={1999}>1999</option>
+                    <option value={2000}>2000</option>
+                    <option value={2001}>2001</option>
+                    <option value={2002}>2002</option>
+                    <option value={2003}>2003</option>
+                    <option value={2004}>2004</option>
+                    <option value={2005}>2005</option>
+                    <option value={2006}>2006</option>
+                    <option value={2007}>2007</option>
+                    <option value={2008}>2008</option>
+                    <option value={2009}>2009</option>
+                    <option value={2010}>2010</option>
+                    <option value={2011}>2011</option>
+                    <option value={2012}>2012</option>
+                    <option value={2013}>2013</option>
+                    <option value={2014}>2014</option>
+                    <option value={2015}>2015</option>
+                    <option value={2016}>2016</option>
+                    <option value={2017}>2017</option>
+                    <option value={2018}>2018</option>
+                    <option value={2019}>2019</option>
                     <option value={2020}>2020</option>
+                    <option value={2021}>2021</option>
+                    <option value={2022}>2022</option>
                   </select>
                 </div>
               </li>
@@ -64,11 +246,23 @@ const UserInfo = () => {
                 </label>
                 <div className="checkSex">
                   <div className="checkSex__item">
-                    <input type="radio" name="sex" value="1" id="" />
+                    <input
+                      type="radio"
+                      name="female"
+                      onChange={onCheckSex}
+                      defaultChecked={data && data.data.payload.sex ? true : false}
+                      checked={sex ? true : false}
+                    />
                     <span>Nam </span>
                   </div>
                   <div className="checkSex__item">
-                    <input type="radio" name="sex" value="0" id="" />
+                    <input
+                      type="radio"
+                      name="male"
+                      onChange={onCheckSex}
+                      defaultChecked={data && data.data.payload.sex ? false : true}
+                      checked={sex ? false : true}
+                    />
                     <span>Nữ </span>
                   </div>
                 </div>
@@ -81,7 +275,6 @@ const UserInfo = () => {
                   </label>
                   <select
                     name="address"
-                    onChange={onChangeUser}
                     style={{ maxWidth: "100%", width: "100%" }}
                   >
                     <option value={-1}>Chọn địa điểm </option>
@@ -116,8 +309,8 @@ const UserInfo = () => {
                 Địa chỉ thư điện tử
               </label>
               <div className="ipn">
-                <input type="text" onChange={onChangeUpdate} name="email" />
-                <button type="button">Thay đổi</button>
+                <input disabled={settingUser.isChangeEmail ? true : false} type="text" onChange={onChangeUser} name="email" />
+                <button onClick={() => onChangeSetting('email')} type="button">Thay đổi</button>
               </div>
             </li>
             <li className="infoUser__item">
@@ -125,8 +318,14 @@ const UserInfo = () => {
                 <i className="fa-solid fa-phone fa-size" /> Số điện thoại
               </label>
               <div className="ipn">
-                <input type="text" onChange={onChangeUpdate} name="phone" />
-                <button type="button">Thay doi</button>
+                <input
+                  type="text"
+                  onChange={onChangeUpdate}
+                  disabled={settingUser.isChangePhone ? true : false}
+                  defaultValue={data && data.data.payload.phone.trim()}
+                  name="phone"
+                />
+                <button onClick={() => onChangeSetting('phone')} type="button">Thay doi</button>
               </div>
             </li>
           </div>
@@ -138,8 +337,8 @@ const UserInfo = () => {
                 Mật khẩu cấp 1
               </label>
               <div className="ipn">
-                <input type="password" defaultValue="##########" />
-                <button type="button">Thiết lập</button>
+                <input disabled={settingUser.isPasswordV1 ? true : false} type="password" defaultValue="##########" onChange={onChangeUser} />
+                <button onClick={() => onChangeSetting('passv1')} type="button">Thiết lập</button>
               </div>
             </li>
             <li className="infoUser__item">
@@ -148,8 +347,8 @@ const UserInfo = () => {
                 Mật khẩu cấp 2
               </label>
               <div className="ipn">
-                <input type="password" defaultValue="##########" />
-                <button type="button">Thiết lập</button>
+                <input disabled={settingUser.isPasswordV2 ? true : false} type="password" defaultValue="##########" onChange={onChangeUser} />
+                <button onClick={() => onChangeSetting('passv2')} type="button">Thiết lập</button>
               </div>
             </li>
           </div>

@@ -50,9 +50,9 @@ export function Shield({ children }: ShieldChildren) {
       "/user/order/detail/[id]",
     ],
     accessRoute: "/user",
-    publicRoutes: ["/404"],
+    publicRoutes: ['/404'],
     loginRoute: "/404",
-    LoadingComponent: <LoadingBackgroundV1 />,
+    LoadingComponent: null,
   };
   return <NextShield {...shieldProps}>{children}</NextShield>;
 }

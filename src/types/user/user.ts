@@ -1,5 +1,3 @@
-import { NextPage } from "next";
-
 export type UserChildren = {
   contentUser?: React.ReactNode;
 };
@@ -25,3 +23,31 @@ export type AuthUserState = {
 export type AuthCheckPhone = {
   phone: string;
 };
+
+export type ChangeInfoUser = {
+  isChangeEmail?: boolean;
+  isChangePhone?: boolean;
+  isPasswordV1?: boolean;
+  isPasswordV2?: boolean;
+}
+
+export type UserInfoFull = {
+  fullName?: string;
+  date?: string;
+  sex?: boolean;
+  address?: string;
+  email?: string;
+  phone?: string;
+  passwordv1?: string;
+  passwordv2?: string;
+  facebook?: string;
+  zalo?: string;
+}
+export type UserDate = {
+  day?: string;
+  month?: string;
+  five?: string;
+}
+export type Sex = {
+  sex: boolean;
+}
