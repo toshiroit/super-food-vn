@@ -1,12 +1,11 @@
 export type ProductItem = {
-  codeProduct: string;
-  sale: number;
-  link: string;
+  code_product: string;
   name: string;
   price: number;
   image: string;
-  point: number;
-  payQuality: string;
+  discount: number;
+  evaluate: number;
+  purchase: number;
 };
 export interface ProductItemProps {
   productItemProps: ProductItem;
@@ -57,3 +56,17 @@ export type ProductContentData = {
   content: string;
   isActive: number;
 };
+
+export type ProductSliceState = {
+  message: string | null;
+  loading: boolean;
+  error?: any | null;
+  data?: any | null;
+  dataAll?: any | null;
+  count?: number;
+  pageSize?: number;
+}
+export type ProductGetDetailDataAPI = {
+  code: string | null;
+  name: string | null;
+}

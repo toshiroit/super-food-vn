@@ -1,11 +1,7 @@
-import { selectAuthLoading } from "@/redux/features/auth/auth-selects";
-import { useAppSelector } from "@/redux/hooks/hooks";
 import { ShieldChildren } from "@/types/shield/shield";
 import { NextShield, NextShieldProps } from "next-shield";
 import { useRouter } from "next/router";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
-import LoadingBackgroundV1 from "../Background/BackgroundLoading/LoadingBackgroundV1";
-import LoadingSpinner from "../Loading/LoadingSpinner";
 
 /**
  *
@@ -32,7 +28,7 @@ export function Shield({ children }: ShieldChildren) {
       "/user/order",
       "/user/address",
       "/user/notify",
-      "/user/order/detail/[id]"
+      "/user/order/detail/[code]"
     ],
     ["/404"]
   > = {
@@ -47,7 +43,7 @@ export function Shield({ children }: ShieldChildren) {
       "/user/order",
       "/user/address",
       "/user/notify",
-      "/user/order/detail/[id]",
+      "/user/order/detail/[code]",
     ],
     accessRoute: "/user",
     publicRoutes: ['/404'],

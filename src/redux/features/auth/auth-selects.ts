@@ -7,3 +7,4 @@ export const selectAuthDataCheckPhone = (state: RootState) =>
   state.authSlice.dataCheckPhone;
 export const selectAuthVerifyCode = (state: RootState) =>
   state.authSlice.verifyCode;
+

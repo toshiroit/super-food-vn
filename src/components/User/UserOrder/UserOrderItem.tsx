@@ -1,8 +1,9 @@
+import { clientRoutes } from "@/constants/router/client/client";
 import Link from "next/link";
 
 const UserOrderItem = () => {
   return (
-    <Link href={"/"}>
+    <Link href={clientRoutes.USER_ORDER_DETAIL_BY_ID('1')}>
       <a>
         <div className="content__order___item">
           <div className="content__order___item____dateIsShip">

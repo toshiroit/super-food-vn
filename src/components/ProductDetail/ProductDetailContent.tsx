@@ -1,37 +1,37 @@
+import { selectProductSliceData, selectProductSliceDataAll, selectProductSliceLoading } from "@/redux/features/product/product-selects";
+import { useAppSelector } from "@/redux/hooks/hooks";
 import { ProductContentData } from "@/types/product/product";
 import { useState } from "react";
+import LoadingSpinner from "../Loading/LoadingSpinner";
 
 const ProductDetailContent = () => {
+  const data = useAppSelector(selectProductSliceData)
+  const loading = useAppSelector(selectProductSliceLoading)
   const [isActiveShow, setIsActiveShow] = useState<number>(1);
   const dataFk = [
     {
       title: "Mô tả",
-      content: `The Modern Data Stack rabbit — Directus is an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.,
-    The Modern Data Stack rabbit — Directus is an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
-The Modern Data Stack rabbit — Directus is an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
-The Modern Data Stack rabbit — Directus is an instant REST+GraphQL API and intuitive no-code data collaboration app for any SQL database.
-      `,
+      content: data && data.description,
       isActive: 1,
     },
     {
       title: "Hướng dẫn sử dung",
-      content:
-        "Simply follow the setup prompts and the CLI will create your new project director",
+      content: data && data.guide,
       isActive: 2,
     },
     {
       title: "Trả hàng",
-      content: "onfiguration file, and initial database.",
+      content: data && data.return,
       isActive: 3,
     },
     {
       title: "Lưu ý ",
-      content: ", and to ensure you have the latest security patches,",
+      content: data && data.note,
       isActive: 4,
     },
   ];
   const selectText = (value: ProductContentData[]) => {
-    let result = dataFk.map((item, index) => {
+    let result = value.map((item, index) => {
       return (
         <li
           key={index}
@@ -54,15 +54,24 @@ The Modern Data Stack rabbit — Directus is an instant REST+GraphQL API and int
   };
   return (
     <>
-      <div className="title">
-        <h4>
-          <i className="fa-solid fa-book" /> Thông tin và hướng dẫn sử dụng
-        </h4>
-      </div>
-      <div className="table">
-        <ul className="table__select">{selectText(dataFk)}</ul>
-        <div className="table__content">{contentText(dataFk)}</div>
-      </div>
+      {
+        !data && loading ? <>
+          <LoadingSpinner
+            css={{ margin: 'auto', textAlign: 'center', width: '100%' }}
+          />
+        </> :
+          <>
+            <div className="title">
+              <h4>
+                <i className="fa-solid fa-book" /> Thông tin và hướng dẫn sử dụng
+              </h4>
+            </div>
+            <div className="table">
+              <ul className="table__select">{selectText(dataFk)}</ul>
+              <div className="table__content">{contentText(dataFk)}</div>
+            </div>
+          </>
+      }
     </>
   );
 };

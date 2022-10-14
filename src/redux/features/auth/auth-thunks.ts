@@ -3,9 +3,6 @@ import { RequestServices } from "@/services/request-services";
 import { LoginConfirmation, LoginPhone } from "@/types/login/login";
 import { AuthCheckPhone } from "@/types/user/user";
 import { createAsyncThunk } from "@reduxjs/toolkit";
-import axios, { AxiosError } from "axios";
-import { login } from "src/utils/auth/auth";
-import { object } from "yup";
 const URL = configAPI.URL_BACKEND;
 
 export const authGetMe = createAsyncThunk(
@@ -87,7 +84,7 @@ export const authCheckPhone = createAsyncThunk(
         error: responsive.error,
         data: responsive.data,
       };
-    } catch (error) {}
+    } catch (error) { }
   }
 );
 

@@ -1365,6 +1365,7 @@ html {
                   border: 2px solid $sp-color-text-primary !important;
                 }
                 .itemSelect {
+                  border:2px solid transparent;
                   margin: 5px;
                   cursor: pointer;
                   display: inline-block;
@@ -1873,7 +1874,8 @@ html {
                       width: 60px;
                       height: 60px;
                       img {
-                        width: 100%;
+                        width: 60px;
+                        height: 60px;
                         border-radius: 50%;
                       }
                     }

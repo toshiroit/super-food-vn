@@ -1,157 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductList from "../Product/ProductList";
 import ProductDetailComment from "./ProductDetailComment";
 import ProductDetailContent from "./ProductDetailContent";
 import ProductDetailShow from "./ProductDetailShow";
 import { ProductItem as ProductItemType } from "@/types/product/product";
 import ProductItem from "../Product/ProductItem";
+import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { getProductByCodeOrName } from "@/redux/features/product/product-thunks";
+import { selectProductSliceData, selectProductSliceLoading } from "@/redux/features/product/product-selects";
 const ProductDetail = () => {
-  const [dataProductDetail] = useState(null);
-  const [products] = useState<ProductItemType[]>([
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-  ]);
+  const data = useAppSelector(selectProductSliceData)
+  const loading = useAppSelector(selectProductSliceLoading)
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  useEffect(() => {
+    if (router.query.name) {
+      const nameRouter = router.query.name as string;
+      const arrNameRouter = nameRouter.split(".")
+      dispatch(getProductByCodeOrName({ code: arrNameRouter[1], name: arrNameRouter[0] }))
+    }
+
+  }, [router.query, dispatch])
   return (
     <>
       {/* <NotificationRoot data={dataNotification} /> */}
@@ -162,9 +32,8 @@ const ProductDetail = () => {
               {/* <BreadCrumb data={dataBreadcrumb} /> */}
             </div>
             <div
-              className={`detail__content___product ${
-                dataProductDetail ? "" : "productDetailLoading"
-              }`}
+              className={`detail__content___product ${!loading && data ? "" : "productDetailLoading"
+                }`}
             >
               <ProductDetailShow />
             </div>
@@ -186,9 +55,11 @@ const ProductDetail = () => {
           </div>
           <div className="productAbout__product">
             <div className="productAbout__product___overScroll">
-              {products.map((item, index) => {
+              {/*
+                {products.map((item, index) => {
                 return <ProductItem productItemProps={item} key={index} />;
               })}
+              */}
             </div>
           </div>
         </div>
@@ -201,9 +72,12 @@ const ProductDetail = () => {
             </div>
             <div className="productAbout__product">
               <div className="productAbout__product___overScroll">
-                {products.map((item, index) => {
-                  return <ProductItem productItemProps={item} key={index} />;
-                })}
+                {
+                  /*
+  * {products.map((item, index) => {
+                    return <ProductItem productItemProps={item} key={index} />;
+                  })}*/
+                }
               </div>
             </div>
           </div>

@@ -1,14 +1,11 @@
 import {
   selectAuthData,
-  selectAuthError,
 } from "@/redux/features/auth/auth-selects";
 import { authGetMe } from "@/redux/features/auth/auth-thunks";
 import { selectDisplayIsShowLogin } from "@/redux/features/display/display-selects";
-import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import axios from "axios";
-import { GetServerSideProps } from "next";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import {
   createContext,
   Dispatch,

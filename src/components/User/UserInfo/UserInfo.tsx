@@ -1,7 +1,9 @@
 import { formDateVN } from "@/lib/formatDate";
 import { addInfoUser } from "@/redux/features/user/user-slice";
 import { useAppDispatch } from "@/redux/hooks/hooks";
+import { validationUserInfoSchema } from "@/schema/userSchema";
 import { ChangeInfoUser, UserDate, UserInfoFull } from "@/types/user/user";
+import { useFormik } from "formik";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
@@ -23,6 +25,8 @@ const UserInfo = () => {
     five: formDateVN(data && data.data.payload.date_birth).getFullYear().toString()
   })
   const [dataUser, setDataUser] = useState<UserInfoFull | undefined>()
+
+  /* Formik validation form user info */
   const onChangeDate = (e: ChangeEvent<HTMLSelectElement>) => {
     setDate({
       ...date,
@@ -310,7 +314,11 @@ const UserInfo = () => {
               </label>
               <div className="ipn">
                 <input disabled={settingUser.isChangeEmail ? true : false} type="text" onChange={onChangeUser} name="email" />
-                <button onClick={() => onChangeSetting('email')} type="button">Thay đổi</button>
+                <button onClick={() => onChangeSetting('email')} type="button">
+                  {
+                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
+                  }
+                </button>
               </div>
             </li>
             <li className="infoUser__item">
@@ -325,7 +333,11 @@ const UserInfo = () => {
                   defaultValue={data && data.data.payload.phone.trim()}
                   name="phone"
                 />
-                <button onClick={() => onChangeSetting('phone')} type="button">Thay doi</button>
+                <button onClick={() => onChangeSetting('phone')} type="button">
+                  {
+                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
+                  }
+                </button>
               </div>
             </li>
           </div>
@@ -338,7 +350,11 @@ const UserInfo = () => {
               </label>
               <div className="ipn">
                 <input disabled={settingUser.isPasswordV1 ? true : false} type="password" defaultValue="##########" onChange={onChangeUser} />
-                <button onClick={() => onChangeSetting('passv1')} type="button">Thiết lập</button>
+                <button onClick={() => onChangeSetting('passv1')} type="button">
+                  {
+                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
+                  }
+                </button>
               </div>
             </li>
             <li className="infoUser__item">
@@ -348,7 +364,11 @@ const UserInfo = () => {
               </label>
               <div className="ipn">
                 <input disabled={settingUser.isPasswordV2 ? true : false} type="password" defaultValue="##########" onChange={onChangeUser} />
-                <button onClick={() => onChangeSetting('passv2')} type="button">Thiết lập</button>
+                <button onClick={() => onChangeSetting('passv2')} type="button">
+                  {
+                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
+                  }
+                </button>
               </div>
             </li>
           </div>

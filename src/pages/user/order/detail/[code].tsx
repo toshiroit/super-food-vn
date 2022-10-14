@@ -1,8 +1,9 @@
 import User from "@/components/User/User";
 import UserOrderDetail from "@/components/User/UserOrder/UserOrderDetail";
+import { NextPage } from "next";
 import Head from "next/head";
 
-const UserOrderDetailPage = () => {
+const UserOrderDetailPage: NextPage = () => {
   return (
     <>
       <Head>

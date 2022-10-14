@@ -7,19 +7,20 @@ import Link from "next/link";
 import React from "react";
 const ProductItem: NextPage<ProductItemProps> = ({ productItemProps }) => {
   const priceSale = (sale: number, price: number) => {
-    return 10;
+    return 100;
   };
+
   return (
     <li className="product__wp___item">
       <Link
         href={clientRoutes.PRODUCT_DETAIL(
           slug(productItemProps.name),
-          productItemProps.codeProduct
+          productItemProps.code_product
         )}
       >
         <a>
           <div className="point">
-            <span>{productItemProps.point}</span>
+            <span>{productItemProps.evaluate}</span>
           </div>
           <div className="image">
             <picture>
@@ -35,14 +36,14 @@ const ProductItem: NextPage<ProductItemProps> = ({ productItemProps }) => {
             </span>
             <span className="t2 text">
               {formatPriceVND(
-                priceSale(productItemProps.sale, productItemProps.price)
+                priceSale(productItemProps.discount, productItemProps.price)
               )}
             </span>
           </div>
           <div className="sellable">
             <div className="col-1">
               <span>
-                Đã bán : <b>124K</b>
+                Đã bán : <b>{productItemProps.purchase}</b>
               </span>
             </div>
             <div className="col-1">

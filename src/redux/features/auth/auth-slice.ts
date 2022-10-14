@@ -2,14 +2,12 @@ import { AuthUserState } from "./../../../types/user/user";
 import {
   authCheckPhone,
   authGetMe,
-  authLogin,
   authLoginPhone,
   authLogout,
   authSendCode,
   authVerifyCode,
 } from "@/redux/features/auth/auth-thunks";
 import { createAction, createSlice } from "@reduxjs/toolkit";
-const incrementBy = createAction("incrementBy");
 const initialState: AuthUserState = {
   loading: false,
   data: null,
@@ -21,7 +19,6 @@ const authSlice = createSlice({
   name: "authSlice",
   initialState,
   reducers: {
-    loginUserPhone: (state, action) => {},
     restartAuth: (state) => {
       state.loading = false;
       state.data = null;
@@ -34,7 +31,7 @@ const authSlice = createSlice({
 
   extraReducers(builder) {
     builder
-      .addCase(authCheckPhone.pending, (state, action) => {})
+      .addCase(authCheckPhone.pending, (state, action) => { })
       .addCase(authCheckPhone.rejected, (state, action) => {
         state.error = action.error;
       })
@@ -105,5 +102,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { loginUserPhone, restartAuth } = authSlice.actions;
+export const { restartAuth } = authSlice.actions;
 export default authSlice.reducer;

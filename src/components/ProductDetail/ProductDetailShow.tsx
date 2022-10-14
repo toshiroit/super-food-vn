@@ -1,13 +1,36 @@
 import { clientRoutes } from "@/constants/router/client/client";
+import { formatPriceVND } from "@/lib/formatPrice";
+import { selectProductSliceData, selectProductSliceLoading } from "@/redux/features/product/product-selects";
+import { useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
 import { useState } from "react";
 
 const ProductDetailShow = () => {
-  const [quality, setQuality] = useState();
+  const data = useAppSelector(selectProductSliceData)
+  const loading = useAppSelector(selectProductSliceLoading)
+  const [quality, setQuality] = useState<number>(1);
+  const [activeType, setActiveType] = useState<string>()
   const [loadingProductDetail] = useState(null);
   const [dataProductDetail] = useState(null);
-  const onAddCart = () => {};
-  const onQuality = (quality: number) => {};
+  const onAddCart = () => { };
+  const onQuality = (quality: number) => { };
+  const priceDiscountResult = (discount: number, price: number) => {
+    const discountw = discount / 100;
+    const priceResult = price - (price * discountw);
+    return priceResult;
+  }
+  const onSelectType = (code: string) => {
+    setActiveType(code)
+  }
+  const onChangeQuality = (type: "+" | "-") => {
+    if (type === '+') {
+      setQuality(quality + 1)
+    }
+    else if (type === '-') {
+      if (quality > 1)
+        setQuality(quality - 1)
+    }
+  }
   return (
     <>
       <div className="common">
@@ -17,10 +40,10 @@ const ProductDetailShow = () => {
             <div className="videoShow" />
           </div>
           <ul className="photo__side">
-            {dataProductDetail && !loadingProductDetail ? (
+            {data && !loading ? (
               <li className="photo__side___item">
                 <picture>
-                  <img src={""} alt="" />
+                  <img src={data.image} alt="" />
                 </picture>
               </li>
             ) : (
@@ -29,7 +52,7 @@ const ProductDetailShow = () => {
           </ul>
         </div>
         <div className="info">
-          {dataProductDetail && !loadingProductDetail ? (
+          {data && !loading ? (
             <div className="info__basic">
               <div className="categorywp">
                 <div className="wp">
@@ -43,7 +66,7 @@ const ProductDetailShow = () => {
                   </span>
                 </div>
               </div>
-              <h1 className="title"></h1>
+              <h1 className="title">{data.name}</h1>
               <div className="starBuy">
                 <div className="star ac">
                   <i className="fa-solid fa-star fa-size" />
@@ -58,11 +81,11 @@ const ProductDetailShow = () => {
                 </div>
               </div>
               <div className="pricex">
-                <h1 className="pricex__w gt">520.480 Đ</h1>
+                <h1 className="pricex__w gt">{formatPriceVND(priceDiscountResult(data.discount, data.price))}</h1>
                 <h3 className="price__w sale">
-                  450.000 Đ
+                  {formatPriceVND(data.price)}
                   <div className="opwSale">
-                    <span>-43%</span>
+                    <span>-{data.discount}%</span>
                   </div>
                 </h3>
                 <div className="pricex__absGift">
@@ -75,22 +98,16 @@ const ProductDetailShow = () => {
               <div className="selectProduct">
                 <h4 className="title">Lựa chọn</h4>
                 <ul className="selectProduct__main">
-                  <li className="itemSelect">
-                    <b>Không Toping</b>
-                  </li>
-                  <li className="itemSelect">
-                    <b>Không Toping</b>
-                  </li>
-                  <li className="itemSelect">
-                    <b>Không Toping</b>
-                  </li>
-                  <li className="itemSelect active">
-                    <i className="fa-solid fa-check fa-size" />
-                    <b>Không bún</b>
-                  </li>
-                  <li className="itemSelect">
-                    <b>Không Toping</b>
-                  </li>
+                  {
+                    Object.values(data.type_product).map((item, key) => {
+                      return (
+                        <li onClick={() => onSelectType(item as string)} className={item === activeType ? 'itemSelect active' : 'itemSelect'} key={key}>
+                          <b>{item as string}</b>
+                        </li>
+                      )
+                    })
+                  }
+
                 </ul>
               </div>
               <div className="btnProduct">
@@ -98,12 +115,12 @@ const ProductDetailShow = () => {
                   <span>Số lượng </span>
                   <div className="btnProduct__quality___input">
                     <i
-                      onClick={() => onQuality(-1)}
+                      onClick={() => onChangeQuality('-')}
                       className="fa-solid fa-minus fa-size"
                     />
-                    <input type="number" name="" defaultValue={quality} id="" />
+                    <input type="number" name="" value={quality} max={data.quality} maxLength={data.quality} id="" />
                     <i
-                      onClick={() => onQuality(+1)}
+                      onClick={() => onChangeQuality("+")}
                       className="fa-solid fa-plus fa-size"
                     />
                   </div>
@@ -180,7 +197,7 @@ const ProductDetailShow = () => {
           )}
         </div>
         <div className="viewShop">
-          {dataProductDetail && !loadingProductDetail ? (
+          {data && !loading ? (
             <>
               <h4 className="title">Xem SHOP</h4>
               <div className="content">

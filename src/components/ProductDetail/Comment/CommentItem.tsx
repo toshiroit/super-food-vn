@@ -1,11 +1,10 @@
-import { CommentItemProps } from "@/interfaces/product";
+import { formatDatePostSQL } from "@/lib/formatDate";
+import { CommentItemProps, EvaluateType } from "@/types/comment/comment";
 import { NextPage } from "next";
-import { useState } from "react";
+import { ReactElement, useState } from "react";
 import CommentReplay from "./CommentReplay";
 
-const CommentItem: NextPage<CommentItemProps> = ({
-  CommentItem,
-}: CommentItemProps) => {
+const CommentItem = ({ CommentItemProps }: CommentItemProps) => {
   const [isCheck] = useState(false);
   const [dataIsCommentReplay] = useState({
     isActive: false,
@@ -17,41 +16,82 @@ const CommentItem: NextPage<CommentItemProps> = ({
     link: string,
     code: string,
     image: string
-  ) => {};
-  const activeCommentReplay = (code: string, isActive: boolean) => {};
+  ) => { };
+  const evaluatePoint = (point: number): ReactElement => {
+    let nameEvaluate: EvaluateType = {
+      name: 'Hài lòng',
+      color: null
+    }
+    if (point > 8) {
+      nameEvaluate.color = '#28a745'
+      nameEvaluate.name = 'Quá hài lòng';
+    }
+    else if (point < 8) {
+      nameEvaluate.color = '#28a745'
+      nameEvaluate.name = 'Hài lòng';
+    }
+    else if (point < 6) {
+      nameEvaluate.color = '#ffc107'
+      nameEvaluate.name = 'Tạm ổn';
+    }
+    else if (point < 5) {
+      nameEvaluate.color = '#dc3545'
+      nameEvaluate.name = 'Không ổn';
+    }
+    else {
+      nameEvaluate.color = '#dc3545'
+      nameEvaluate.name = 'Quá không ổn '
+    }
+    return <span style={{ color: nameEvaluate.color }}>
+      {
+        nameEvaluate.color === '#28a745' ? '😍 '
+          : nameEvaluate.color === '#ffc107' ? '😌 '
+            : nameEvaluate.color === '#dc3545' ? '😡 ' : ''
+      }
+      {
+        nameEvaluate.name
+      }
+    </span>;
+  }
+  const activeCommentReplay = (code: string, isActive: boolean) => { };
   return (
     <>
+      {console.log(CommentItemProps)}
       <div className="evaluate__point___user">
         <div className="left comment">
           <div className="content">
             <div className="avatar">
               <picture>
-                <img src={CommentItem.avatar} alt="" />
+                <img src={CommentItemProps?.avatar || `
+                  https://cdn3.iconfinder.com/data/icons/toolbar-people/512/user_error_man_male_profile_warning-512.png
+                `} alt="" />
               </picture>
             </div>
             <div className="name">
-              <h3 className="w">{CommentItem.name}</h3>
+              <h3 className="w">{CommentItemProps.full_name}</h3>
               <div className="star">
-                {ratingComment(CommentItem.rating).map((item) => {
-                  return item;
-                })}
+                <i className="fa-size fa-solid fa-star"></i>
+                <i className="fa-size fa-solid fa-star"></i>
+                <i className="fa-size fa-solid fa-star"></i>
+                <i className="fa-size fa-solid fa-star"></i>
+                <i className="fa-size fa-solid fa-star"></i>
               </div>
               <div className="date">
                 <span>
                   <i className="fa-solid fa-clock" />
-                  {CommentItem.dateComment}
+                  {" " + formatDatePostSQL(CommentItemProps.createdat)}
                 </span>
               </div>
               <div className="like">
                 <i className="fa-solid fa-thumbs-up fa-size" />
-                <b>{CommentItem.like}</b>
+                <b>{64}</b>
               </div>
             </div>
           </div>
         </div>
         <div className="right">
           <div className="title">
-            <span>Hài lòng </span>
+            <span>{evaluatePoint(CommentItemProps.evaluate)} </span>
             <div className="check">
               {isCheck ? (
                 <>
@@ -65,7 +105,7 @@ const CommentItem: NextPage<CommentItemProps> = ({
           </div>
           <div className="comment">
             <div className="comment__text">
-              <p>{CommentItem.textComment}</p>
+              <p>{CommentItemProps.comment}</p>
             </div>
             <ul className="comment__image">
               {/*
@@ -83,31 +123,24 @@ const CommentItem: NextPage<CommentItemProps> = ({
               </div>
             </li>
             */}
-              {}
-              {CommentItem.images &&
-                CommentItem.images.map((item) => {
+              {CommentItemProps.image &&
+                CommentItemProps.image.map((item, key) => {
                   return (
                     <li
-                      onClick={() =>
-                        onShowBackgroundFixed(item.link, item.code, "image")
-                      }
-                      key={item.code}
+                      key={key}
                       className={`comment__image___item`}
                     >
                       <picture>
-                        <img src={item.link} alt="" />
+                        <img src={item} alt="" />
                       </picture>
                     </li>
                   );
                 })}
-              {CommentItem.videos &&
-                CommentItem.videos.map((item) => {
+              {CommentItemProps.video &&
+                CommentItemProps.video.map((item, key) => {
                   return (
                     <li
-                      onClick={() =>
-                        onShowBackgroundFixed(item.link, item.code, "video")
-                      }
-                      key={item.code}
+                      key={key}
                       className="comment__image___item video"
                     >
                       <picture>
