@@ -13,7 +13,7 @@ const GiftItem = ({ code, title, image }: GiftItem) => {
       </div>
       <i className="bd" />
       <div className="price">
-        <span>Giảm ngay 20k</span>
+        <span>{title}</span>
       </div>
       <div className="btn">
         <button type="submit">Chọn</button>

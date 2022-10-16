@@ -2,8 +2,57 @@ import Breadcrumb from "@/components/Breadcrumb/Breadcrumb";
 import Link from "next/link";
 import CartItem from "@/components/Cart/CartItem";
 import CartPay from "@/components/Cart/CartPay";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
+import { useRouter } from "next/router";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { addCartByCodeUser, getCartByCodeUser } from "@/redux/features/cart/cart-thunks";
+import { selectCartSliceData, selectCartSliceDataLocal, selectCartSliceLoading } from "@/redux/features/cart/cart-selects";
+import { restCart, setCartLocal } from "@/redux/features/cart/cart-slice";
+import { joinProductShop } from "@/lib/joinProductShop";
 const Cart = () => {
-  const onOrder = () => {};
+  const { data, isLogged } = useAuthContext()
+  const dataCartAPI = useAppSelector(selectCartSliceData)
+  const dataCartLocal = useAppSelector(selectCartSliceDataLocal)
+  // const [dataCartLocal, setDataCartLocal] = useState<any[]>()
+  const loadingCartAPI = useAppSelector(selectCartSliceLoading)
+  const dispatch = useAppDispatch()
+  const router = useRouter()
+  const onOrder = () => { };
+  useEffect(() => {
+    if (localStorage.getItem("cart")) {
+      if (isLogged) {
+        if (data) {
+          if (data.data.payload) {
+            //localStorage.removeItem('cart')
+            if (dataCartLocal.length !== 0) {
+              dispatch(addCartByCodeUser({ data_cart: dataCartLocal, code_user: data.data.payload.code_user }))
+            }
+          }
+        }
+      }
+    }
+    // eslint-disable-next-line
+  }, [router.pathname, isLogged, data, dispatch])
+  useEffect(() => {
+    if (isLogged && data) {
+      let isStop = true
+      function getCartByCodeUserFc() {
+        if (isStop) {
+          dispatch(setCartLocal())
+          dispatch(getCartByCodeUser({ code_user: data.data.payload && data.data.payload.code_user }))
+        }
+      }
+      getCartByCodeUserFc()
+      return () => {
+        isStop = false
+      }
+    }
+    else {
+      dispatch(setCartLocal())
+    }
+    // eslint-disable-next-line
+  }, [router.pathname, dispatch, isLogged])
   return (
     <div className="cart">
       <div className="container">
@@ -23,37 +72,58 @@ const Cart = () => {
                 </Link>
               </div>
               <div className="cart__content___main____inner">
-                <div className="left">
-                  <div className="header">
-                    <ul className="header__main">
-                      <li className="header__main___item">
-                        <input type="checkbox" className="" name="" id="" />
-                        <label className="check-box" />
-                        <span>Tất cả ( 2 sản phẩm ) </span>
-                      </li>
-                      <li className="header__main___item price">
-                        <span>Đơn giá </span>
-                      </li>
-                      <li className="header__main___item quality">
-                        <span>Số lượng </span>
-                      </li>
-                      <li className="header__main___item priceResult">
-                        <span>Thành tiền </span>
-                      </li>
-                      <li className="header__main___item remove">
-                        <span>
-                          <i className="fa-solid fa-delete-left" />
-                        </span>
-                      </li>
-                    </ul>
-                  </div>
-                  <ul className="main">
-                    <CartItem />
-                  </ul>
-                </div>
-                <div className="right">
-                  <CartPay />
-                </div>
+                {
+                  dataCartLocal && dataCartLocal.length === 0 ? <div
+                    style={{ width: '100%', flexDirection: 'column', alignItems: 'center', height: 'auto', display: 'flex' }}
+                    className="cartNotFound">
+                    <picture>
+                      <img style={{ width: '450px' }} src="/images/empty-cart.png" alt="" />
+                    </picture>
+                    <p className="" style={{ margin: 'auto', fontSize: '1.5rem', fontWeight: '700' }}>Không có sản phẩm </p>
+                  </div> :
+                    <>
+                      <div className="left">
+                        <div className="header">
+                          <ul className="header__main">
+                            <li className="header__main___item">
+                              <input type="checkbox" className="" name="" id="" />
+                              <label className="check-box" />
+                              <span>Tất cả ( {dataCartLocal.length} sản phẩm ) </span>
+                            </li>
+                            <li className="header__main___item price">
+                              <span>Đơn giá </span>
+                            </li>
+                            <li className="header__main___item quality">
+                              <span>Số lượng </span>
+                            </li>
+                            <li className="header__main___item priceResult">
+                              <span>Thành tiền </span>
+                            </li>
+                            <li className="header__main___item remove">
+                              <span>
+                                <i className="fa-solid fa-delete-left" />
+                              </span>
+                            </li>
+                          </ul>
+                        </div>
+                        <ul className="main">
+                          {joinProductShop(dataCartLocal).map((item, key) => {
+                            return <CartItem
+                              cartItem={item.cartItem}
+                              name_shop={item.name_shop}
+                              code_shop={item.code_shop}
+                              key={key}
+                            />
+                          }
+                          )}
+
+                        </ul>
+                      </div>
+                      <div className="right">
+                        <CartPay />
+                      </div>
+                    </>
+                }
               </div>
             </form>
           </div>

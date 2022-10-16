@@ -36,6 +36,7 @@ const createRequest: any = ({
     method: method,
     url: url,
     data: body,
+    params: body,
     headers: setHeader(isAuthRequired, contentType, authorization),
   });
 };

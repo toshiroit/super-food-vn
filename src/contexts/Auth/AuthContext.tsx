@@ -4,7 +4,6 @@ import {
 import { authGetMe } from "@/redux/features/auth/auth-thunks";
 import { selectDisplayIsShowLogin } from "@/redux/features/display/display-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import axios from "axios";
 import { useRouter } from "next/router";
 import {
   createContext,
@@ -32,21 +31,22 @@ export function AuthProvider({ children, jwt }: AuthProviderProps) {
   const router = useRouter();
   const [isLogged, setIsLogged] = useState<boolean>(false);
   useEffect(() => {
-    async function token() {
-      const data = await axios.get("/api/auth/login");
-      if (data.data.jwt) {
+    let isCanelledAPI = true
+    function getMe() {
+      if (isCanelledAPI) {
         dispatch(authGetMe());
-        setIsLogged(true);
-      } else {
-        setIsLogged(false);
       }
     }
-    token();
-  }, [router.pathname, isLogged, dataDisplay, dispatch]);
+    getMe()
+    return () => {
+      isCanelledAPI = false
+    }
+  }, [router.pathname, dataDisplay, dispatch, isLogged]);
   return (
     <AuthContext.Provider
-      value={{ isLogged: isLogged, data: data, toggleLogged: setIsLogged }}
+      value={{ isLogged: data ? true : false, data: data, toggleLogged: setIsLogged }}
     >
+
       {children}
     </AuthContext.Provider>
   );

@@ -11,9 +11,9 @@ const Cart: NextPage = () => {
     </>
   );
 };
-// export const getServerSideProps = async (ctx: any) => {
-//   return {
-//     props: {},
-//   };
-// };
+export const getServerSideProps = async (ctx: any) => {
+  return {
+    props: {},
+  };
+};
 export default Cart;

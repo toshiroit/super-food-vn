@@ -70,3 +70,11 @@ export type ProductGetDetailDataAPI = {
   code: string | null;
   name: string | null;
 }
+
+
+export type ShowProductList = {
+  typeShow: 'SHOP-NEW' | 'PRODUCT-NEW' | 'HOT' | 'GOOD' | 'TOP'
+}
+export interface ShowProductListProps {
+  item: ShowProductList;
+}

@@ -1,161 +1,10 @@
-import Banner from "@/components/Banner/Banner";
 import BannerGift from "@/components/Banner/BannerGift";
 import ProductList from "@/components/Product/ProductList";
 import type { NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import { useState } from "react";
-import { useDispatch } from "react-redux";
-import { ProductItem as ProductItemType } from "@/types/product/product";
 
 const Home: NextPage = () => {
-  const dispatch = useDispatch();
-  const onLogin = () => {};
-  const [products] = useState<ProductItemType[]>([
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-    {
-      codeProduct: "#124865",
-      name: "124",
-      image:
-        "https://img.freepik.com/premium-photo/rice-with-young-green-peas-shrimps-arugula-black-bowl-healthy-food-buddha-bowl_2829-2420.jpg?w=2000",
-      link: "124",
-      payQuality: "13",
-      point: 124,
-      price: 24,
-      sale: 41,
-    },
-  ]);
+
   return (
     <div className={""}>
       <Head>
@@ -184,7 +33,7 @@ const Home: NextPage = () => {
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
-              <ProductList />
+              <ProductList item={{ typeShow: 'SHOP-NEW' }} />
             </div>
             <div className="main__wp1">
               <div className="main__wp1___title">
@@ -192,13 +41,13 @@ const Home: NextPage = () => {
                   <picture>
                     <img src={"/images/new-items.png"} alt="" />
                   </picture>
-                  Khám phá quản mới
+                  Các món ăn đang HOT trên web
                 </h4>
                 <div className="alw">
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
-              <ProductList />
+              <ProductList item={{ typeShow: 'HOT' }} />
             </div>
             <div className="main__wp1">
               <div className="main__wp1___title">
@@ -206,13 +55,13 @@ const Home: NextPage = () => {
                   <picture>
                     <img src={"/images/new-items.png"} alt="" />
                   </picture>
-                  Khám phá quản mới
+                  Các món đang bán chạy
                 </h4>
                 <div className="alw">
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
-              <ProductList />
+              <ProductList item={{ typeShow: 'HOT' }} />
             </div>
             <div className="main__wp1">
               <div className="main__wp1___title">
@@ -220,13 +69,14 @@ const Home: NextPage = () => {
                   <picture>
                     <img src={"/images/new-items.png"} alt="" />
                   </picture>
-                  Khám phá quản mới
+                  Sản phẩm tốt
                 </h4>
                 <div className="alw">
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
-              <ProductList />
+              <ProductList item={{ typeShow: 'GOOD' }} />
+
             </div>
           </div>
           {/* <Trademark /> */}

@@ -7,7 +7,6 @@ import loginSlice from "../features/login/login-slice";
 import productSlice from "../features/product/product-slice";
 import userSlice from "../features/user/user-slice";
 
-
 export default combineReducers({
   displaySlice,
   loginSlice,
@@ -15,5 +14,5 @@ export default combineReducers({
   userSlice,
   cartSlice,
   productSlice,
-  commentSlice
+  commentSlice,
 });

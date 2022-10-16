@@ -56,7 +56,6 @@ const CommentItem = ({ CommentItemProps }: CommentItemProps) => {
   const activeCommentReplay = (code: string, isActive: boolean) => { };
   return (
     <>
-      {console.log(CommentItemProps)}
       <div className="evaluate__point___user">
         <div className="left comment">
           <div className="content">

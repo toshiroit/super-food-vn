@@ -1,18 +1,63 @@
 import { clientRoutes } from "@/constants/router/client/client";
 import { formatPriceVND } from "@/lib/formatPrice";
+import { addCart } from "@/redux/features/cart/cart-slice";
+import { addCartByCodeUser } from "@/redux/features/cart/cart-thunks";
 import { selectProductSliceData, selectProductSliceLoading } from "@/redux/features/product/product-selects";
-import { useAppSelector } from "@/redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { NotifyCationForm } from "@/types/notifycation/notifycation";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
+import NotifycationForm from "../Notification/NotificationForm";
 
 const ProductDetailShow = () => {
+  const { isLogged } = useAuthContext()
+  const [timeShow, setTimeShow] = useState<number>(4)
+  const [showNotify, setShowNotify] = useState<NotifyCationForm>({
+    show: null,
+    type: null
+  })
   const data = useAppSelector(selectProductSliceData)
   const loading = useAppSelector(selectProductSliceLoading)
+  const dispatch = useAppDispatch()
   const [quality, setQuality] = useState<number>(1);
   const [activeType, setActiveType] = useState<string>()
-  const [loadingProductDetail] = useState(null);
-  const [dataProductDetail] = useState(null);
-  const onAddCart = () => { };
+
+  useEffect(() => {
+    if (showNotify.show == 'show') {
+      if (timeShow === 0) {
+        setTimeShow(4)
+      }
+      const timer: NodeJS.Timer = setInterval(() => timeShow > 0 && setTimeShow(timeShow - 1), 1000);
+      if (timeShow === 0) {
+        setShowNotify({
+          show: 'hide'
+        })
+      }
+      return () => clearInterval(timer);
+    }
+
+  }, [timeShow, showNotify])
+  const onAddCart = (data: any) => {
+    if (!isLogged) {
+      console.log(data)
+      dispatch(addCart({ item: data, quality: quality }))
+      setShowNotify({
+        show: 'show',
+        type: 'danger',
+        message: 'Thêm vào giỏ hàng thành công '
+      })
+    }
+    else {
+      dispatch(addCart({ item: data, quality: quality }))
+      setShowNotify({
+        show: 'show',
+        type: 'danger',
+        message: 'Đã đănng nhập tài khoản  '
+      })
+
+    }
+  };
   const onQuality = (quality: number) => { };
   const priceDiscountResult = (discount: number, price: number) => {
     const discountw = discount / 100;
@@ -33,6 +78,11 @@ const ProductDetailShow = () => {
   }
   return (
     <>
+      <NotifycationForm
+        show={showNotify?.show}
+        type={showNotify.type}
+        message={showNotify.message}
+      />
       <div className="common">
         <div className="photo">
           <div className="photo__box">
@@ -66,8 +116,7 @@ const ProductDetailShow = () => {
                   </span>
                 </div>
               </div>
-              <h1 className="title">{data.name}</h1>
-              <div className="starBuy">
+              <h1 className="title">{data.name}</h1> <div className="starBuy">
                 <div className="star ac">
                   <i className="fa-solid fa-star fa-size" />
                   <i className="fa-solid fa-star fa-size" />
@@ -130,7 +179,7 @@ const ProductDetailShow = () => {
                     <i className="fa-solid fa-bag-shopping fa-size" /> MUA NGAY
                   </button>
                   <button
-                    onClick={onAddCart}
+                    onClick={() => onAddCart(data)}
                     type="button"
                     className="btn btn-cart"
                   >

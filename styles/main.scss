@@ -2694,6 +2694,8 @@ html {
                         height: 80px;
                         img {
                           max-width: 80px;
+                          border-radius: 7px;
+                          object-fit: cover;
                           height: 100%;
                         }
                       }

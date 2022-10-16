@@ -1169,7 +1169,6 @@ a {
   position: fixed;
   right: 50px;
   bottom: 31px;
-  transition: all 0.3s;
   &__inner {
     border: 1px solid #ddd;
     background-color: #fa9f47;
@@ -1183,29 +1182,6 @@ a {
     .text {
       font-size: 0.9rem;
     }
-  }
-}
-.showNotifyFixed {
-  animation: showNotifyFixed 0.3s forwards;
-}
-.hideNotifyFixed {
-  animation: hideNotifyFixed 0.3s forwards;
-}
-@keyframes showNotifyFixed {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes hideNotifyFixed {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
   }
 }
 

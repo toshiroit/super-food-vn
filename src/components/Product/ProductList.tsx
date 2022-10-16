@@ -1,28 +1,35 @@
 import { selectProductSliceDataAll, selectProductSliceLoading } from "@/redux/features/product/product-selects";
 import { getProductAll } from "@/redux/features/product/product-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import {
-  ProductItem as ProductItemType,
-  ProductListProps,
-} from "@/types/product/product";
-import { NextPage } from "next";
+import { ShowProductListProps } from "@/types/product/product";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import LoadingSpinner from "../Loading/LoadingSpinner";
 import ProductItem from "./ProductItem";
 
-const ProductList: NextPage<ProductListProps> = () => {
+const ProductList = ({ item }: ShowProductListProps) => {
   const loadingGetAll = useAppSelector(selectProductSliceLoading)
   const dataProductAll = useAppSelector(selectProductSliceDataAll)
   const dispatch = useAppDispatch()
   const router = useRouter()
 
   useEffect(() => {
-    if (!dataProductAll) {
-      dispatch(getProductAll())
+    // eslint-disable-next-line
+    if (item.typeShow === 'SHOP-NEW') {
+      let isStop = true
+      async function getProductAllFc() {
+        await dispatch(getProductAll())
+      }
+      if (isStop) {
+        console.log("VO")
+        getProductAllFc()
+      }
+      return () => {
+        isStop = false
+      }
     }
-  }, [router.pathname, dispatch])
-  const [isShowAll] = useState(false);
+    // eslint-disable-next-line
+  }, [])
   return (
     <>
       {
@@ -52,7 +59,6 @@ const ProductList: NextPage<ProductListProps> = () => {
                 ""
               )}
             </div>
-
           </>
       }
 
