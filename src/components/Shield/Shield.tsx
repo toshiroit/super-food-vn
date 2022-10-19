@@ -28,7 +28,8 @@ export function Shield({ children }: ShieldChildren) {
       "/user/order",
       "/user/address",
       "/user/notify",
-      "/user/order/detail/[code]"
+      "/user/order/detail/[code]",
+      "/checkout"
     ],
     ["/404"]
   > = {
@@ -44,10 +45,11 @@ export function Shield({ children }: ShieldChildren) {
       "/user/address",
       "/user/notify",
       "/user/order/detail/[code]",
+      "/checkout"
     ],
     accessRoute: "/user",
     publicRoutes: ['/404'],
-    loginRoute: "/404",
+    loginRoute: '/404',
     LoadingComponent: null,
   };
   return <NextShield {...shieldProps}>{children}</NextShield>;

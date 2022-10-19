@@ -1,11 +1,17 @@
+import { slug } from "@/lib/slug";
 import { useRouter } from "next/router";
-import { EventHandler, FormEvent } from "react";
+import { ChangeEvent, EventHandler, FormEvent, useState } from "react";
 
 const Banner = () => {
   const router = useRouter();
+  const [textSeach, setTextSearch] = useState<string>()
+  const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
+    setTextSearch(e.target.value)
+  }
   const onSearchProduct = (e: FormEvent<EventTarget>) => {
     e.preventDefault();
-    router.push("/search?q=12124");
+    if (textSeach && textSeach.length > 0)
+      router.push(`/search?q=${slug(textSeach || '')}`);
   };
   return (
     <div className="banner">
@@ -23,6 +29,8 @@ const Banner = () => {
                 </span>
                 <input
                   type="text"
+                  value={textSeach}
+                  onChange={onChangeSearch}
                   placeholder="Tìm đồ ăn vặt buối tối - trà sữa - đồ ăn đêm ngay bây giờ nào "
                 />
                 <ul

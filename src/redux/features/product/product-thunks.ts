@@ -34,3 +34,34 @@ export const getProductAll = createAsyncThunk(
     }
   }
 )
+
+export const getProductByName = createAsyncThunk(
+  'product/get-product-by-name', async () => {
+    const responsive = await RequestServices.get({
+      method: 'GET',
+      authorization: "",
+      contentType: 'application/json',
+      isAuthRequired: false,
+      url: `${URL + `/product/`} `
+    })
+    return {
+      data: responsive.data,
+      error: responsive.error
+    }
+  }
+)
+export const getListSearchByName = createAsyncThunk(
+  'product/get-list-search-by-name', async () => {
+    const responsive = await RequestServices.get({
+      method: 'GET',
+      authorization: "",
+      contentType: 'application/json',
+      isAuthRequired: false,
+      url: `${URL + `/search/list-search?q=${'2141'}`} `
+    })
+    return {
+      data: responsive.data,
+      error: responsive.error
+    }
+  }
+)

@@ -26,10 +26,18 @@ const Container = ({ children }: ContainerProps) => {
   return (
     <div id="body" className="wrapper">
       <div className="desktop supership">
-        <Header />
-        {isShowBanner(dataShow) ? <Banner /> : ""}
-        {children}
-        <Footer />
+        {
+          router.pathname === '/checkout' || router.pathname === '/checkout/completion' ?
+            <>
+              {children}
+            </>
+            : <>
+              <Header />
+              {isShowBanner(dataShow) ? <Banner /> : ""}
+              {children}
+              <Footer />
+            </>
+        }
       </div>
     </div>
   );

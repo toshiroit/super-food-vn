@@ -1,10 +1,22 @@
+import { selectSearchSliceSearchType } from "@/redux/features/search/search-selects";
+import { changeSearch } from "@/redux/features/search/search-slice";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { FilterSearch } from "@/types/search/search";
 import { useState } from "react";
 import ProductList from "../Product/ProductList";
 
 const Search = () => {
   const [loadingSearch] = useState(true);
+  const dispatch = useAppDispatch()
+  const dataSearchType = useAppSelector(selectSearchSliceSearchType)
+  const onFilter = (value: FilterSearch) => {
+    dispatch(changeSearch({
+      searchType: { valueType: value.value, nameType: value.name }
+    }))
+  }
   return (
     <div className="search">
+      {console.log(dataSearchType)}
       <div className="container">
         <div className="search__content breadcrum">
           <div className="search__content___inner">
@@ -16,17 +28,23 @@ const Search = () => {
                 <li className="header__list___item">Đánh giá cao</li>
               </ul>
               <div className="header__sort">
-                <select className="header__sort___item">
-                  <option>124124</option>
-                  <option>124124</option>
-                  <option>124124</option>
-                  <option>124124</option>
+                <select
+                  onChange={(e) => onFilter({ name: 'SORT', value: e.target.value })}
+                  className="header__sort___item">
+                  <option value={-1}>Sắp xếp </option>
+                  <option value={0}>Tên A-Z </option>
+                  <option value={1}>Tên Z-A</option>
+                  <option value={2}>Giá thấp nhất </option>
+                  <option value={3}>Giá cao nhất </option>
                 </select>
-                <select className="header__sort___item">
-                  <option>124124</option>
-                  <option>124124</option>
-                  <option>124124</option>
-                  <option>124124</option>
+                <select
+                  onChange={(e) => onFilter({ name: 'TYPE-SHOW', value: e.target.value })}
+                  className="header__sort___item"
+                >
+                  <option value={-1}>Loại hiện thị </option>
+                  <option value={0}>Đang HOT</option>
+                  <option value={1}>Mua nhiều nhất </option>
+                  <option value={2}>Đặt nhiều </option>
                 </select>
               </div>
             </div>

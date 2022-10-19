@@ -2,9 +2,13 @@ import { formatPriceVND } from "@/lib/formatPrice";
 import { getGiftProductCart } from "@/lib/getGiftProductCart";
 import { selectCartSliceDataLocal, selectCartSlicePriceDiscount, selectCartSlicePriceResult } from "@/redux/features/cart/cart-selects";
 import { priceResultData } from "@/redux/features/cart/cart-slice";
+import { addDataCheckout } from "@/redux/features/checkout/checkout-slice";
+import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { GiftT } from "@/types/cart/cart";
+import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import GiftItem from "../Gift/GiftItem";
 
 const CartPay = () => {
@@ -12,6 +16,8 @@ const CartPay = () => {
   const priceResultW = useAppSelector(selectCartSlicePriceResult)
   const priceDiscountW = useAppSelector(selectCartSlicePriceDiscount)
   const dispatch = useAppDispatch()
+  const router = useRouter()
+  const { isLogged } = useAuthContext()
   const [codeGift, setCodeGift] = useState<GiftT>({
     code: '',
     isCheck: true
@@ -22,6 +28,27 @@ const CartPay = () => {
       code: e.target.value,
     })
   };
+  const onPayCheckout = () => {
+    if (dataCartLocal) {
+      if (dataCartLocal.length > 0) {
+        if (isLogged) {
+          dispatch(addDataCheckout({
+            data: dataCartLocal,
+            priceResult: priceResultW as number || 0,
+            priceDiscount: priceDiscountW as number || 0
+          }))
+          router.push('/checkout')
+        }
+        else {
+          dispatch(onDisplayLogin({
+            isShowPhone: true,
+            isShowFixed: true
+          }))
+        }
+
+      }
+    }
+  }
   const onCheckCodeGift = () => {
     if (codeGift.code) {
       if (codeGift.code.length > 0) {
@@ -163,8 +190,11 @@ const CartPay = () => {
           </div>
         </div>
         <div className="buy">
-          <button type="submit" className="btn btn-buy">
-            <i className="fa-solid fa-bag-shopping" /> ĐẶT NGAY
+          <button type="button" onClick={onPayCheckout} className="btn btn-buy">
+            <i className="fa-solid fa-bag-shopping" />
+            {
+              isLogged ? ' ĐẶT NGAY' : 'Đăng nhập để đặt hàng '
+            }
           </button>
         </div>
       </div>

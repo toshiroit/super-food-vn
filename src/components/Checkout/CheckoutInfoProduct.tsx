@@ -1,7 +1,18 @@
+import { formatPriceVND } from "@/lib/formatPrice";
+import { selectCartSliceDataLocal } from "@/redux/features/cart/cart-selects";
+import { useAppSelector } from "@/redux/hooks/hooks";
 import { useState } from "react";
 
 const CheckoutInfoProduct = () => {
   const [isShow, setIsShow] = useState<boolean>(false);
+  const dataCartLocal = useAppSelector(selectCartSliceDataLocal)
+  const priceDiscount = (price: number, discount: number) => {
+    const discountResult = discount / 100;
+    return price - (price * discountResult);
+  };
+  const priceResultQuatity = (price: number, quatity: number) => {
+    return price * quatity;
+  }
   return (
     <>
       <div className="title">
@@ -15,15 +26,25 @@ const CheckoutInfoProduct = () => {
       </div>
       {isShow ? (
         <ul className="infoProduct">
-          <li className="infoProduct__item">
-            <span className="name">
-              <i className="fa-solid fa-signature" /> Lẩu thái cay cấp độ 13
-            </span>
-            <div className="slPr">
-              <h5>x13</h5>
-              <span className="price">130.000đ</span>
-            </div>
-          </li>
+          {
+            dataCartLocal.map(item => {
+              return (
+                <li className="infoProduct__item" key={item.code_product}>
+                  <span className="name">
+                    <i className="fa-solid fa-signature" /> {item.name}
+                  </span>
+                  <div className="slPr">
+                    <h5>x{item.quality_product}</h5>
+                    <span className="price">
+                      {
+                        formatPriceVND(priceResultQuatity(priceDiscount(item.price, item.discount), item.quality))
+                      }
+                    </span>
+                  </div>
+                </li>
+              )
+            })
+          }
         </ul>
       ) : (
         ""

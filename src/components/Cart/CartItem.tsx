@@ -16,7 +16,6 @@ const CartItem = ({ cartItem, code_shop, name_shop }: CartShop) => {
     return price - (price * discountResult);
   };
 
-
   const priceResultQuality = (
     price: number,
     discount: number,
@@ -49,6 +48,7 @@ const CartItem = ({ cartItem, code_shop, name_shop }: CartShop) => {
             <input
               type="checkbox"
               name={`groupShop`}
+              onChange={(e) => { }}
               id=""
             />
             <div className="wo">
@@ -70,7 +70,9 @@ const CartItem = ({ cartItem, code_shop, name_shop }: CartShop) => {
                     <input
                       type="checkbox"
                       name={`itemProduct`}
+                      onChange={(e) => { }}
                       id=""
+                      value={0}
                     />
                   </div>
                   <Link href={
@@ -134,6 +136,7 @@ const CartItem = ({ cartItem, code_shop, name_shop }: CartShop) => {
                       <input
                         type="number"
                         value={item.quality_product}
+                        onChange={(e) => { }}
                         name=""
                         id=""
                       />
@@ -148,7 +151,7 @@ const CartItem = ({ cartItem, code_shop, name_shop }: CartShop) => {
                       {formatPriceVND(
                         priceResultQuality(
                           item.price as number,
-                          24,
+                          item.discount as number,
                           item.quality_product as number
                         )
                       )}

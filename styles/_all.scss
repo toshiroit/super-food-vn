@@ -1208,4 +1208,24 @@ a {
     opacity: 0;
   }
 }
-
+.completionOrder {
+    width: 100%;
+    background-color: #f1f1f1;
+    height: 100vh;
+    &__inner {
+      .image {
+        text-align: center;
+        img {
+          width: 800px;
+        }
+      }
+      .text {
+        text-align: center;
+        .w {
+          color: #3cb878;
+          font-weight: 600;
+          font-size: 1.5rem;
+        }
+      }
+    }
+}

@@ -51,3 +51,8 @@ export type UserDate = {
 export type Sex = {
   sex: boolean;
 }
+
+export type AddressUser = {
+  code: string;
+  fullName: string;
+}
