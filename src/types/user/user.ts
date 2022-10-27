@@ -32,7 +32,7 @@ export type ChangeInfoUser = {
 }
 
 export type UserInfoFull = {
-  fullName?: string;
+  full_name?: string;
   date?: string;
   sex?: boolean;
   address?: string;
@@ -55,4 +55,18 @@ export type Sex = {
 export type AddressUser = {
   code: string;
   fullName: string;
+}
+
+export type UpdateUserW1Info = {
+  fullName: string;
+  date: string;
+  sex: boolean;
+}
+
+export type UserState = {
+  updateUserW1: {
+    data: any | null;
+    loading: boolean;
+    error: any | null
+  }
 }

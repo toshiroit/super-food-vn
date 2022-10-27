@@ -1,22 +1,16 @@
 import { formatDatePostSQL } from "@/lib/formatDate";
 import { CommentItemProps, EvaluateType } from "@/types/comment/comment";
-import { NextPage } from "next";
 import { ReactElement, useState } from "react";
+import { AuthContext, useAuthContext } from "src/contexts/Auth/AuthContext";
 import CommentReplay from "./CommentReplay";
 
 const CommentItem = ({ CommentItemProps }: CommentItemProps) => {
+  const { data, isLogged } = useAuthContext()
   const [isCheck] = useState(false);
   const [dataIsCommentReplay] = useState({
     isActive: false,
   });
-  const ratingComment = (rating: number): [] => {
-    return [];
-  };
-  const onShowBackgroundFixed = (
-    link: string,
-    code: string,
-    image: string
-  ) => { };
+
   const evaluatePoint = (point: number): ReactElement => {
     let nameEvaluate: EvaluateType = {
       name: 'Hài lòng',
@@ -53,7 +47,19 @@ const CommentItem = ({ CommentItemProps }: CommentItemProps) => {
       }
     </span>;
   }
-  const activeCommentReplay = (code: string, isActive: boolean) => { };
+  const isCheckLike = (likeData: any) => {
+    let resultCheck = false
+    if (isLogged && data) {
+      if (likeData && data.data.payload) {
+        likeData.map((item: any) => {
+          if (item.code_user.trim() === data.data.payload.code_user.trim()) {
+            resultCheck = true
+          }
+        })
+      }
+    }
+    return resultCheck;
+  }
   return (
     <>
       <div className="evaluate__point___user">
@@ -157,19 +163,15 @@ const CommentItem = ({ CommentItemProps }: CommentItemProps) => {
                 })}
             </ul>
           </div>
-          <div className="btnComment">
+          {isLogged ? <div className="btnComment">
             <div className="btnComment__content">
-              <button className="btnLike" type="button">
+              <button className={`btnLike ${isCheckLike(CommentItemProps.like_data) ? 'activeLike' : ''} `} type="button">
                 <i className="fa-solid fa-thumbs-up fa-size" />
-                Thích
+                {
+                  isCheckLike(CommentItemProps.like_data) ? ' Đã thích' : 'Thích'
+                }
               </button>
               <button
-                onClick={() =>
-                  activeCommentReplay(
-                    CommentItem.code,
-                    !dataIsCommentReplay.isActive
-                  )
-                }
                 className="btnRep"
                 type="button"
               >
@@ -177,11 +179,8 @@ const CommentItem = ({ CommentItemProps }: CommentItemProps) => {
                 Phản hồi
               </button>
             </div>
-          </div>
-          {CommentItem.commentReplay &&
-            CommentItem.commentReplay.map((item) => {
-              return <CommentReplay key={item.code} CommentItemReplay={item} />;
-            })}
+          </div> : ''}
+
           {/* <div className="repComment" style={{ display: "" }}>
             {
               dataIsCommentReplay.isActive && dataIsCommentReplay.codeComment === code ? <CommentSendReplay /> : ''

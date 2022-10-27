@@ -22,6 +22,8 @@ export type CommentItem = {
   createdat: string;
   updatedat: string;
   evaluate: number;
+  like_count: number;
+  like_data: any;
 }
 
 export type EvaluateType = {

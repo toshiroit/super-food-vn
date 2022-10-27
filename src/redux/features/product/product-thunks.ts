@@ -1,6 +1,7 @@
 import { configAPI } from "@/config/config";
 import { RequestServices } from "@/services/request-services";
-import { ProductGetDetailDataAPI } from "@/types/product/product";
+import { GetAllProductTypeAPIThunk, ProductGetDetailDataAPI } from "@/types/product/product";
+import { SearchDataAPI } from "@/types/search/search";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 const URL = configAPI.URL_BACKEND;
 
@@ -20,13 +21,13 @@ export const getProductByCodeOrName = createAsyncThunk(
   })
 
 export const getProductAll = createAsyncThunk(
-  'product/get-all', async (data, thunkAPI) => {
+  'product/get-all', async (data: GetAllProductTypeAPIThunk, thunkAPI) => {
     const responsive = await RequestServices.get({
       method: "GET",
       authorization: "",
       contentType: "application/json",
       isAuthRequired: false,
-      url: `${URL + '/product/get-all'}`
+      url: `${URL + `/product/get-all?limit=${data.limit || 6}&type=${data.type || ''}`}`
     })
     return {
       error: responsive.error,
@@ -65,3 +66,36 @@ export const getListSearchByName = createAsyncThunk(
     }
   }
 )
+
+export const searchProductByName = createAsyncThunk('search/search-product', async (data: SearchDataAPI, thunkAPI) => {
+  let querySearch: string = ''
+  if (data.textSearch) {
+    querySearch += `q=${data.textSearch}`
+  }
+  if (data.value) {
+    if (data.value[0] && data.value[0].nameType === 'SORT' && data.value[0].valueType) {
+      querySearch += `&sort=${data.value[0].valueType}`
+    }
+    if (data.value[1] && data.value[1].nameType === 'TYPE-SHOW' && data.value[1].valueType) {
+      querySearch += `&typeshow=${data.value[1].valueType}`
+    }
+    if (data.value[2] && data.value[2].nameType === 'LIST-SHOP' && data.value[2].valueType) {
+      querySearch += `&listshop=${data.value[2].valueType}`
+    }
+  }
+  if (data.page) {
+    querySearch += `&page=${data.page} `
+  }
+
+  const responsive = await RequestServices.get({
+    method: 'GET',
+    authorization: "",
+    contentType: 'application/json',
+    isAuthRequired: false,
+    url: `${URL + `/search?${querySearch}`}`,
+  })
+  return {
+    data: responsive.data,
+    error: responsive.error
+  }
+})

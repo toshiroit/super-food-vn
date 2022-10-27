@@ -1,8 +1,9 @@
-import { UserInfoFull } from "@/types/user/user";
+import { UserInfoFull, UserState } from "@/types/user/user";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { updateUserInfoW1 } from "./user-thunks";
 
 const dataUser: UserInfoFull = {
-  fullName: "",
+  full_name: "",
   date: "",
   sex: false,
   address: "",
@@ -13,19 +14,32 @@ const dataUser: UserInfoFull = {
   facebook: "",
   zalo: ""
 }
+const userState: UserState = {
+  updateUserW1: {
+    data: null,
+    loading: false,
+    error: null
+  }
+}
 const userSlice = createSlice({
   name: 'user-slice',
-  initialState: {
-    data:
-      dataUser,
-  },
+  initialState: userState,
   reducers: {
     addInfoUser: (state, action: PayloadAction<UserInfoFull | undefined>) => {
-      console.log(action.payload)
-      state.data = { ...action.payload }
-      return state;
+
     }
-  }
+  },
+  extraReducers(builder) {
+    builder.addCase(updateUserInfoW1.pending, (state) => {
+      state.updateUserW1.loading = true
+    }).addCase(updateUserInfoW1.rejected, (state, action) => {
+      state.updateUserW1.loading = false
+      state.updateUserW1.error = action.error
+    }).addCase(updateUserInfoW1.fulfilled, (state, action) => {
+      state.updateUserW1.loading = false
+      state.updateUserW1.data = action.payload.data
+    })
+  },
 })
 
 export const { addInfoUser } = userSlice.actions

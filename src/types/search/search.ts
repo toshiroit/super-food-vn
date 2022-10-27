@@ -21,6 +21,9 @@ export type SearchSliceState = {
   textSearch: string;
   product: ProductItem[];
   searchType: SearchType[];
+  error: any;
+  message?: string;
+  loading: boolean;
 }
 export type SearchType = {
   valueType: string;
@@ -30,4 +33,8 @@ export type FilterSearch = {
   name: 'LIST-SHOP' | 'SORT' | 'TYPE-SHOW' | '',
   value: string;
 }
-
+export type SearchDataAPI = {
+  value: SearchType[]
+  textSearch: string;
+  page?: string;
+}

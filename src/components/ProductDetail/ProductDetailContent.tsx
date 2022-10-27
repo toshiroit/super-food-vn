@@ -1,11 +1,11 @@
-import { selectProductSliceData, selectProductSliceDataAll, selectProductSliceLoading } from "@/redux/features/product/product-selects";
+import { selectProductSliceData, selectProductSliceDataAll, selectProductSliceDataProductDetail, selectProductSliceLoading } from "@/redux/features/product/product-selects";
 import { useAppSelector } from "@/redux/hooks/hooks";
 import { ProductContentData } from "@/types/product/product";
 import { useState } from "react";
 import LoadingSpinner from "../Loading/LoadingSpinner";
 
 const ProductDetailContent = () => {
-  const data = useAppSelector(selectProductSliceData)
+  const data = useAppSelector(selectProductSliceDataProductDetail)
   const loading = useAppSelector(selectProductSliceLoading)
   const [isActiveShow, setIsActiveShow] = useState<number>(1);
   const dataFk = [

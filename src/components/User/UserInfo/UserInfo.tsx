@@ -1,9 +1,9 @@
 import { formDateVN } from "@/lib/formatDate";
+import { selectUserSliceDataUpdateW1 } from "@/redux/features/user/user-selects";
 import { addInfoUser } from "@/redux/features/user/user-slice";
-import { useAppDispatch } from "@/redux/hooks/hooks";
-import { validationUserInfoSchema } from "@/schema/userSchema";
-import { ChangeInfoUser, UserDate, UserInfoFull } from "@/types/user/user";
-import { useFormik } from "formik";
+import { updateUserInfoW1 } from "@/redux/features/user/user-thunks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { ChangeInfoUser, UpdateUserW1Info, UserDate, UserInfoFull } from "@/types/user/user";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
@@ -11,6 +11,7 @@ import { useAuthContext } from "src/contexts/Auth/AuthContext";
 const UserInfo = () => {
   const { data } = useAuthContext();
   const dispatch = useAppDispatch()
+  const dataUpdateW1Rx = useAppSelector(selectUserSliceDataUpdateW1)
   const month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const [settingUser, setSettingUser] = useState<ChangeInfoUser>({
     isChangeEmail: false,
@@ -18,13 +19,14 @@ const UserInfo = () => {
     isPasswordV1: false,
     isPasswordV2: false
   })
+  const [fullName, setFullName] = useState<string>(data && data.data.payload.full_name)
   const [sex, setSex] = useState<boolean>(false)
   const [date, setDate] = useState<UserDate>({
     day: formDateVN(data && data.data.payload.date_birth).getDay().toString(),
     month: formDateVN(data && data.data.payload.date_birth).getMonth().toString(),
     five: formDateVN(data && data.data.payload.date_birth).getFullYear().toString()
   })
-  const [dataUser, setDataUser] = useState<UserInfoFull | undefined>()
+  const [dataUser, setDataUser] = useState<UserInfoFull | undefined>(data && data.data.payload)
 
   /* Formik validation form user info */
   const onChangeDate = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -34,7 +36,6 @@ const UserInfo = () => {
     })
   }
   const onCheckSex = (e: ChangeEvent<HTMLInputElement>) => {
-    console.log(e)
     if (e.target.name === 'female') {
       setSex(true)
     }
@@ -53,7 +54,14 @@ const UserInfo = () => {
     let newDataUser = { ...dataUser };
     newDataUser.date = `${date?.day + '/' + date?.month + '/' + date?.five}`;
     newDataUser.sex = sex;
-    dispatch(addInfoUser(newDataUser));
+    const dataUpdate: UpdateUserW1Info = {
+      fullName: newDataUser.full_name || '',
+      date: '2022-10-20 00:00:00',
+      sex: newDataUser.sex
+    }
+    console.log("DATA : ", dataUpdate)
+    dispatch(updateUserInfoW1(dataUpdate))
+    //dispatch(addInfoUser(newDataUser));
   };
   const onChangeSetting = (nameSetting: 'phone' | 'email' | 'passv1' | 'passv2') => {
     if (nameSetting === 'phone') {
@@ -87,6 +95,7 @@ const UserInfo = () => {
   return (
     <div className="content">
       <div className="title">
+        {console.log(dataUpdateW1Rx)}
         <h4>Thông tin tài khoản</h4>
         <Link href={"/user"}>
           <a>
@@ -111,9 +120,9 @@ const UserInfo = () => {
                 </label>
                 <input
                   type="text"
-                  name="fullName"
+                  name="full_name"
                   onChange={onChangeUser}
-                  defaultValue={data && data.data.payload.full_name}
+                  value={dataUser?.full_name}
                   placeholder="Thêm tên người dùng "
                 />
               </li>
@@ -132,8 +141,7 @@ const UserInfo = () => {
                     }
                   >
                     <option value={-1}>Ngày</option>
-                    <option value={1}>1</option>
-                    <option value={2}>2</option>
+                    <option value={1}>1</option> <option value={2}>2</option>
                     <option value={3}>3</option>
                     <option value={4}>4</option>
                     <option value={5}>5</option>
@@ -295,9 +303,10 @@ const UserInfo = () => {
               <div className="save">
                 <button type="submit">
                   <>
-                    {" "}
                     <i className="fa-solid fa-floppy-disk fa-size" />
-                    Lưu thông tin
+                    {
+                      dataUpdateW1Rx.loading ? 'Đang lưu ' : 'Lưu thông tin'
+                    }
                   </>
                 </button>
               </div>

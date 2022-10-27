@@ -1,9 +1,10 @@
 import { clientRoutes } from "@/constants/router/client/client";
+import { ItemOrder, ItemOrderProps } from "@/types/order/order";
 import Link from "next/link";
 
-const UserOrderItem = () => {
+const UserOrderItem = ({ itemOrder }: ItemOrderProps) => {
   return (
-    <Link href={clientRoutes.USER_ORDER_DETAIL_BY_ID('1')}>
+    <Link href={clientRoutes.USER_ORDER_DETAIL_BY_ID(itemOrder.code_order)}>
       <a>
         <div className="content__order___item">
           <div className="content__order___item____dateIsShip">

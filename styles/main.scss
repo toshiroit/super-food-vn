@@ -2087,8 +2087,11 @@ html {
                         border-radius: 5px;
                         cursor: pointer;
                       }
+                      .activeLike {
+                        border: 2px solid $sp-color-text-primary !important;
+                      }
                       .btnLike {
-                        border: 2px solid $sp-color-text-primary;
+                        border:2px solid transparent;
 
                         @include fontText(1rem);
                         .fa-size {

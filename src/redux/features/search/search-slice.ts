@@ -1,10 +1,14 @@
 import { SearchActionDispatch, SearchSliceState } from "@/types/search/search";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { searchProductByName } from "./search-thunks";
 
 const searchState: SearchSliceState = {
   searchType: [
   ],
+  loading: false,
   product: [],
+  error: '',
+  message: '',
   textSearch: ''
 }
 const searchSlice = createSlice({
@@ -31,7 +35,16 @@ const searchSlice = createSlice({
       }
       return state;
     }
-  }
+  },
+  extraReducers(builder) {
+    builder.addCase(searchProductByName.pending, (state) => {
+      state.loading = true
+    }).addCase(searchProductByName.rejected, (state, action) => {
+      state.error = action.error
+    }).addCase(searchProductByName.fulfilled, (state, action) => {
+      state.product = action.payload.data
+    })
+  },
 })
 export const { addSearch, changeSearch } = searchSlice.actions
 export default searchSlice.reducer

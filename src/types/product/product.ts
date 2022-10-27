@@ -62,6 +62,38 @@ export type ProductSliceState = {
   loading: boolean;
   error?: any | null;
   data?: any | null;
+  dataProductDetail?: any | null;
+  dataProductSearch: {
+    loading: boolean,
+    data: any | null
+  };
+  dataProductShopNew: {
+    data: any | null;
+    loading: boolean;
+    error: any
+  },
+  dataProductProductNew: {
+    data: any | null;
+    loading: boolean;
+    error: any
+  },
+  dataProductProductHot: {
+    data: any | null;
+    loading: boolean;
+    error: any
+  },
+  dataProductPayTop: {
+    data: any | null;
+    loading: boolean;
+    error: any
+
+  },
+  dataProductEvaluate: {
+    data: any | null;
+    loading: boolean;
+    error: any
+
+  },
   dataAll?: any | null;
   count?: number;
   pageSize?: number;
@@ -73,8 +105,16 @@ export type ProductGetDetailDataAPI = {
 
 
 export type ShowProductList = {
-  typeShow: 'SHOP-NEW' | 'PRODUCT-NEW' | 'HOT' | 'GOOD' | 'TOP'
+  typeShow: 'SHOP-NEW' | 'PRODUCT-NEW' | 'HOT' | 'GOOD' | 'TOP' | 'ANY',
+
 }
 export interface ShowProductListProps {
   item: ShowProductList;
+  dataProductAll: any
+}
+
+
+export type GetAllProductTypeAPIThunk = {
+  limit?: number;
+  type: 'new-product' | 'shop-new' | 'pay-top' | 'evaluate'
 }

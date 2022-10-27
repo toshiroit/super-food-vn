@@ -5,7 +5,7 @@ import { ProductItemProps } from "@/types/product/product";
 import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
-const ProductItem: NextPage<ProductItemProps> = ({ productItemProps }) => {
+const ProductItem = ({ productItemProps }: ProductItemProps) => {
   const priceSale = (sale: number, price: number) => {
     return 100;
   };

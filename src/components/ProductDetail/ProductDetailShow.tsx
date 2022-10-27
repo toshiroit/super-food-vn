@@ -2,7 +2,7 @@ import { clientRoutes } from "@/constants/router/client/client";
 import { formatPriceVND } from "@/lib/formatPrice";
 import { addCart } from "@/redux/features/cart/cart-slice";
 import { addCartByCodeUser } from "@/redux/features/cart/cart-thunks";
-import { selectProductSliceData, selectProductSliceLoading } from "@/redux/features/product/product-selects";
+import { selectProductSliceData, selectProductSliceDataProductDetail, selectProductSliceLoading } from "@/redux/features/product/product-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { NotifyCationForm } from "@/types/notifycation/notifycation";
 import Link from "next/link";
@@ -17,7 +17,7 @@ const ProductDetailShow = () => {
     show: null,
     type: null
   })
-  const data = useAppSelector(selectProductSliceData)
+  const data = useAppSelector(selectProductSliceDataProductDetail)
   const loading = useAppSelector(selectProductSliceLoading)
   const dispatch = useAppDispatch()
   const [quality, setQuality] = useState<number>(1);
@@ -58,7 +58,6 @@ const ProductDetailShow = () => {
 
     }
   };
-  const onQuality = (quality: number) => { };
   const priceDiscountResult = (discount: number, price: number) => {
     const discountw = discount / 100;
     const priceResult = price - (price * discountw);
@@ -148,13 +147,7 @@ const ProductDetailShow = () => {
                 <h4 className="title">Lựa chọn</h4>
                 <ul className="selectProduct__main">
                   {
-                    Object.values(data.type_product).map((item, key) => {
-                      return (
-                        <li onClick={() => onSelectType(item as string)} className={item === activeType ? 'itemSelect active' : 'itemSelect'} key={key}>
-                          <b>{item as string}</b>
-                        </li>
-                      )
-                    })
+
                   }
 
                 </ul>
@@ -167,7 +160,7 @@ const ProductDetailShow = () => {
                       onClick={() => onChangeQuality('-')}
                       className="fa-solid fa-minus fa-size"
                     />
-                    <input type="number" name="" value={quality} max={data.quality} maxLength={data.quality} id="" />
+                    <input onChange={() => { }} type="number" name="" value={quality} max={data.quality} maxLength={data.quality} id="" />
                     <i
                       onClick={() => onChangeQuality("+")}
                       className="fa-solid fa-plus fa-size"

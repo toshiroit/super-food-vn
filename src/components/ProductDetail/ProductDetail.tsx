@@ -1,16 +1,13 @@
 import { useEffect, useState } from "react";
-import ProductList from "../Product/ProductList";
 import ProductDetailComment from "./ProductDetailComment";
 import ProductDetailContent from "./ProductDetailContent";
 import ProductDetailShow from "./ProductDetailShow";
-import { ProductItem as ProductItemType } from "@/types/product/product";
-import ProductItem from "../Product/ProductItem";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { getProductByCodeOrName } from "@/redux/features/product/product-thunks";
-import { selectProductSliceData, selectProductSliceLoading } from "@/redux/features/product/product-selects";
+import { selectProductSliceDataProductDetail, selectProductSliceLoading } from "@/redux/features/product/product-selects";
 const ProductDetail = () => {
-  const data = useAppSelector(selectProductSliceData)
+  const data = useAppSelector(selectProductSliceDataProductDetail)
   const loading = useAppSelector(selectProductSliceLoading)
   const dispatch = useAppDispatch()
   const router = useRouter()

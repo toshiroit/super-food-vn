@@ -1,21 +1,20 @@
-import { REGEX_NAME } from "@/constants/validation/regex";
-import { restartAuth } from "@/redux/features/auth/auth-slice";
-import { authLogin } from "@/redux/features/auth/auth-thunks";
+import { selectAuthData, selectAuthLoading } from "@/redux/features/auth/auth-selects";
+import { restartAuth } from "@/redux/features/auth/auth-slice"; import { authLogin } from "@/redux/features/auth/auth-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectLoginPhone } from "@/redux/features/login/login-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { LoginConfirmation, LoginFormError } from "@/types/login/login";
-import { Formik, FormikHelpers, FormikProps, useFormik } from "formik";
+import { LoginConfirmation } from "@/types/login/login";
+import { useFormik } from "formik";
 import { useRouter } from "next/router";
-import { ChangeEvent, FormEvent, useState } from "react";
-import { Resolver, SubmitHandler, useForm } from "react-hook-form";
+import { FormEvent, useEffect, useState } from "react";
 import { validationRegister } from "src/schemas/userSchema";
 
 const LoginConfirmation = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const phoneConfirmation = useAppSelector(selectLoginPhone);
-
+  const dataReg = useAppSelector(selectAuthData)
+  const loadingReg = useAppSelector(selectAuthLoading)
   const [dataFormConfirmation, setDataFormConfirmation] =
     useState<LoginConfirmation>({
       fullName: "",
@@ -33,19 +32,29 @@ const LoginConfirmation = () => {
   const formik = useFormik({
     initialValues: dataFormConfirmation,
     validationSchema: validationRegister,
-    onSubmit(values) {},
+    onSubmit(values) { },
   });
 
   const onRegister = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (formik.isValid) {
       dispatch(authLogin(formik.values));
-      // router.push("/user");
-      // dispatch(
-      //   onDisplayLogin({ isShowFixed: false, isShowConfirmation: false })
-      // );
+      router.push("/");
+      dispatch(
+
+        onDisplayLogin({ isShowFixed: false, isShowConfirmation: false })
+      );
+
     }
   };
+  useEffect(() => {
+    console.log(dataReg, loadingReg)
+    if (dataReg && !loadingReg) {
+
+
+    }
+    // eslint-disable-line
+  }, [loadingReg, dispatch, dataReg])
   return (
     <div className="fixedLogin" style={{}}>
       <div className="fixedLogin__inner">
@@ -166,11 +175,16 @@ const LoginConfirmation = () => {
                 ""
               )}
             </div>
+            <p style={{ textAlign: 'center', fontSize: '0.9rem', color: '#f70e0e' }}>Đăng kí tài khoản không thành công </p>
             <div className="btnLogin">
               <button type="reset" className="sendCode">
                 Đặt lại
               </button>
-              <button type="submit">XÁC NHẬN</button>
+              <button type="submit">
+                {
+                  loadingReg ? 'Đang đăng kí ' : 'Đăng kí'
+                }
+              </button>
             </div>
           </form>
         </div>
