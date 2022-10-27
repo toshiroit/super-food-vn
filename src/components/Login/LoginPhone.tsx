@@ -1,11 +1,8 @@
 import { checkPhone } from "@/lib/checkPhone";
 import {
-  selectAuthData,
   selectAuthDataCheckPhone,
   selectAuthLoading,
 } from "@/redux/features/auth/auth-selects";
-import { authSendCode } from "@/redux/features/auth/auth-thunks";
-import { selectDisplayShowLogin } from "@/redux/features/display/display-selects";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectLoginPhone } from "@/redux/features/login/login-selects";
 import { addPhone } from "@/redux/features/login/login-slice";
@@ -13,7 +10,6 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import {
   ChangeEvent,
   FormEvent,
-  HTMLInputTypeAttribute,
   useEffect,
   useState,
 } from "react";
@@ -25,7 +21,6 @@ const LoginPhone = () => {
   const [phoneLogin, setPhoneLogin] = useState<string>(
     phoneConfirmation && phoneConfirmation
   );
-  const [loadingSendCode] = useState(true);
   const [isLogin, setIsLogin] = useState({
     isPhone: true,
     errorPhone: true,
