@@ -1,60 +1,83 @@
+import { formatPriceVND } from "@/lib/formatPrice";
+import { selectOrderSliceDataOrderDetail } from "@/redux/features/order/order-selects";
+import { getOrderDetailByCodeOrder } from "@/redux/features/order/order-thunks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+
 const UserOrderDetail = () => {
+  const router = useRouter()
+  const dispatch = useAppDispatch()
+  const dataOrderDetail = useAppSelector(selectOrderSliceDataOrderDetail)
+  useEffect(() => {
+    if (router.query.code) {
+      dispatch(getOrderDetailByCodeOrder({ code_order: router.query.code as string || '' }))
+    }
+  }, [router.query])
   return (
     <div className="content">
+      {console.log(dataOrderDetail)}
       <div className="title">
         <h4>
           <i className="fa-solid fa-circle-info" />
-          Chi tiết đơn hàng
+          Chi tiết đơn hàng : {dataOrderDetail.data && dataOrderDetail.data.data[0].code_order}
         </h4>
         <i id="showMenuUserIdx" className="fa-solid fa-bars" />
       </div>
       <div className="content__order">
-        <div className="content__order___imageName">
-          <picture>
-            <img
-              src="https://cdn.cet.edu.vn/wp-content/uploads/2019/04/fastfood-la-gi.jpg"
-              alt=""
-            />
-          </picture>
-          <div className="namePrice">
-            <h4>
-              <i className="fa-solid fa-signature fa-size" /> Lẩu Thái Hải Sản
-              (Gồm Nước Cốt Lẩu)
-            </h4>
-            <span className="tag">
-              <i className="fa-solid fa-tag fa-size" />
-              Lẩu cay , Cơm , Bún
-            </span>
-            <div className="grpPro">
-              <span>
-                <b>
-                  <i className="fa-solid fa-layer-group fa-size" />
-                  Loại sản phẩm
-                </b>
-                : Không toping , Thêm bún
-              </span>
-            </div>
-            <div className="grpPro">
-              <span>
-                <b>
-                  <i className="fa-brands fa-affiliatetheme fa-size" />
-                  Số lượng
-                </b>
-                : 260
-              </span>
-            </div>
-            <div className="price">
-              <span className="price__w2">
-                <b>Tổng tiền : </b>140.000 đ
-              </span>
-            </div>
-          </div>
-          <div className="removeOrder">
-            <button type="button" name="removeOrder">
-              Hủy đơn hàng{" "}
-            </button>
-          </div>
-        </div>
+        {
+          dataOrderDetail.data && dataOrderDetail.data.data.map(item => {
+            return (
+              <div className="content__order___imageName" key={item.code_order}>
+                <picture>
+                  <img
+                    src={item.image}
+                    alt=""
+                  />
+                </picture>
+                <div className="namePrice">
+                  <h4>
+                    <i className="fa-solid fa-signature fa-size" />
+                    {item.name}
+                  </h4>
+                  <span className="tag">
+                    <i className="fa-solid fa-tag fa-size" />
+                    Lẩu cay , Cơm , Bún
+                  </span>
+                  <div className="grpPro">
+                    <span>
+                      <b>
+                        <i className="fa-solid fa-layer-group fa-size" />
+                        Loại sản phẩm
+                      </b>
+                      : Không toping , Thêm bún
+                    </span>
+                  </div>
+                  <div className="grpPro">
+                    <span>
+                      <b>
+                        <i className="fa-brands fa-affiliatetheme fa-size" />
+                        Số lượng
+                      </b>
+                      : {item.quality}
+                    </span>
+                  </div>
+                  <div className="price">
+                    <span className="price__w2">
+                      <b>Tổng tiền : </b>
+                      {formatPriceVND(item.total_order)}
+                    </span>
+                  </div>
+                </div>
+                <div className="removeOrder">
+                  <button type="button" name="removeOrder">
+                    Hủy đơn hàng{" "}
+                  </button>
+                </div>
+              </div>
+            )
+          })
+        }
         <div className="content__order___infoW">
           <ul className="statusMain">
             <span className="fxNd">

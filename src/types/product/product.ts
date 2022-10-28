@@ -63,6 +63,11 @@ export type ProductSliceState = {
   error?: any | null;
   data?: any | null;
   dataProductDetail?: any | null;
+  dataProductDetailShop: {
+    data: any | null;
+    loading: boolean;
+    error: any
+  },
   dataProductSearch: {
     loading: boolean,
     data: any | null
@@ -94,6 +99,12 @@ export type ProductSliceState = {
     error: any
 
   },
+  dataProductDetaiLike: {
+    data: any | null;
+    loading: boolean;
+    error: any;
+  }
+
   dataAll?: any | null;
   count?: number;
   pageSize?: number;
@@ -117,4 +128,9 @@ export interface ShowProductListProps {
 export type GetAllProductTypeAPIThunk = {
   limit?: number;
   type: 'new-product' | 'shop-new' | 'pay-top' | 'evaluate'
+}
+
+export type GetAllProductTypeShop = {
+  code_shop: string;
+  limit: string;
 }

@@ -1,6 +1,6 @@
 import { configAPI } from "@/config/config";
 import { RequestServices } from "@/services/request-services";
-import { GetAllProductTypeAPIThunk, ProductGetDetailDataAPI } from "@/types/product/product";
+import { GetAllProductTypeAPIThunk, GetAllProductTypeShop, ProductGetDetailDataAPI } from "@/types/product/product";
 import { SearchDataAPI } from "@/types/search/search";
 import { createAsyncThunk } from "@reduxjs/toolkit";
 const URL = configAPI.URL_BACKEND;
@@ -35,6 +35,7 @@ export const getProductAll = createAsyncThunk(
     }
   }
 )
+
 
 export const getProductByName = createAsyncThunk(
   'product/get-product-by-name', async () => {
@@ -99,3 +100,55 @@ export const searchProductByName = createAsyncThunk('search/search-product', asy
     error: responsive.error
   }
 })
+
+export const getAllProductByShop = createAsyncThunk(
+  'product/get-product-shop',
+  async (data: GetAllProductTypeShop, thunkAPI) => {
+    const responsive = await RequestServices.get({
+      method: 'GET',
+      authorization: '',
+      isAuthRequired: false,
+      contentType: 'application/json',
+      url: `${URL + `/product/get-all-shop?limit=${data.limit || 6}&code_shop=${data.code_shop}`}`
+    })
+    return {
+      data: responsive.data,
+      error: responsive.error
+    }
+  }
+)
+
+export const getAllProductByTop = createAsyncThunk(
+  'product/get-product-top',
+  async (data: { limit: string }, thunkAPI) => {
+    const responsive = await RequestServices.get({
+      method: 'GET',
+      authorization: '',
+      isAuthRequired: false,
+      contentType: 'application/json',
+      url: `${URL + `/product/get-all-top?limit=${data.limit || 6}`}`
+    })
+    return {
+      data: responsive.data,
+      error: responsive.error
+    }
+  }
+)
+
+export const getAllProductByPayTop = createAsyncThunk(
+  'product/get-product-pay-top',
+  async (data: { limit: string }, thunkAPI) => {
+    const responsive = await RequestServices.get({
+      method: 'GET',
+      authorization: '',
+      isAuthRequired: false,
+      contentType: 'application/json',
+      url: `${URL + `/product/get-all-pay-top?limit=${data.limit || 6}`}`
+    })
+    return {
+      data: responsive.data,
+      error: responsive.error
+    }
+
+  }
+)

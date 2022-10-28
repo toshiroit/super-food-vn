@@ -16,7 +16,6 @@ const UserOrder = () => {
   }, [router.query, dispatch])
   return (
     <div className="content">
-      {console.log(dataListOrder)}
       <div className="title">
         <h4>
           <i className="fa-solid fa-coins" /> Quản lí đơn hàng

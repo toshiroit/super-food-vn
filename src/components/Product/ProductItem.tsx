@@ -6,6 +6,14 @@ import { NextPage } from "next";
 import Link from "next/link";
 import React from "react";
 const ProductItem = ({ productItemProps }: ProductItemProps) => {
+
+
+  const priceDiscountResult = (discount: number, price: number) => {
+    const discountw = discount / 100;
+    const priceResult = price - (price * discountw);
+    return priceResult;
+  }
+
   const priceSale = (sale: number, price: number) => {
     return 100;
   };
@@ -36,7 +44,7 @@ const ProductItem = ({ productItemProps }: ProductItemProps) => {
             </span>
             <span className="t2 text">
               {formatPriceVND(
-                priceSale(productItemProps.discount, productItemProps.price)
+                priceDiscountResult(productItemProps.discount, productItemProps.price)
               )}
             </span>
           </div>

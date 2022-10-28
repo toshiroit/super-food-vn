@@ -1,4 +1,5 @@
 import { combineReducers } from "@reduxjs/toolkit";
+import addressSlice from "../features/address/address-slice";
 import authSlice from "../features/auth/auth-slice";
 import cartSlice from "../features/cart/cart-slice";
 import checkoutSlice from "../features/checkout/checkout-slice";
@@ -20,5 +21,6 @@ export default combineReducers({
   commentSlice,
   checkoutSlice,
   searchSlice,
-  orderSlice
+  orderSlice,
+  addressSlice
 });

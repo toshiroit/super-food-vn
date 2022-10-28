@@ -11,3 +11,5 @@ export const selectProductSliceDataSearch = (state: RootState) => state.productS
 export const selectProductSliceDataProductShopNew = (state: RootState) => state.productSlice.dataProductShopNew
 export const selectProductSliceDataProductProductNew = (state: RootState) => state.productSlice.dataProductProductNew
 export const selectProductSliceDataProductProductHot = (state: RootState) => state.productSlice.dataProductProductHot
+export const selectProductSliceDataProductDetailShop = (state: RootState) => state.productSlice.dataProductDetailShop
+export const selectProductSliceDataProductPayTop = (state: RootState) => state.productSlice.dataProductPayTop

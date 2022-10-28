@@ -134,7 +134,7 @@ const Search = () => {
                   loadingSearch ? <div style={{ textAlign: 'center' }}>
                     <LoadingDIO />
                   </div> :
-                    dataProduct.data.length === 0 || !dataProduct ?
+                    !dataProduct ?
                       <h1>KHONG CO SAN PHAM</h1> :
                       <ProductList item={{ typeShow: 'ANY' }} dataProductAll={dataProduct && dataProduct.data} />
 

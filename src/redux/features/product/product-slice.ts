@@ -1,6 +1,6 @@
 import { ProductSliceState } from "@/types/product/product";
 import { createSlice } from "@reduxjs/toolkit";
-import { getProductAll, getProductByCodeOrName, searchProductByName } from "./product-thunks";
+import { getAllProductByPayTop, getAllProductByShop, getAllProductByTop, getProductAll, getProductByCodeOrName, searchProductByName } from "./product-thunks";
 
 const initialState: ProductSliceState = {
   data: null,
@@ -8,6 +8,12 @@ const initialState: ProductSliceState = {
   message: null,
   loading: false,
   dataProductDetail: null,
+  error: null,
+  dataProductDetaiLike: {
+    loading: false,
+    data: null,
+    error: ''
+  },
   dataProductSearch: {
     data: null,
     loading: false
@@ -37,7 +43,12 @@ const initialState: ProductSliceState = {
     data: null,
     error: ''
   },
-  error: null
+  dataProductDetailShop: {
+    loading: false,
+    data: null,
+    error: ''
+  },
+
 }
 const productSlice = createSlice({
   name: 'product-slice',
@@ -91,6 +102,36 @@ const productSlice = createSlice({
     }).addCase(searchProductByName.fulfilled, (state, action) => {
       state.dataProductSearch.loading = false
       state.dataProductSearch.data = action.payload.data
+    })
+
+    builder.addCase(getAllProductByShop.pending, (state) => {
+      state.dataProductDetailShop.loading = true
+    }).addCase(getAllProductByShop.rejected, (state, action) => {
+      state.dataProductDetailShop.loading = false
+      state.dataProductDetailShop.error = action.error
+    }).addCase(getAllProductByShop.fulfilled, (state, action) => {
+      state.dataProductDetailShop.loading = false
+      state.dataProductDetailShop.data = action.payload.data
+    })
+
+    builder.addCase(getAllProductByTop.pending, (state) => {
+      state.dataProductProductHot.loading = true
+    }).addCase(getAllProductByTop.rejected, (state, action) => {
+      state.dataProductProductHot.loading = false
+      state.dataProductProductHot.error = action.error
+    }).addCase(getAllProductByTop.fulfilled, (state, action) => {
+      state.dataProductProductHot.loading = false
+      state.dataProductProductHot.data = action.payload.data
+    })
+
+    builder.addCase(getAllProductByPayTop.pending, (state) => {
+      state.dataProductPayTop.loading = true
+    }).addCase(getAllProductByPayTop.rejected, (state, action) => {
+      state.dataProductPayTop.loading = false
+      state.dataProductPayTop.error = action.error
+    }).addCase(getAllProductByPayTop.fulfilled, (state, action) => {
+      state.dataProductPayTop.loading = false
+      state.dataProductPayTop.data = action.payload.data
     })
   },
 })

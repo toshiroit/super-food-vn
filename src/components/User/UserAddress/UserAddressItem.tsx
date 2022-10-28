@@ -1,12 +1,11 @@
+import { clientRoutes } from "@/constants/router/client/client";
+import { ItemAddressShowProps } from "@/types/address/address";
 import Link from "next/link";
-import React, { useState } from "react";
-
-const UserAddressItem = () => {
-  const [active] = useState(false);
+const UserAddressItem = ({ itemAddress }: ItemAddressShowProps) => {
   return (
     <li
       className={
-        active
+        itemAddress.status
           ? `content__address___main____item root`
           : `content__address___main____item `
       }
@@ -21,14 +20,14 @@ const UserAddressItem = () => {
           <span>
             <i className="fa-solid fa-signature fa-size" /> Họ và tên :{" "}
             {/* <b >{addRess} </b> */}
-            {"VAN NAm"}
+            {itemAddress.full_name}
             {/* {value.name} */}
           </span>
         </div>
         <div className="content__phone tw">
           <span>
             <i className="fa-solid fa-phone fa-size" />
-            Số điện thoại : <b>0947.712.857</b>
+            Số điện thoại : <b>{itemAddress.phone}</b>
           </span>
         </div>
         <div className="content__address tw">
@@ -39,7 +38,7 @@ const UserAddressItem = () => {
         </div>
       </div>
       <div className="btn">
-        <Link href={"/"}>
+        <Link href={clientRoutes.USER_ADDRESS_DETAIL(itemAddress.code_address)}>
           <a>
             <button>
               <i className="fa-solid fa-eye fa-size" /> Xem chi tiết

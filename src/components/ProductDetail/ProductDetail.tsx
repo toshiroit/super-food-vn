@@ -4,10 +4,12 @@ import ProductDetailContent from "./ProductDetailContent";
 import ProductDetailShow from "./ProductDetailShow";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { getProductByCodeOrName } from "@/redux/features/product/product-thunks";
-import { selectProductSliceDataProductDetail, selectProductSliceLoading } from "@/redux/features/product/product-selects";
+import { getAllProductByShop, getProductByCodeOrName } from "@/redux/features/product/product-thunks";
+import { selectProductSliceDataProductDetail, selectProductSliceDataProductDetailShop, selectProductSliceLoading } from "@/redux/features/product/product-selects";
+import ProductItem from "../Product/ProductItem";
 const ProductDetail = () => {
   const data = useAppSelector(selectProductSliceDataProductDetail)
+  const dataProductByShop = useAppSelector(selectProductSliceDataProductDetailShop)
   const loading = useAppSelector(selectProductSliceLoading)
   const dispatch = useAppDispatch()
   const router = useRouter()
@@ -19,8 +21,15 @@ const ProductDetail = () => {
     }
 
   }, [router.query, dispatch])
+
+  useEffect(() => {
+    if (data) {
+      dispatch(getAllProductByShop({ limit: '6', code_shop: data.code_shop }))
+    }
+  }, [data, dispatch])
   return (
     <>
+      {console.log(dataProductByShop.data)}
       {/* <NotificationRoot data={dataNotification} /> */}
       <div className="detail">
         <div className="container">
@@ -47,11 +56,19 @@ const ProductDetail = () => {
         <div className="container">
           <div className="productAbout__opw">
             <div className="title">
-              <h4>Thức ăn đi kèm</h4>
+              <h4>Các món ngon trong cửa hàng này </h4>
             </div>
           </div>
           <div className="productAbout__product">
             <div className="productAbout__product___overScroll">
+              {
+                dataProductByShop.data && dataProductByShop.data.data.map(item => {
+                  return (
+                    <ProductItem productItemProps={item} key={item.code_product} />
+
+                  )
+                })
+              }
               {/*
                 {products.map((item, index) => {
                 return <ProductItem productItemProps={item} key={index} />;

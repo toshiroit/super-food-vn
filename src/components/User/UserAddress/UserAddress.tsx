@@ -1,13 +1,18 @@
+import { selectAddressSliceData, selectAddressSliceLoading } from "@/redux/features/address/address-selects";
+import { getAddressByUser } from "@/redux/features/address/address-thunks";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import UserAddressItem from "./UserAddressItem";
 
 const UserAddress = () => {
-  const [userAddressArr] = useState([
-    {
-      address: [],
-    },
-  ]);
+
+  const dispatch = useAppDispatch()
+  const dataAddress = useAppSelector(selectAddressSliceData)
+  const loadingAddress = useAppSelector(selectAddressSliceLoading)
+  useEffect(() => {
+    dispatch(getAddressByUser())
+  }, [dispatch])
   return (
     <div className="content">
       <div className="title">
@@ -22,7 +27,20 @@ const UserAddress = () => {
       </div>
       <div className="content__address">
         <ul className="content__address___main">
-          <UserAddressItem />
+          {console.log(dataAddress)}
+          {
+            loadingAddress ? <h1> Dang tai</h1> :
+              dataAddress && dataAddress.data.map(item => {
+                return (
+                  <UserAddressItem
+
+                    itemAddress={item}
+                    key={item.code_address}
+                  />
+                )
+              })
+          }
+
           {/* {userAddressArr &&
             userAddressArr.address.map((item: any) => {
               return (

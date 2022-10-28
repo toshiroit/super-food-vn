@@ -40,7 +40,6 @@ const ProductDetailShow = () => {
   }, [timeShow, showNotify])
   const onAddCart = (data: any) => {
     if (!isLogged) {
-      console.log(data)
       dispatch(addCart({ item: data, quality: quality }))
       setShowNotify({
         show: 'show',

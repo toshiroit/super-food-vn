@@ -1,9 +1,15 @@
 import { OrderState } from "@/types/order/order";
 import { createSlice } from "@reduxjs/toolkit";
-import { getListOrderByCodeUser } from "./order-thunks";
+import { getListOrderByCodeUser, getOrderDetailByCodeOrder } from "./order-thunks";
 
 const orderState: OrderState = {
   dataListOrder: {
+    loading: false,
+    error: null,
+    message: null,
+    data: null
+  },
+  dataOrderDetail: {
     loading: false,
     error: null,
     message: null,
@@ -21,9 +27,18 @@ const orderSlice = createSlice({
       state.dataListOrder.loading = false;
       state.dataListOrder.error = action.error
     }).addCase(getListOrderByCodeUser.fulfilled, (state, action) => {
-      console.log(action.payload)
       state.dataListOrder.loading = false;
       state.dataListOrder.data = action.payload.data
+    })
+
+    builder.addCase(getOrderDetailByCodeOrder.pending, (state) => {
+      state.dataOrderDetail.loading = true
+    }).addCase(getOrderDetailByCodeOrder.rejected, (state, action) => {
+      state.dataOrderDetail.loading = false;
+      state.dataOrderDetail.error = action.error
+    }).addCase(getOrderDetailByCodeOrder.fulfilled, (state, action) => {
+      state.dataOrderDetail.loading = false;
+      state.dataOrderDetail.data = action.payload.data
     })
   },
 })
