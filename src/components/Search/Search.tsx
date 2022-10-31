@@ -39,13 +39,13 @@ const Search = () => {
       }
 
     }
-  }, [router.query.page])
+  }, [router.query])
   const paginationEl = (size: number): React.ReactElement[] => {
-    let i = 0, result = []
-    if (size > 7) {
-    }
-    else if (size < 7) {
-      for (i = 1; i <= size; i++) {
+    let i = 0, result = [], j = 0, pageLimit = 7
+    const page = router.query.page || 1
+    const maxPageLimit = 5
+    if (Number(page) < size && Number(page) < maxPageLimit) {
+      for (i = 1; i <= maxPageLimit; i++) {
         result.push(
           <Link href={`/search?q=${router.query.q}&page=${i}`}>
             <a>
@@ -55,10 +55,31 @@ const Search = () => {
             </a>
           </Link>
         )
-
+      }
+    }
+    else {
+      for (i = Number(page); i <= size; i++) {
+        result.push(
+          <Link href={`/search?q=${router.query.q}&page=${i}`}>
+            <a>
+              <li className={
+                `pagination__main___item ${Number(router.query.page || 1) === i ? 'active' : ''}`
+              }>{i}</li>
+            </a>
+          </Link>
+        )
       }
     }
     return result;
+  }
+  const onChangePage = (change: "pre" | 'next') => {
+    if (router.query.page) {
+      if (change === 'pre') {
+        console.log(router)
+        router.query.page = "1"
+      }
+
+    }
   }
   return (
     <div className="search">
@@ -145,7 +166,7 @@ const Search = () => {
 
                   {
                     dataProduct && dataProduct.totalPages > 7 ?
-                      <li className="pagination__main___item arrow">
+                      <li onClick={() => onChangePage('pre')} className="pagination__main___item arrow">
                         <i className="fa-solid fa-angle-left fa-size" />
                       </li> : ''
                   }
