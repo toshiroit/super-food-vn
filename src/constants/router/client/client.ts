@@ -22,6 +22,7 @@ export const clientRoutes = {
   USER_REST_PASS: "/user/rest-pass",
   USER_ORDER_DETAIL_BY_ID: (id: string) => {
     return `/user/order/detail/${id}`
-  }
+  },
+  CHECKOUT: '/checkout'
 };
 export const PRIVATE_ROUTES = ["/user/"];

@@ -10,6 +10,7 @@ import { addCartByCodeUser, getCartByCodeUser } from "@/redux/features/cart/cart
 import { selectCartSliceData, selectCartSliceDataLocal, selectCartSliceLoading } from "@/redux/features/cart/cart-selects";
 import { restCart, setCartLocal } from "@/redux/features/cart/cart-slice";
 import { joinProductShop } from "@/lib/joinProductShop";
+import * as CartType from "@/types/cart/cart";
 const Cart = () => {
   const { data, isLogged } = useAuthContext()
   const dataCartAPI = useAppSelector(selectCartSliceData)
@@ -53,6 +54,22 @@ const Cart = () => {
     }
     // eslint-disable-next-line
   }, [router.pathname, dispatch, isLogged])
+
+  const joinProductShopTest = (data: CartType.CartItem[]) => {
+    let cpData = [...data]
+    const itemsByCodeShop: any = {}
+    for (const item of cpData) {
+      itemsByCodeShop[item.code_shop || ''] ??= {
+        shop: {
+          name_shop: item.name_shop,
+          code_shop: item.code_shop
+        },
+        cart: []
+      }
+      itemsByCodeShop[item.code_shop || ''].cart.push(item)
+    }
+    return Object.values(itemsByCodeShop)
+  }
   return (
     <div className="cart">
       <div className="container">
@@ -107,16 +124,23 @@ const Cart = () => {
                           </ul>
                         </div>
                         <ul className="main">
-                          {joinProductShop(dataCartLocal).map((item, key) => {
-                            return <CartItem
-                              cartItem={item.cartItem}
-                              name_shop={item.name_shop}
-                              code_shop={item.code_shop}
-                              key={key}
-                            />
+                          {
+                            /* 
+    * {joinProductShop(dataCartLocal).map((item, key) => {
+                                return <CartItem
+                                  cartItem={item.cartItem}
+                                  name_shop={item.name_shop}
+                                  code_shop={item.code_shop}
+                                  key={key}
+                                />
+                              }
+                              )}*/
                           }
-                          )}
-
+                          <CartItem
+                            code_shop={''}
+                            name_shop={'124'}
+                            cartItem={joinProductShopTest(dataCartLocal)}
+                          />
                         </ul>
                       </div>
                       <div className="right">

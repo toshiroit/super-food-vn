@@ -37,7 +37,7 @@ const CheckoutInfoProduct = () => {
                     <h5>x{item.quality_product}</h5>
                     <span className="price">
                       {
-                        formatPriceVND(priceResultQuatity(priceDiscount(item.price, item.discount), item.quality))
+                        formatPriceVND(priceResultQuatity(priceDiscount(item.price, item.discount), item.quality_product))
                       }
                     </span>
                   </div>

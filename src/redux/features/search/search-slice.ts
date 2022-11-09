@@ -20,8 +20,11 @@ const searchSlice = createSlice({
 
     },
     changeSearch: (state, action: PayloadAction<SearchActionDispatch>) => {
-      if (action.payload.textSearch)
+      if (action.payload.textSearch) {
         state.textSearch = action.payload.textSearch || ''
+        localStorage.setItem('text_search', action.payload.textSearch)
+      }
+
       if (action.payload.searchType) {
         if (action.payload.searchType.nameType === 'SORT') {
           state.searchType[0] = action.payload.searchType

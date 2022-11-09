@@ -2,7 +2,7 @@ import { ConfigFormatVND } from "src/types/format/format";
 export const configFormatVND: ConfigFormatVND = {
   style: "currency",
   currency: "VND",
-  maximumFractionDigits: 9,
+  maximumFractionDigits: 0,
 };
 export const configAPI = {
   URL_BACKEND:

@@ -1,11 +1,15 @@
+import { clientRoutes } from "@/constants/router/client/client";
 import { formatPriceVND } from "@/lib/formatPrice";
 import { getGiftProductCart } from "@/lib/getGiftProductCart";
+import { selectAddressSliceData } from "@/redux/features/address/address-selects";
+import { getAddressByUser } from "@/redux/features/address/address-thunks";
 import { selectCartSliceDataLocal, selectCartSlicePriceDiscount, selectCartSlicePriceResult } from "@/redux/features/cart/cart-selects";
 import { priceResultData } from "@/redux/features/cart/cart-slice";
 import { addDataCheckout } from "@/redux/features/checkout/checkout-slice";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { GiftT } from "@/types/cart/cart";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
@@ -14,10 +18,23 @@ import GiftItem from "../Gift/GiftItem";
 const CartPay = () => {
   const dataCartLocal = useAppSelector(selectCartSliceDataLocal)
   const priceResultW = useAppSelector(selectCartSlicePriceResult)
+  const dataAddressUser = useAppSelector(selectAddressSliceData)
   const priceDiscountW = useAppSelector(selectCartSlicePriceDiscount)
   const dispatch = useAppDispatch()
   const router = useRouter()
   const { isLogged } = useAuthContext()
+  useEffect(() => {
+    let isStoped = true
+    const onGetAddress = () => {
+      if (isStoped) {
+        dispatch(getAddressByUser())
+      }
+      return () => {
+        isStoped = false
+      }
+    }
+    onGetAddress()
+  }, [dataCartLocal, dispatch])
   const [codeGift, setCodeGift] = useState<GiftT>({
     code: '',
     isCheck: true
@@ -32,12 +49,19 @@ const CartPay = () => {
     if (dataCartLocal) {
       if (dataCartLocal.length > 0) {
         if (isLogged) {
-          dispatch(addDataCheckout({
-            data: dataCartLocal,
-            priceResult: priceResultW as number || 0,
-            priceDiscount: priceDiscountW as number || 0
-          }))
-          router.push('/checkout')
+          if (dataAddressUser) {
+            if (dataAddressUser.length > 0) {
+              dispatch(addDataCheckout({
+                data: dataCartLocal,
+                priceResult: priceResultW as number || 0,
+                priceDiscount: priceDiscountW as number || 0
+              }))
+              router.push(clientRoutes.CHECKOUT)
+            }
+            else {
+              router.push(clientRoutes.USER_ADDRESS)
+            }
+          }
         }
         else {
           dispatch(onDisplayLogin({
@@ -100,75 +124,105 @@ const CartPay = () => {
   }, [dispatch, dataCartLocal, codeGift])
   return (
     <>
-      <div className="header">
-        <div className="inline">
-          <span>
-            <i className="fa-solid fa-location-dot fa-size" />
-            Giao tới
-          </span>
-          <span>
-            <i className="fa-solid fa-file-invoice fa-size" />
-            Thay đổi
-          </span>
-        </div>
-        <div className="info">
-          <div className="info__name">
-            <span>Đậu Văn Nam </span>
+      {isLogged ?
+        <>
+          <div className="header">
+            <div className="inline">
+              <span>
+                <i className="fa-solid fa-location-dot fa-size" />
+                Giao tới
+              </span>
+              <Link href={clientRoutes.USER_ADDRESS}>
+                <a>
+                  <span>
+                    <i className="fa-solid fa-file-invoice fa-size" />
+                    Thay đổi
+                  </span>
+                </a>
+              </Link>
+            </div>
+            <>
+              {dataAddressUser && dataAddressUser.length === 0 ? dataAddressUser.map((item => {
+                if (item.status)
+                  return (
+                    <>
+                      <div className="info">
+                        <div className="info__name">
+                          <span>{item.full_name}</span>
+                        </div>
+                        <i className="bd" />
+                        <div className="info__phone">
+                          <span>{item.phone}</span>
+                        </div>
+                      </div>
+                      <div className="address">
+                        <p>{item.detail_address
+                          ||
+                          item.street + ' , ' + item.village + ' , ' + item.province}</p>
+                      </div>
+
+                    </>
+                  )
+              })) : <h4 style={{ textAlign: 'center', fontWeight: '400', fontSize: '0.9rem' }}>Chưa có địa chỉ thanh toán </h4>
+              }
+            </>
           </div>
-          <i className="bd" />
-          <div className="info__phone">
-            <span>0948124851</span>
+          <div className="main">
+            <div className="main__gift">
+              <span>
+                <i className="fa-solid fa-gift fa-size" /> Mã giảm giá
+              </span>
+              <span>
+                Có thể chọn (2)
+                <i className="fa-solid fa-circle-info fa-size" />
+              </span>
+            </div>
+            <ul className="main__list">
+              {/*
+              {
+                getGiftProductCart(dataCartLocal).map((item, key) => {
+                  return (
+                    <GiftItem code={item.code_w_voucher} image="124" title={item.name_voucher} key={key} />
+                  )
+                })
+              }
+              */}
+              {
+                dataCartLocal.map((item, key) => {
+                  return (
+                    <GiftItem code={item.code_w_voucher} image="124" title={item.name_voucher} key={item.code_w_voucher} />
+                  )
+                })
+              }
+            </ul>
+            <div className="main__input">
+              <div className="main__input___owp">
+                <input
+                  placeholder="Mã giảm giá của bạn "
+                  type="text"
+                  name="codeGift"
+                  onChange={onChangeCodeGift}
+                  id=""
+                />
+                <button type="button" onClick={onCheckCodeGift}>Áp dụng</button>
+              </div>
+              <p
+                style={{
+                  fontSize: "0.9rem",
+                  color: `${!codeGift.isCheck ? '#e7000e' : '#408140'}`, marginTop: "5px"
+                }}
+                className="error"
+              >
+                {
+                  !codeGift.isCheck ? <>
+                    Mã giảm giá không chính xác
+                  </> : codeGift.show === 'SHOW' ? 'Đã áp dụng ' : ''
+                }
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="address">
-          <p>Đăk lakw, Phường Tân Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk</p>
-        </div>
-      </div>
-      <div className="main">
-        <div className="main__gift">
-          <span>
-            <i className="fa-solid fa-gift fa-size" /> Mã giảm giá
-          </span>
-          <span>
-            Có thể chọn (2)
-            <i className="fa-solid fa-circle-info fa-size" />
-          </span>
-        </div>
-        <ul className="main__list">
-          {
-            getGiftProductCart(dataCartLocal).map((item, key) => {
-              return (
-                <GiftItem code={item.code_w_voucher} image="124" title={item.name_voucher} key={key} />
-              )
-            })
-          }
-        </ul>
-        <div className="main__input">
-          <div className="main__input___owp">
-            <input
-              placeholder="Mã giảm giá của bạn "
-              type="text"
-              name="codeGift"
-              onChange={onChangeCodeGift}
-              id=""
-            />
-            <button type="button" onClick={onCheckCodeGift}>Áp dụng</button>
-          </div>
-          <p
-            style={{
-              fontSize: "0.9rem",
-              color: `${!codeGift.isCheck ? '#e7000e' : '#408140'}`, marginTop: "5px"
-            }}
-            className="error"
-          >
-            {
-              !codeGift.isCheck ? <>
-                Mã giảm giá không chính xác
-              </> : codeGift.show === 'SHOW' ? 'Đã áp dụng ' : ''
-            }
-          </p>
-        </div>
-      </div>
+        </> : ''
+      }
       <div className="footer">
         <ul className="price__main">
           <li className="price__main___item">
@@ -193,7 +247,9 @@ const CartPay = () => {
           <button type="button" onClick={onPayCheckout} className="btn btn-buy">
             <i className="fa-solid fa-bag-shopping" />
             {
-              isLogged ? ' ĐẶT NGAY' : 'Đăng nhập để đặt hàng '
+              isLogged ? ' ĐẶT NGAY' :
+                !dataAddressUser || dataAddressUser?.length === 0 ? 'Cập nhật địa chi để đặt hàng ' :
+                  'Đăng nhập để đặt hàng '
             }
           </button>
         </div>

@@ -2750,6 +2750,7 @@ html {
                       &__price {
                         margin-left: 10px;
                         display: flex;
+                        width: 125px;
                         align-items: flex-end;
                         position: relative;
                         & > * span {
@@ -3280,6 +3281,7 @@ html {
                         &__price {
                           margin-left: 10px;
                           display: flex;
+                          width: 125px;
                           align-items: flex-end;
                           position: relative;
                           & > * span {

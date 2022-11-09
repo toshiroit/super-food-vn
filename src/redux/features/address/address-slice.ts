@@ -22,7 +22,7 @@ const addressSlice = createSlice({
       state.error = action.error
     }).addCase(getAddressByUser.fulfilled, (state, action) => {
       state.loading = false
-      state.data = action.payload.data
+      state.data = action.payload.data.data
     })
   },
 })

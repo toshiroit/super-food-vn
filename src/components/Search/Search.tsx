@@ -1,6 +1,6 @@
 import { selectProductSliceData, selectProductSliceDataSearch, selectProductSliceLoadingSearch } from "@/redux/features/product/product-selects";
 import { searchProductByName } from "@/redux/features/product/product-thunks";
-import { selectSearchSliceSearchType } from "@/redux/features/search/search-selects";
+import { selectSearchSliceSearchType, selectSearchSliceTextSearch } from "@/redux/features/search/search-selects";
 import { changeSearch } from "@/redux/features/search/search-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { FilterSearch } from "@/types/search/search";
@@ -14,6 +14,7 @@ const Search = () => {
   const dispatch = useAppDispatch()
   const router = useRouter()
   const searchType = useAppSelector(selectSearchSliceSearchType)
+  const dataTextSearch = useAppSelector(selectSearchSliceTextSearch)
   const dataProduct = useAppSelector(selectProductSliceDataSearch)
   const loadingSearch = useAppSelector(selectProductSliceLoadingSearch)
 
@@ -25,50 +26,39 @@ const Search = () => {
   useEffect(() => {
     let isCanelledAPI = true
     const page = router.query.page || 1
-    if (router.query.q && router.query.page) {
+    let textSearch = dataTextSearch
+    if (dataTextSearch.length === 0) {
+      textSearch = localStorage.getItem('text_search') || ''
+    }
+    if (dataTextSearch.length === 0 || !dataTextSearch) {
+      console.log(textSearch)
       function searchProduct() {
         if (isCanelledAPI) {
           dispatch(searchProductByName({
-            value: searchType, textSearch: router.query.q as string || '', page: String(page)
+            value: searchType, textSearch: textSearch, page: String(page)
           }))
         }
       }
       searchProduct()
-      return () => {
-        isCanelledAPI = false
-      }
-
     }
-  }, [router.query])
+    return () => {
+      isCanelledAPI = false
+    }
+  }, [router.query, dispatch, searchType, dataTextSearch])
   const paginationEl = (size: number): React.ReactElement[] => {
     let i = 0, result = [], j = 0, pageLimit = 7
     const page = router.query.page || 1
     const maxPageLimit = 5
-    if (Number(page) < size && Number(page) < maxPageLimit) {
-      for (i = 1; i <= maxPageLimit; i++) {
-        result.push(
-          <Link href={`/search?q=${router.query.q}&page=${i}`}>
-            <a>
-              <li className={
-                `pagination__main___item ${Number(router.query.page || 1) === i ? 'active' : ''}`
-              }>{i}</li>
-            </a>
-          </Link>
-        )
-      }
-    }
-    else {
-      for (i = Number(page); i <= size; i++) {
-        result.push(
-          <Link href={`/search?q=${router.query.q}&page=${i}`}>
-            <a>
-              <li className={
-                `pagination__main___item ${Number(router.query.page || 1) === i ? 'active' : ''}`
-              }>{i}</li>
-            </a>
-          </Link>
-        )
-      }
+    for (i = 1; i <= size; i++) {
+      result.push(
+        <Link href={`/search?q=${router.query.q}&page=${i}`}>
+          <a>
+            <li className={
+              `pagination__main___item ${Number(router.query.page || 1) === i ? 'active' : ''}`
+            }>{i}</li>
+          </a>
+        </Link>
+      )
     }
     return result;
   }

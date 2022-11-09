@@ -19,6 +19,7 @@ export interface CartItem extends VoucherT {
   readonly code_shop?: string | null;
   readonly code_user?: string | null;
   code_voucher: string | null;
+  name_shop: string;
   evaluate: number | undefined;
   id_product: number | null;
   image: string | null;
@@ -43,10 +44,11 @@ export type OnChangeCartType = {
 export type CartShop = {
   code_shop: string;
   name_shop: string;
-  cartItem: CartItem[];
+  cartItem: CartItemShop[]
 }
 export type CartItemShop = {
-
+  shop: any
+  cart: CartItem[]
 }
 
 export type PriceResultCartData = {

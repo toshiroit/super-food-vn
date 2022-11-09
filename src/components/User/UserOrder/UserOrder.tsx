@@ -29,14 +29,16 @@ const UserOrder = () => {
       <div className="content__order">
         {
           dataListOrder.loading ? <h1>Dang tai </h1> :
-            dataListOrder && dataListOrder.data && dataListOrder.data.data.map((item: any) => {
-              return (
-                <UserOrderItem itemOrder={item} key={item.code_order} />
-              )
-            })
+            dataListOrder && dataListOrder.data && dataListOrder.data.data.length !== 0 ?
+              dataListOrder.data.data
+                .map((item: any) => {
+                  return (
+                    <UserOrderItem itemOrder={item} key={item.code_order} />
+                  )
+                }) : <span style={{ textAlign: 'center' }} > Không có đơn hàng nào</span>
         }
       </div>
-    </div>
+    </div >
   );
 };
 export default UserOrder;

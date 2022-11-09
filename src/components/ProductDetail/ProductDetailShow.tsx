@@ -145,11 +145,30 @@ const ProductDetailShow = () => {
               <div className="selectProduct">
                 <h4 className="title">Lựa chọn</h4>
                 <ul className="selectProduct__main">
+                  {console.log(data)}
                   {
-
+                    data.type_product && data.type_product.map((item: any) => {
+                      if (item.code && item.name.length > 0)
+                        return (
+                          <li key={item.code} className="itemSelect">{item.name}</li>
+                        )
+                    })
                   }
-
                 </ul>
+              </div>
+              <div className="noteProduct">
+                <textarea
+                  style={{
+                    width: '100%',
+                    resize: 'none',
+                    height: '150px',
+                    padding: '10px',
+                    border: '1px solid #ddd',
+                    background: 'none',
+                    outline: 'none'
+                  }}
+                  placeholder="Thêm thông tin cho shop "
+                ></textarea>
               </div>
               <div className="btnProduct">
                 <div className="btnProduct__quality">
@@ -216,6 +235,7 @@ const ProductDetailShow = () => {
                   </ul>
                 </div>
               </div>
+
               <div className="infoProductwp">
                 <ul className="infoProductwp__main">
                   <li className="infoProductwp__main___item">

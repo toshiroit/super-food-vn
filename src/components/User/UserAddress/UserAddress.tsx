@@ -27,10 +27,9 @@ const UserAddress = () => {
       </div>
       <div className="content__address">
         <ul className="content__address___main">
-          {console.log(dataAddress)}
           {
             loadingAddress ? <h1> Dang tai</h1> :
-              dataAddress && dataAddress.data.map(item => {
+              dataAddress && dataAddress.map(item => {
                 return (
                   <UserAddressItem
 

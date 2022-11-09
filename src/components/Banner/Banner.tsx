@@ -2,8 +2,9 @@ import { slug } from "@/lib/slug";
 import { searchProductByName } from "@/redux/features/product/product-thunks";
 import { selectSearchSliceLoading, selectSearchSliceSearchType, selectSearchSliceTextSearch } from "@/redux/features/search/search-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
+import { changeSearch } from "@/redux/features/search/search-slice";
 import { useRouter } from "next/router";
-import { ChangeEvent, EventHandler, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
 
 const Banner = () => {
   const router = useRouter();
@@ -18,6 +19,7 @@ const Banner = () => {
     e.preventDefault();
     if (textSearch && textSearch.length > 0) {
       const page = router.query.page || 1
+      dispatch(changeSearch({ textSearch: textSearch }))
       dispatch(searchProductByName({ value: searchType, textSearch: textSearch }))
       router.push(`/search?q=${slug(textSearch || '')}`);
     }
