@@ -152,3 +152,21 @@ export const getAllProductByPayTop = createAsyncThunk(
 
   }
 )
+
+export const getAllProductByNewShop = createAsyncThunk(
+  'product/get-product-new-shop',
+  async (data: { limit: string }, thunkAPI) => {
+    const responsive = await RequestServices.get({
+      method: 'GET',
+      authorization: '',
+      isAuthRequired: false,
+      contentType: 'application/json',
+      url: `${URL + `/product/get-all-new-shop?limit=${data.limit || 6}`}`
+    })
+    return {
+      data: responsive.data,
+      error: responsive.error
+    }
+
+  }
+)

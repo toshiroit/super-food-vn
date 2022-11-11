@@ -1,6 +1,6 @@
 import { ProductSliceState } from "@/types/product/product";
 import { createSlice } from "@reduxjs/toolkit";
-import { getAllProductByPayTop, getAllProductByShop, getAllProductByTop, getProductAll, getProductByCodeOrName, searchProductByName } from "./product-thunks";
+import { getAllProductByNewShop, getAllProductByPayTop, getAllProductByShop, getAllProductByTop, getProductAll, getProductByCodeOrName, searchProductByName } from "./product-thunks";
 
 const initialState: ProductSliceState = {
   data: null,
@@ -48,6 +48,11 @@ const initialState: ProductSliceState = {
     data: null,
     error: ''
   },
+  addTypeProduct: {
+    message: null,
+    loading: false,
+    error: null
+  }
 
 }
 const productSlice = createSlice({
@@ -132,6 +137,16 @@ const productSlice = createSlice({
     }).addCase(getAllProductByPayTop.fulfilled, (state, action) => {
       state.dataProductPayTop.loading = false
       state.dataProductPayTop.data = action.payload.data
+    })
+
+    builder.addCase(getAllProductByNewShop.pending, (state) => {
+      state.dataProductShopNew.loading = true
+    }).addCase(getAllProductByNewShop.rejected, (state, action) => {
+      state.dataProductShopNew.loading = false
+      state.dataProductShopNew.error = action.error
+    }).addCase(getAllProductByNewShop.fulfilled, (state, action) => {
+      state.dataProductShopNew.loading = false
+      state.dataProductShopNew.data = action.payload.data
     })
   },
 })

@@ -1,7 +1,7 @@
 import BannerGift from "@/components/Banner/BannerGift";
 import ProductList from "@/components/Product/ProductList";
 import { selectProductSliceDataAll, selectProductSliceDataProductPayTop, selectProductSliceDataProductProductHot, selectProductSliceDataProductProductNew, selectProductSliceDataProductShopNew } from "@/redux/features/product/product-selects";
-import { getAllProductByPayTop, getAllProductByTop, getProductAll } from "@/redux/features/product/product-thunks";
+import { getAllProductByNewShop, getAllProductByPayTop, getAllProductByTop, getProductAll } from "@/redux/features/product/product-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import type { NextPage } from "next";
 import Head from "next/head";
@@ -21,6 +21,7 @@ const Home: NextPage = () => {
       await dispatch(getProductAll({ limit: 6, type: 'new-product' }))
       await dispatch(getAllProductByTop({ limit: '6' }))
       await dispatch(getAllProductByPayTop({ limit: '6' }))
+      await dispatch(getAllProductByNewShop({ limit: '6' }))
     }
     if (isStop) {
       getProductAllFc()
@@ -62,7 +63,7 @@ const Home: NextPage = () => {
               {
                 dataProductNew.loading
                   ? <h1>Dang tai</h1>
-                  : <ProductList item={{ typeShow: 'SHOP-NEW' }} dataProductAll={dataProductNew.data} />
+                  : <ProductList item={{ typeShow: 'SHOP-NEW' }} dataProductAll={dataProductShopNew.data && dataProductShopNew.data.data} />
               }
             </div>
             <div className="main__wp1">

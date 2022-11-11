@@ -103,6 +103,12 @@ export type ProductSliceState = {
     data: any | null;
     loading: boolean;
     error: any;
+  },
+
+  addTypeProduct: {
+    message: any | null;
+    loading: boolean;
+    error: any | null
   }
 
   dataAll?: any | null;

@@ -22,7 +22,7 @@ const ProductDetailShow = () => {
   const dispatch = useAppDispatch()
   const [quality, setQuality] = useState<number>(1);
   const [activeType, setActiveType] = useState<string>()
-
+  const [imageShow, setImageShow] = useState<any>()
   useEffect(() => {
     if (showNotify.show == 'show') {
       if (timeShow === 0) {
@@ -74,6 +74,13 @@ const ProductDetailShow = () => {
         setQuality(quality - 1)
     }
   }
+
+  const onShowImage = (data: any, id: number) => {
+    setImageShow({
+      id,
+      image: data.image
+    })
+  }
   return (
     <>
       <NotifycationForm
@@ -83,17 +90,42 @@ const ProductDetailShow = () => {
       />
       <div className="common">
         <div className="photo">
-          <div className="photo__box">
-            <div className="image"></div>
-            <div className="videoShow" />
-          </div>
+          {data && !loading ?
+            <div className="photo__box">
+              <div className="image">
+                <picture>
+                  <img
+                    src={imageShow && imageShow.image || data.image}
+                    alt=""
+                  />
+                </picture>
+              </div>
+              <div className="videoShow" />
+            </div> : ''
+          }
           <ul className="photo__side">
             {data && !loading ? (
-              <li className="photo__side___item">
-                <picture>
-                  <img src={data.image} alt="" />
-                </picture>
-              </li>
+              <>
+                <li onClick={() => onShowImage(data.image, -1)} className="photo__side___item" >
+                  <picture>
+                    <img src={data.image} alt="" />
+                  </picture>
+                </li>
+                {
+                  data.images && data.images.map((item: any, key: any) => {
+                    return (
+                      <li onClick={() => onShowImage(item, key)}
+                        className={`photo__side___item ${imageShow && imageShow.id === key ? 'active' : ''}`} key={key}>
+                        <picture>
+                          <img src={item.image} alt="" />
+                        </picture>
+                      </li>
+                    )
+                  })
+                }
+
+              </>
+
             ) : (
               ""
             )}
