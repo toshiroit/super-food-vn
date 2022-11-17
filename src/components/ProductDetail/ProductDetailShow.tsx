@@ -13,6 +13,7 @@ import NotifycationForm from "../Notification/NotificationForm";
 const ProductDetailShow = () => {
   const { isLogged } = useAuthContext()
   const [timeShow, setTimeShow] = useState<number>(4)
+  const [infoProduct, setInfoProduct] = useState<string>('')
   const [showNotify, setShowNotify] = useState<NotifyCationForm>({
     show: null,
     type: null
@@ -38,9 +39,9 @@ const ProductDetailShow = () => {
     }
 
   }, [timeShow, showNotify])
-  const onAddCart = (data: any) => {
+  const onAddCart = (data: any, infoProduct: string) => {
     if (!isLogged) {
-      dispatch(addCart({ item: data, quality: quality }))
+      dispatch(addCart({ item: data, quality: quality, infoProduct: infoProduct }))
       setShowNotify({
         show: 'show',
         type: 'danger',
@@ -48,7 +49,7 @@ const ProductDetailShow = () => {
       })
     }
     else {
-      dispatch(addCart({ item: data, quality: quality }))
+      dispatch(addCart({ item: data, quality: quality, infoProduct: infoProduct }))
       setShowNotify({
         show: 'show',
         type: 'danger',
@@ -177,7 +178,6 @@ const ProductDetailShow = () => {
               <div className="selectProduct">
                 <h4 className="title">Lựa chọn</h4>
                 <ul className="selectProduct__main">
-                  {console.log(data)}
                   {
                     data.type_product && data.type_product.map((item: any) => {
                       if (item.code && item.name.length > 0)
@@ -190,7 +190,10 @@ const ProductDetailShow = () => {
               </div>
               <div className="noteProduct">
                 <textarea
+                  onChange={(e) => setInfoProduct(e.target.value)}
+                  name="inoProduct"
                   style={{
+
                     width: '100%',
                     resize: 'none',
                     height: '150px',
@@ -222,7 +225,7 @@ const ProductDetailShow = () => {
                     <i className="fa-solid fa-bag-shopping fa-size" /> MUA NGAY
                   </button>
                   <button
-                    onClick={() => onAddCart(data)}
+                    onClick={() => onAddCart(data, infoProduct)}
                     type="button"
                     className="btn btn-cart"
                   >

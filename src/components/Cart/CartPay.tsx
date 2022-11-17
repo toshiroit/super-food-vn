@@ -6,6 +6,7 @@ import { getAddressByUser } from "@/redux/features/address/address-thunks";
 import { selectCartSliceDataLocal, selectCartSlicePriceDiscount, selectCartSlicePriceResult } from "@/redux/features/cart/cart-selects";
 import { priceResultData } from "@/redux/features/cart/cart-slice";
 import { addDataCheckout } from "@/redux/features/checkout/checkout-slice";
+import { checkoutOrder } from "@/redux/features/checkout/checkout-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { GiftT } from "@/types/cart/cart";
@@ -52,9 +53,13 @@ const CartPay = () => {
           if (dataAddressUser) {
             if (dataAddressUser.length > 0) {
               dispatch(addDataCheckout({
+                address: {
+                  fullName: '124',
+                  code: '124'
+                },
                 data: dataCartLocal,
                 priceResult: priceResultW as number || 0,
-                priceDiscount: priceDiscountW as number || 0
+                priceDiscount: priceDiscountW as number || 0,
               }))
               router.push(clientRoutes.CHECKOUT)
             }
@@ -190,7 +195,7 @@ const CartPay = () => {
               {
                 dataCartLocal.map((item, key) => {
                   return (
-                    <GiftItem code={item.code_w_voucher} image="124" title={item.name_voucher} key={item.code_w_voucher} />
+                    <GiftItem code={item.code_w_voucher} image="124" title={item.name_voucher} key={key} />
                   )
                 })
               }
@@ -247,9 +252,8 @@ const CartPay = () => {
           <button type="button" onClick={onPayCheckout} className="btn btn-buy">
             <i className="fa-solid fa-bag-shopping" />
             {
-              isLogged ? ' ĐẶT NGAY' :
-                !dataAddressUser || dataAddressUser?.length === 0 ? 'Cập nhật địa chi để đặt hàng ' :
-                  'Đăng nhập để đặt hàng '
+              !isLogged ? 'Đăng nhập để đặt hàng ' :
+                'ĐẶT NGAY'
             }
           </button>
         </div>

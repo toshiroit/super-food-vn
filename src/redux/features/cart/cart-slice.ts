@@ -10,7 +10,8 @@ const initialState: CartState<CartItem> = {
   dataLocal: [],
   message: null,
   codeGift: '',
-  priceDiscount: 0
+  priceDiscount: 0,
+  code_address: ''
 }
 const cartSlice = createSlice({
   name: 'cart-slice',
@@ -21,6 +22,7 @@ const cartSlice = createSlice({
       if (item) {
         const cartLocal = localStorage.getItem('cart')
         const cartItem: CartItem = {
+          name_shop: '',
           code_cart: randomLengthText(14),
           code_product: item.code_product,
           code_user: null,
@@ -45,6 +47,7 @@ const cartSlice = createSlice({
           createdat: item.createdat,
           type: item.type,
           updatedat: item.updatedat,
+          info_product: action.payload.infoProduct || ''
         }
         if (!cartLocal) {
           const cartArr = []
@@ -158,6 +161,7 @@ const cartSlice = createSlice({
       localStorage.setItem('cart', JSON.stringify(action.payload.data))
       state.loading = false;
       state.data = action.payload.data
+      state.dataLocal = action.payload.data
     })
 
     builder.addCase(removeCartItemByCodeCart.pending, (state) => {

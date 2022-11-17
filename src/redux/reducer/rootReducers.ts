@@ -7,6 +7,7 @@ import commentSlice from "../features/comment/comment-slice";
 import displaySlice from "../features/display/display-slice";
 import loginSlice from "../features/login/login-slice";
 import orderSlice from "../features/order/order-slice";
+import paymentSlice from "../features/payment/payment-slice";
 import productSlice from "../features/product/product-slice";
 import searchSlice from "../features/search/search-slice";
 import userSlice from "../features/user/user-slice";
@@ -22,5 +23,6 @@ export default combineReducers({
   checkoutSlice,
   searchSlice,
   orderSlice,
-  addressSlice
+  addressSlice,
+  paymentSlice
 });

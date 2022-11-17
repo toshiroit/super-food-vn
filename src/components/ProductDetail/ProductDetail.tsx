@@ -29,7 +29,6 @@ const ProductDetail = () => {
   }, [data, dispatch])
   return (
     <>
-      {console.log(dataProductByShop.data)}
       {/* <NotificationRoot data={dataNotification} /> */}
       <div className="detail">
         <div className="container">
@@ -62,7 +61,7 @@ const ProductDetail = () => {
           <div className="productAbout__product">
             <div className="productAbout__product___overScroll">
               {
-                dataProductByShop.data && dataProductByShop.data.data.map(item => {
+                dataProductByShop.data && dataProductByShop.data.data.map((item: any) => {
                   return (
                     <ProductItem productItemProps={item} key={item.code_product} />
 

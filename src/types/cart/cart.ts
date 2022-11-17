@@ -9,6 +9,7 @@ export type CartState<T> = {
   priceResult?: number;
   codeGift?: string;
   priceDiscount?: number;
+  code_address?: string;
 }
 
 
@@ -31,11 +32,13 @@ export interface CartItem extends VoucherT {
   type?: string;
   createdat?: string | null;
   updatedat?: string | null;
+  info_product: string;
 }
 
 export interface CartItemProps {
   item: CartItem;
   quality?: number;
+  infoProduct?: string;
 }
 export type OnChangeCartType = {
   type: '+' | '-' | 'remove';
@@ -44,7 +47,7 @@ export type OnChangeCartType = {
 export type CartShop = {
   code_shop: string;
   name_shop: string;
-  cartItem: CartItemShop[]
+  cartItem: CartItem[]
 }
 export type CartItemShop = {
   shop: any

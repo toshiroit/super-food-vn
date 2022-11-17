@@ -27,7 +27,13 @@ const Cart = () => {
           if (data.data.payload) {
             //localStorage.removeItem('cart')
             if (dataCartLocal.length !== 0) {
-              dispatch(addCartByCodeUser({ data_cart: dataCartLocal, code_user: data.data.payload.code_user }))
+              dispatch(
+                addCartByCodeUser({
+                  data_cart: dataCartLocal,
+                  code_user: data.data.payload.code_user,
+
+                })
+              )
             }
           }
         }
@@ -40,7 +46,7 @@ const Cart = () => {
       let isStop = true
       function getCartByCodeUserFc() {
         if (isStop) {
-          dispatch(setCartLocal())
+          //dispatch(setCartLocal())
           dispatch(getCartByCodeUser({ code_user: data.data.payload && data.data.payload.code_user }))
         }
       }
@@ -55,7 +61,7 @@ const Cart = () => {
     // eslint-disable-next-line
   }, [router.pathname, dispatch, isLogged])
 
-  const joinProductShopTest = (data: CartType.CartItem[]) => {
+  const joinProductShopTest = (data: CartType.CartItem[]): CartType.CartItemShop[] => {
     let cpData = [...data]
     const itemsByCodeShop: any = {}
     for (const item of cpData) {
@@ -68,7 +74,10 @@ const Cart = () => {
       }
       itemsByCodeShop[item.code_shop || ''].cart.push(item)
     }
-    return Object.values(itemsByCodeShop)
+    if (itemsByCodeShop) {
+      return Object.values(itemsByCodeShop)
+    }
+    return []
   }
   return (
     <div className="cart">
