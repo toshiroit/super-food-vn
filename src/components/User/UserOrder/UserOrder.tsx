@@ -3,17 +3,49 @@ import { getListOrderByCodeUser } from "@/redux/features/order/order-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import UserOrderItem from "./UserOrderItem";
 
 const UserOrder = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const dataListOrder = useAppSelector(selectOrderSliceDataListOrder)
+  const [pageOrder, setPageOrder] = useState<number[]>([])
+  const [current_page, setCurent_page] = useState<number>(1)
+  const range = (from: number, to: number, step = 1) => {
+    let i = from;
+    const range = [];
+
+    while (i <= to) {
+      range.push(i);
+      i += step;
+    }
+
+    return range;
+  };
   useEffect(() => {
-    const page = Number(router.query.page || 1)
-    dispatch(getListOrderByCodeUser({ page }))
-  }, [router.query, dispatch])
+    dispatch(getListOrderByCodeUser({ page: current_page }))
+  }, [current_page, dispatch])
+  const handlePageClick = () => {
+
+  }
+  useEffect(() => {
+    if (dataListOrder.data && dataListOrder.data.totalPages) {
+      const totalNumbers = 2 * 2 + 2;
+      const totalBlocks = totalNumbers + 2;
+      let tempData = []
+      if (dataListOrder.data.totalPages > totalBlocks) {
+        const startPage = Math.max(2, current_page - 2);
+        const endPage = Math.min(dataListOrder.data.totalPages - 1, current_page + 2);
+        let pages = range(startPage, endPage);
+
+        tempData = [1, ...pages, dataListOrder.data.totalPages];
+        console.log(tempData)
+        setPageOrder(tempData)
+      }
+    }
+    // eslint-disable-next-line
+  }, [current_page, dispatch])
   return (
     <div className="content">
       <div className="title">
@@ -37,8 +69,28 @@ const UserOrder = () => {
                   )
                 }) : <span style={{ textAlign: 'center' }} > Không có đơn hàng nào</span>
         }
+        <div className="pagination">
+          <ul className="pagination__main">
+
+            <li className="pagination__main___item arrow">
+              <i className="fa-solid fa-angle-left fa-size" />
+            </li>
+            {
+              pageOrder.map((item) => {
+                return (
+                  <li key={item} onClick={() => setCurent_page(item)} className={
+                    `pagination__main___item ${current_page === item ? 'active' : ''}`
+                  }>{item}</li>
+                )
+              })
+            }
+            <li className="pagination__main___item arrow">
+              <i className="fa-solid fa-angle-right fa-size" />
+            </li>
+          </ul>
+        </div>
       </div>
-    </div >
+    </div>
   );
 };
 export default UserOrder;

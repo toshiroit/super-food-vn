@@ -21,6 +21,13 @@ export type OrderGetDetailAPI = {
 }
 export type ItemOrder = {
   code_order: string;
+  date_order: string;
+  image_shop: string;
+  total_order: number;
+  phone_shipw: string;
+  progress: number;
+  name_product: string;
+  image_product: string;
 }
 export interface ItemOrderProps {
   itemOrder: ItemOrder

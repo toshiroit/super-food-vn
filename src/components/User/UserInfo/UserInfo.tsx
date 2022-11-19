@@ -19,12 +19,12 @@ const UserInfo = () => {
     isPasswordV1: false,
     isPasswordV2: false
   })
-  const [fullName, setFullName] = useState<string>(data && data.data.payload.full_name)
+  const [fullName, setFullName] = useState<string>(data && data.data.payload && data.data.payload.full_name)
   const [sex, setSex] = useState<boolean>(false)
   const [date, setDate] = useState<UserDate>({
-    day: formDateVN(data && data.data.payload.date_birth).getDay().toString(),
-    month: formDateVN(data && data.data.payload.date_birth).getMonth().toString(),
-    five: formDateVN(data && data.data.payload.date_birth).getFullYear().toString()
+    day: formDateVN(data && data.data.payload && data.data.payload.date_birth).getDay().toString(),
+    month: formDateVN(data && data.data.payload && data.data.payload.date_birth).getMonth().toString(),
+    five: formDateVN(data && data.data.payload && data.data.payload.date_birth).getFullYear().toString()
   })
   const [dataUser, setDataUser] = useState<UserInfoFull | undefined>(data && data.data.payload)
 
@@ -137,7 +137,7 @@ const UserInfo = () => {
                     id=""
                     onChange={onChangeDate}
                     defaultValue={
-                      data && formDateVN(data.data.payload.date_birth).getDay()
+                      data && formDateVN(data.data.payload && data.data.payload.date_birth).getDay()
                     }
                   >
                     <option value={-1}>Ngày</option>
@@ -159,7 +159,7 @@ const UserInfo = () => {
                     id=""
                     defaultValue={
                       data &&
-                      month[formDateVN(data.data.payload.date_birth).getMonth()]
+                      month[formDateVN(data.data.payload && data.data.payload.date_birth).getMonth()]
                     }
                   >
                     <>
@@ -201,7 +201,7 @@ const UserInfo = () => {
                     id=""
                     defaultValue={
                       data &&
-                      formDateVN(data.data.payload.date_birth).getFullYear()
+                      formDateVN(data.data.payload && data.data.payload.date_birth).getFullYear()
                     }
                   >
                     <option value={-1}>Năm</option>
@@ -262,7 +262,7 @@ const UserInfo = () => {
                       type="radio"
                       name="female"
                       onChange={onCheckSex}
-                      defaultChecked={data && data.data.payload.sex ? true : false}
+                      defaultChecked={data && data.data.payload && data.data.payload.sex ? true : false}
                       checked={sex ? true : false}
                     />
                     <span>Nam </span>
@@ -272,7 +272,7 @@ const UserInfo = () => {
                       type="radio"
                       name="male"
                       onChange={onCheckSex}
-                      defaultChecked={data && data.data.payload.sex ? false : true}
+                      defaultChecked={data && data.data.payload && data.data.payload.sex ? false : true}
                       checked={sex ? false : true}
                     />
                     <span>Nữ </span>
@@ -339,7 +339,7 @@ const UserInfo = () => {
                   type="text"
                   onChange={onChangeUpdate}
                   disabled={settingUser.isChangePhone ? true : false}
-                  defaultValue={data && data.data.payload.phone.trim()}
+                  defaultValue={data && data.data.payload && data.data.payload.phone.trim()}
                   name="phone"
                 />
                 <button onClick={() => onChangeSetting('phone')} type="button">

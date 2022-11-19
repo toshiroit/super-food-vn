@@ -1,7 +1,7 @@
 import { randomLengthText } from "@/lib/random";
-import { CartItem, CartItemProps, CartState, OnChangeCartType, PriceResultCartData } from "@/types/cart/cart";
+import { CartItem, CartItemProps, CartState, OnChangeCartType, PriceResultCartData, SetDataCartLocalAction } from "@/types/cart/cart";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCartByCodeUser, removeCartItemByCodeCart } from "./cart-thunks";
+import { getCartByCodeUser, removeCartByCodeProductAndCart, removeCartItemByCodeCart } from "./cart-thunks";
 
 const initialState: CartState<CartItem> = {
   data: null,
@@ -11,7 +11,12 @@ const initialState: CartState<CartItem> = {
   message: null,
   codeGift: '',
   priceDiscount: 0,
-  code_address: ''
+  code_address: '',
+  removeCartByProduct: {
+    loading: false,
+    error: null,
+    data: null
+  }
 }
 const cartSlice = createSlice({
   name: 'cart-slice',
@@ -149,6 +154,11 @@ const cartSlice = createSlice({
     },
     resultPay: (state) => {
 
+    },
+    setDataCartLocal: (state, action: PayloadAction<SetDataCartLocalAction>) => {
+      localStorage.setItem('cart', JSON.stringify([]))
+      state.dataLocal = action.payload.data
+      return state;
     }
   },
   extraReducers(builder) {
@@ -173,7 +183,17 @@ const cartSlice = createSlice({
       state.loading = false;
       state.message = action.payload.data
     })
+
+    builder.addCase(removeCartByCodeProductAndCart.pending, (state) => {
+      state.removeCartByProduct.loading = true
+    }).addCase(removeCartByCodeProductAndCart.rejected, (state, action) => {
+      state.removeCartByProduct.loading = false
+      state.removeCartByProduct.error = action.error
+    }).addCase(removeCartByCodeProductAndCart.fulfilled, (state, action) => {
+      state.removeCartByProduct.loading = false
+      state.removeCartByProduct.data = action.payload.data
+    })
   },
 })
-export const { setCartLocal, onChangeCart, addCart, restCart, priceResultData } = cartSlice.actions;
+export const { setDataCartLocal, setCartLocal, onChangeCart, addCart, restCart, priceResultData } = cartSlice.actions;
 export default cartSlice.reducer;

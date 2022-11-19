@@ -51,3 +51,23 @@ export const removeCartItemByCodeCart = createAsyncThunk(
     }
   }
 )
+export const removeCartByCodeProductAndCart = createAsyncThunk(
+  'cart/remove-cart-by-code-product',
+  async (data: { code_product: Array<string> }, thunkAPI) => {
+    console.log("DATA", data)
+    const responsive = await RequestServices.del({
+      method: "DELETE",
+      authorization: '',
+      isAuthRequired: true,
+      contentType: 'application/json',
+      url: `${URL + `/cart/remove-cart-by-code-product?code_product=${JSON.stringify(data.code_product)}`}`,
+      body: {
+        data: "XOA DU LIEU"
+      }
+    })
+    return {
+      data: responsive.data,
+      error: responsive.error
+    }
+  }
+)

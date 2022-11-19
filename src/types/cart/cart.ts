@@ -10,6 +10,11 @@ export type CartState<T> = {
   codeGift?: string;
   priceDiscount?: number;
   code_address?: string;
+  removeCartByProduct: {
+    loading: boolean;
+    error: any | null;
+    data: any | null;
+  }
 }
 
 
@@ -65,4 +70,7 @@ export type GiftT = {
   isCheck?: boolean;
   price_gift?: number;
   show?: 'SHOW' | 'HIDE'
+}
+export type SetDataCartLocalAction = {
+  data: Array<any>
 }

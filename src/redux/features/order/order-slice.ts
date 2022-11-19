@@ -33,6 +33,7 @@ const orderSlice = createSlice({
 
     builder.addCase(getOrderDetailByCodeOrder.pending, (state) => {
       state.dataOrderDetail.loading = true
+      state.dataOrderDetail.data = null
     }).addCase(getOrderDetailByCodeOrder.rejected, (state, action) => {
       state.dataOrderDetail.loading = false;
       state.dataOrderDetail.error = action.error

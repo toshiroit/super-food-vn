@@ -3,20 +3,26 @@ import { selectOrderSliceDataOrderDetail } from "@/redux/features/order/order-se
 import { getOrderDetailByCodeOrder } from "@/redux/features/order/order-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const UserOrderDetail = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
+  const [dataOrder, setDataOrder] = useState<any>()
   const dataOrderDetail = useAppSelector(selectOrderSliceDataOrderDetail)
   useEffect(() => {
     if (router.query.code) {
       dispatch(getOrderDetailByCodeOrder({ code_order: router.query.code as string || '' }))
     }
-  }, [router.query])
+  }, [router.query, dispatch])
+  useEffect(() => {
+    if (dataOrderDetail.data && dataOrderDetail.data.data && dataOrderDetail.data.data[0]) {
+
+      setDataOrder(dataOrderDetail.data.data[0])
+    }
+  }, [dataOrderDetail.data])
   return (
     <div className="content">
-      {console.log(dataOrderDetail)}
       <div className="title">
         <h4>
           <i className="fa-solid fa-circle-info" />
@@ -26,9 +32,9 @@ const UserOrderDetail = () => {
       </div>
       <div className="content__order">
         {
-          dataOrderDetail.data && dataOrderDetail.data.data.map(item => {
+          dataOrderDetail.data && dataOrderDetail.data.data.map((item: any, key: number) => {
             return (
-              <div className="content__order___imageName" key={item.code_order}>
+              <div className="content__order___imageName" key={item.code_product}>
                 <picture>
                   <img
                     src={item.image}
@@ -42,7 +48,7 @@ const UserOrderDetail = () => {
                   </h4>
                   <span className="tag">
                     <i className="fa-solid fa-tag fa-size" />
-                    Lẩu cay , Cơm , Bún
+                    {item.name_product_type || 'Chưa có'}
                   </span>
                   <div className="grpPro">
                     <span>
@@ -62,22 +68,25 @@ const UserOrderDetail = () => {
                       : {item.quality}
                     </span>
                   </div>
-                  <div className="price">
-                    <span className="price__w2">
-                      <b>Tổng tiền : </b>
-                      {formatPriceVND(item.total_order)}
-                    </span>
-                  </div>
+
                 </div>
                 <div className="removeOrder">
-                  <button type="button" name="removeOrder">
-                    Hủy đơn hàng{" "}
-                  </button>
                 </div>
               </div>
             )
           })
         }
+        <div
+          style={{
+            marginTop: '10px',
+            textAlign: 'end',
+            padding: '10px'
+          }}
+          className="result_price">
+          <h4 style={{ color: '#DC3545' }}>
+            Tổng tiền : {dataOrderDetail.data && formatPriceVND(dataOrderDetail.data.data[0].total_order)}
+          </h4>
+        </div>
         <div className="content__order___infoW">
           <ul className="statusMain">
             <span className="fxNd">
@@ -148,26 +157,28 @@ const UserOrderDetail = () => {
                   <li className="nd__item">
                     <span>
                       <i className="fa-solid fa-signature fa-size" />
-                      Tên của hàng :<b>Cửa hàng lẩu thái Buôn ma thuột </b>
+                      Tên của hàng :<b>{dataOrderDetail.data && dataOrderDetail.data.data[0].name_shop} </b>
                     </span>
                   </li>
                   <li className="nd__item">
                     <span>
                       <i className="fa-solid fa-phone fa-size" /> Số điện thoại
-                      : <b> 0941.714.714</b>
-                    </span>
-                  </li>
-                  <li className="nd__item">
-                    <span>
-                      <i className="fa-solid fa-location-dot fa-size" />
-                      Địa chỉ :<b>86/24 Hà huy tập , tân An , Buôn ma thuột</b>
+                      : <b> {dataOrderDetail.data && dataOrderDetail.data.data[0].phone_shop}</b>
                     </span>
                   </li>
                   <li className="nd__item">
                     <span>
                       <i className="fa-solid fa-bowl-rice fa-size" />
                       Sản phẩm đặt :
-                      <b>Lẩu thái cay ( Không Topping , cay nhiều )</b>
+                      <b>
+                        {dataOrderDetail.data && dataOrderDetail.data.data.map((item: any, key: number) => {
+                          return (
+                            item.name + ' , '
+                          )
+                        })
+                        }
+
+                      </b>
                     </span>
                   </li>
                   <li className="nd__item">
@@ -175,9 +186,14 @@ const UserOrderDetail = () => {
                       <i className="fa-solid fa-envelope-open-text fa-size" />
                       Thông tin thêm cho Shop :
                     </span>
-                    <p>
-                      Lorem facere at blanditiis doloribus! Similique aliquid
-                      error vel ratione quos reiciendis nisi illo!
+                    <p style={{ fontSize: '0.9rem', fontWeight: '500' }}>
+                      {
+                        dataOrderDetail.data && dataOrderDetail.data.data.map((item: any, key: number) => {
+                          return (
+                            item.info_order || 'Không có' + ' - '
+                          )
+                        })
+                      }
                     </p>
                   </li>
                   <li className="nd__item">
@@ -189,7 +205,8 @@ const UserOrderDetail = () => {
                 </ul>
               </div>
               <div className="show__infoBuy___wd" />
-              <div className="show__infoBuy___shop show__infoBuy___item">
+              {/* 
+            <div className="show__infoBuy___shop show__infoBuy___item">
                 <div className="title">
                   <h4 className="title__shipper">
                     <i className="fa-solid fa-truck-fast" />
@@ -266,6 +283,7 @@ const UserOrderDetail = () => {
                   </li>
                 </ul>
               </div>
+              */}
             </div>
           </div>
         </div>

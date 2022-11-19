@@ -1,9 +1,8 @@
 import { formatPriceVND } from "@/lib/formatPrice";
-import { randomLengthText } from "@/lib/random";
 import socket from "@/lib/socketIO";
 import { selectAddressSliceData } from "@/redux/features/address/address-selects";
 import { selectCartSliceDataLocal } from "@/redux/features/cart/cart-selects";
-import { priceResultData } from "@/redux/features/cart/cart-slice";
+import { priceResultData, setDataCartLocal } from "@/redux/features/cart/cart-slice";
 import { selectDataCheckout, selectDataPayment } from "@/redux/features/checkout/checkout-selects";
 import { restCheckout } from "@/redux/features/checkout/checkout-slice";
 import { checkoutOrder } from "@/redux/features/checkout/checkout-thunks";
@@ -15,6 +14,7 @@ import LoadingBackgroundV1 from "../Background/BackgroundLoading/LoadingBackgrou
 import LoadingSpinner from "../Loading/LoadingSpinner";
 import { ToastContainer, toast } from 'react-toastify';
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
+import { removeCartByCodeProductAndCart } from "@/redux/features/cart/cart-thunks";
 const CheckoutPrice = () => {
   const code_payment = useAppSelector(selectDataPayment)
   const { data } = useAuthContext()
@@ -73,6 +73,14 @@ const CheckoutPrice = () => {
     if (!dataCheckoutW.dataCheckout.loading && dataCheckoutW.dataCheckout.data) {
       if (dataCheckoutW.dataCheckout.data.status === 200) {
         const code_user = data.data.payload.code_user
+        const code_product: Array<string> = []
+        dataCartLocal.map((item) => {
+          if (item.code_product) {
+            code_product.push(item.code_product.trim())
+          }
+        })
+        dispatch(setDataCartLocal({ data: [] }))
+        dispatch(removeCartByCodeProductAndCart({ code_product: code_product }))
         dispatch(restCheckout())
         socket.emit('notification', {
           data: `Tài khoản ${code_user} vừa đặt hàng thành công`
