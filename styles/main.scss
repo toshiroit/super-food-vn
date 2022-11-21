@@ -4168,9 +4168,13 @@ html {
                       cursor: pointer;
 
                       .fa-size {
+                        width: 15px;
+                        height: 15px;
                         margin-right: 6px;
                         text-align: center;
                         width: 15px;
+                        text-align: center;
+                        line-height: 14px;
                       }
                       .fa-size-waitLoad {
                         color: $sp-color-text-danger;

@@ -10,6 +10,7 @@ import orderSlice from "../features/order/order-slice";
 import paymentSlice from "../features/payment/payment-slice";
 import productSlice from "../features/product/product-slice";
 import searchSlice from "../features/search/search-slice";
+import socketSlice from "../features/socket/socket-slice";
 import userSlice from "../features/user/user-slice";
 
 export default combineReducers({
@@ -24,5 +25,6 @@ export default combineReducers({
   searchSlice,
   orderSlice,
   addressSlice,
-  paymentSlice
+  paymentSlice,
+  socketSlice
 });

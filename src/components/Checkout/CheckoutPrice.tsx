@@ -1,5 +1,4 @@
 import { formatPriceVND } from "@/lib/formatPrice";
-import socket from "@/lib/socketIO";
 import { selectAddressSliceData } from "@/redux/features/address/address-selects";
 import { selectCartSliceDataLocal } from "@/redux/features/cart/cart-selects";
 import { priceResultData, setDataCartLocal } from "@/redux/features/cart/cart-slice";
@@ -10,14 +9,14 @@ import { selectPaymentSliceData } from "@/redux/features/payment/payment-selects
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import LoadingBackgroundV1 from "../Background/BackgroundLoading/LoadingBackgroundV1";
-import LoadingSpinner from "../Loading/LoadingSpinner";
-import { ToastContainer, toast } from 'react-toastify';
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import { removeCartByCodeProductAndCart } from "@/redux/features/cart/cart-thunks";
+import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
+import { joinProductShop } from "@/lib/joinProductShop";
 const CheckoutPrice = () => {
+  const socketRdx = useAppSelector(selectSocketSliceSocket)
   const code_payment = useAppSelector(selectDataPayment)
-  const { data } = useAuthContext()
+  const { data, isLogged } = useAuthContext()
   const [dataCheckout, setDataCheckout] = useState<any>()
   const dataCartLocal = useAppSelector(selectCartSliceDataLocal)
   const dataAddress = useAppSelector(selectAddressSliceData)
@@ -52,7 +51,6 @@ const CheckoutPrice = () => {
   }
 
   const orderCheckout = () => {
-
     let address_root = ''
     if (dataAddress) {
       dataAddress.map((item) => {
@@ -61,6 +59,7 @@ const CheckoutPrice = () => {
         }
       })
     }
+
     dispatch(checkoutOrder({
       data_checkout: dataCartLocal,
       price_result: dataCheckoutW.priceResult,
@@ -79,16 +78,20 @@ const CheckoutPrice = () => {
             code_product.push(item.code_product.trim())
           }
         })
+        if (socketRdx) {
+          socketRdx.emit('notification_order', {
+            code_shop: joinProductShop(dataCartLocal),
+            data: dataCartLocal
+          })
+        }
         dispatch(setDataCartLocal({ data: [] }))
         dispatch(removeCartByCodeProductAndCart({ code_product: code_product }))
         dispatch(restCheckout())
-        socket.emit('notification', {
-          data: `Tài khoản ${code_user} vừa đặt hàng thành công`
-        })
         router.replace('/checkout/completion')
       }
     }
   }, [dataCheckoutW.dataCheckout.loading, dispatch, isUpload])
+
   return (
     <>
       <ul className="price__main">

@@ -69,26 +69,29 @@ const UserOrder = () => {
                   )
                 }) : <span style={{ textAlign: 'center' }} > Không có đơn hàng nào</span>
         }
-        <div className="pagination">
-          <ul className="pagination__main">
+        {
+          pageOrder.length !== 0 || pageOrder.length > 1 ?
+            <div className="pagination">
+              <ul className="pagination__main">
 
-            <li className="pagination__main___item arrow">
-              <i className="fa-solid fa-angle-left fa-size" />
-            </li>
-            {
-              pageOrder.map((item) => {
-                return (
-                  <li key={item} onClick={() => setCurent_page(item)} className={
-                    `pagination__main___item ${current_page === item ? 'active' : ''}`
-                  }>{item}</li>
-                )
-              })
-            }
-            <li className="pagination__main___item arrow">
-              <i className="fa-solid fa-angle-right fa-size" />
-            </li>
-          </ul>
-        </div>
+                <li className="pagination__main___item arrow">
+                  <i className="fa-solid fa-angle-left fa-size" />
+                </li>
+                {
+                  pageOrder.map((item) => {
+                    return (
+                      <li key={item} onClick={() => setCurent_page(item)} className={
+                        `pagination__main___item ${current_page === item ? 'active' : ''}`
+                      }>{item}</li>
+                    )
+                  })
+                }
+                <li className="pagination__main___item arrow">
+                  <i className="fa-solid fa-angle-right fa-size" />
+                </li>
+              </ul>
+            </div> : ''
+        }
       </div>
     </div>
   );

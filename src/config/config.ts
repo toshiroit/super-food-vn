@@ -6,6 +6,8 @@ export const configFormatVND: ConfigFormatVND = {
 };
 export const configAPI = {
   URL_BACKEND:
-    (process.env.URL_BACKEND_NODE_JS_V16 as string) ||
+    (process.env.NEXT_PUBLIC_URL_BACKEND_NODE_JS_V16 as string) ||
     "http://localhost:8080/api",
+  URL_SOCKET_IO:
+    process.env.NEXT_PUBLIC_URL_BACKEND_SOCKET
 };

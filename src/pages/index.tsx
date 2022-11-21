@@ -46,7 +46,6 @@ const Home: NextPage = () => {
         <div className="container">
           {/* <Banner /> */}
           <BannerGift />
-          {console.log(dataProductTop)}
           <div className="main">
             <div className="main__wp1">
               <div className="main__wp1___title">

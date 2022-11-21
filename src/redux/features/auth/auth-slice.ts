@@ -49,6 +49,7 @@ const authSlice = createSlice({
       .addCase(authLoginPhone.fulfilled, (state, action) => {
         state.loading = false;
         state.data = action.payload.data;
+        localStorage.setItem('token', action.payload.data.token)
         state.error = action.payload.error;
       });
     builder
