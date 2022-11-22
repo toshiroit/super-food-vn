@@ -59,7 +59,10 @@ const CheckoutPrice = () => {
         }
       })
     }
-
+    /*socketRdx?.emit('notification_order', {
+      code_shop: joinProductShop(dataCartLocal),
+      data: dataCartLocal
+    })*/
     dispatch(checkoutOrder({
       data_checkout: dataCartLocal,
       price_result: dataCheckoutW.priceResult,

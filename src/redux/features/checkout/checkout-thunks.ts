@@ -36,7 +36,7 @@ export const checkoutOrder = createAsyncThunk(
         code_shop: item.code_shop,
         code_product: item.cartItem.map((item2) => {
           if (item2.code_product)
-            return { code: item2.code_product.trim() }
+            return { code: item2.code_product.trim(), quatity: item2.quality_product }
         }),
         code_address: data.code_address.length === 0 || !data.code_address ? 'PAYMENT_4912W_1' : data.code_address,
         code_payment: data.code_payment,
