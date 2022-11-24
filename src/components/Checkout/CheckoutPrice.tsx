@@ -1,8 +1,14 @@
 import { formatPriceVND } from "@/lib/formatPrice";
 import { selectAddressSliceData } from "@/redux/features/address/address-selects";
 import { selectCartSliceDataLocal } from "@/redux/features/cart/cart-selects";
-import { priceResultData, setDataCartLocal } from "@/redux/features/cart/cart-slice";
-import { selectDataCheckout, selectDataPayment } from "@/redux/features/checkout/checkout-selects";
+import {
+  priceResultData,
+  setDataCartLocal,
+} from "@/redux/features/cart/cart-slice";
+import {
+  selectDataCheckout,
+  selectDataPayment,
+} from "@/redux/features/checkout/checkout-selects";
 import { restCheckout } from "@/redux/features/checkout/checkout-slice";
 import { checkoutOrder } from "@/redux/features/checkout/checkout-thunks";
 import { selectPaymentSliceData } from "@/redux/features/payment/payment-selects";
@@ -14,99 +20,117 @@ import { removeCartByCodeProductAndCart } from "@/redux/features/cart/cart-thunk
 import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
 import { joinProductShop } from "@/lib/joinProductShop";
 const CheckoutPrice = () => {
-  const socketRdx = useAppSelector(selectSocketSliceSocket)
-  const code_payment = useAppSelector(selectDataPayment)
-  const { data, isLogged } = useAuthContext()
-  const [dataCheckout, setDataCheckout] = useState<any>()
-  const dataCartLocal = useAppSelector(selectCartSliceDataLocal)
-  const dataAddress = useAppSelector(selectAddressSliceData)
-  const dataCheckoutW = useAppSelector(selectDataCheckout)
-  const dataPayment = useAppSelector(selectPaymentSliceData)
-  const [isUpload, setIsUpload] = useState<boolean>(false)
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const socketRdx = useAppSelector(selectSocketSliceSocket);
+  const code_payment = useAppSelector(selectDataPayment);
+  const { data, isLogged } = useAuthContext();
+  const [dataCheckout, setDataCheckout] = useState<any>();
+  const dataCartLocal = useAppSelector(selectCartSliceDataLocal);
+  const dataAddress = useAppSelector(selectAddressSliceData);
+  const dataCheckoutW = useAppSelector(selectDataCheckout);
+  const dataPayment = useAppSelector(selectPaymentSliceData);
+  const [isUpload, setIsUpload] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   useEffect(() => {
     if (dataCartLocal) {
-      dispatch(priceResultData({
-        data: dataCartLocal,
-        code_gift: '',
-        price_gift: 1
-      }))
+      dispatch(
+        priceResultData({
+          data: dataCartLocal,
+          code_gift: "",
+          price_gift: 1,
+        })
+      );
     }
     // eslint-disable-next-line
-  }, [dataCartLocal])
+  }, [dataCartLocal]);
   const priceResultQuality = (price: number, quality: number) => {
     return price * quality;
-  }
+  };
   const priceDiscount = (price: number, discount: number) => {
     const discountResult = discount / 100;
-    return price - (price * discountResult);
+    return price - price * discountResult;
   };
   const priceResult = () => {
     let result: number = 0;
-    dataCartLocal.map(item => {
-      result += priceDiscount(priceResultQuality(item.price, item.quality_product), item.discount)
-    })
+    dataCartLocal.map((item) => {
+      result += priceDiscount(
+        priceResultQuality(item.price, item.quality_product),
+        item.discount
+      );
+    });
     return result;
-  }
+  };
 
   const orderCheckout = () => {
-    let address_root = ''
+    let address_root = "";
     if (dataAddress) {
       dataAddress.map((item) => {
         if (item.status) {
-          address_root = item.code_address
+          address_root = item.code_address;
         }
-      })
+      });
     }
     /*socketRdx?.emit('notification_order', {
       code_shop: joinProductShop(dataCartLocal),
       data: dataCartLocal
     })*/
-    dispatch(checkoutOrder({
-      data_checkout: dataCartLocal,
-      price_result: dataCheckoutW.priceResult,
-      code_address: address_root,
-      code_payment: code_payment || ''
-    }))
+    if (code_payment && code_payment.length !== 0) {
+      dispatch(
+        checkoutOrder({
+          data_checkout: dataCartLocal,
+          price_result: dataCheckoutW.priceResult,
+          code_address: address_root,
+          code_payment: code_payment || "",
+        })
+      );
+    } else {
+      alert("Bạn chưa chọn hình thức thanh toán");
+    }
+
     // router.push('/checkout/completion?code')
-  }
+  };
   useEffect(() => {
-    if (!dataCheckoutW.dataCheckout.loading && dataCheckoutW.dataCheckout.data) {
+    if (
+      !dataCheckoutW.dataCheckout.loading &&
+      dataCheckoutW.dataCheckout.data
+    ) {
       if (dataCheckoutW.dataCheckout.data.status === 200) {
-        const code_user = data.data.payload.code_user
-        const code_product: Array<string> = []
+        const code_user = data.data.payload.code_user;
+        const code_product: Array<string> = [];
         dataCartLocal.map((item) => {
           if (item.code_product) {
-            code_product.push(item.code_product.trim())
+            code_product.push(item.code_product.trim());
           }
-        })
+        });
         if (socketRdx) {
-          socketRdx.emit('notification_order', {
+          socketRdx.emit("notification_order", {
             code_shop: joinProductShop(dataCartLocal),
-            data: dataCartLocal
-          })
+            data: dataCartLocal,
+          });
         }
-        dispatch(setDataCartLocal({ data: [] }))
-        dispatch(removeCartByCodeProductAndCart({ code_product: code_product }))
-        dispatch(restCheckout())
-        router.replace('/checkout/completion')
+        dispatch(setDataCartLocal({ data: [] }));
+        dispatch(
+          removeCartByCodeProductAndCart({ code_product: code_product })
+        );
+        dispatch(restCheckout());
+        router.replace("/checkout/completion");
       }
     }
-  }, [dataCheckoutW.dataCheckout.loading, dispatch, isUpload])
+  }, [dataCheckoutW.dataCheckout.loading, dispatch, isUpload]);
 
   return (
     <>
       <ul className="price__main">
         <li className="price__main___item">
           <span>Tạm tính </span>
-          <span className="boldPrice">
-            {formatPriceVND(priceResult())}
-          </span>
+          <span className="boldPrice">{formatPriceVND(priceResult())}</span>
         </li>
         <li className="price__main___item">
           <span>Giảm giá </span>
-          <span className="boldPrice salePrice"> -{formatPriceVND(dataCheckoutW.priceDiscount)}</span>
+          <span className="boldPrice salePrice">
+            {" "}
+            -{formatPriceVND(dataCheckoutW.priceDiscount)}
+          </span>
         </li>
       </ul>
       <div className="price__result">
@@ -122,8 +146,7 @@ const CheckoutPrice = () => {
           <i className="fa-solid fa-bag-shopping" /> ĐẶT NGAY
         </button>
       </div>
-
     </>
-  )
-}
+  );
+};
 export default CheckoutPrice;

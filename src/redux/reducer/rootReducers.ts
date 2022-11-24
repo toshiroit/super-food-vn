@@ -6,10 +6,12 @@ import checkoutSlice from "../features/checkout/checkout-slice";
 import commentSlice from "../features/comment/comment-slice";
 import displaySlice from "../features/display/display-slice";
 import loginSlice from "../features/login/login-slice";
+import notifySlice from "../features/notify/notify-slice";
 import orderSlice from "../features/order/order-slice";
 import paymentSlice from "../features/payment/payment-slice";
 import productSlice from "../features/product/product-slice";
 import searchSlice from "../features/search/search-slice";
+import shopSlice from "../features/shop/shop-slice";
 import socketSlice from "../features/socket/socket-slice";
 import userSlice from "../features/user/user-slice";
 
@@ -26,5 +28,7 @@ export default combineReducers({
   orderSlice,
   addressSlice,
   paymentSlice,
-  socketSlice
+  socketSlice,
+  shopSlice,
+  notifySlice
 });

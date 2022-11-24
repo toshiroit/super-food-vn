@@ -1,12 +1,96 @@
 import { clientRoutes } from "@/constants/router/client/client";
+import { onDisplayLogin } from "@/redux/features/display/display-slice";
+import { selectNotifySliceDataNotify } from "@/redux/features/notify/notify-selects";
+import { addNewNotifyShop } from "@/redux/features/notify/notify-thunks";
+import { selectShopSliceDataFollowShopByUser, selectShopSliceDataShopDetail } from "@/redux/features/shop/shop-selects";
+import { filterProductShop } from "@/redux/features/shop/shop-slice";
+import { followShopByUser, getDataDetailShopByCodeShop } from "@/redux/features/shop/shop-thunks";
+import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
+import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { ChangeEvent, KeyboardEvent, useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 
 const ShopHeader = () => {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const { isLogged } = useAuthContext()
+  const socketRdx = useAppSelector(selectSocketSliceSocket)
+  const dataShopDetail = useAppSelector(selectShopSliceDataShopDetail);
+  const dataFollowShop = useAppSelector(selectShopSliceDataFollowShopByUser)
+  const dataNotifyShop = useAppSelector(selectNotifySliceDataNotify)
+  const [isFollow, setIsFollow] = useState<boolean>(false)
+  const [isAddNew, setIsAddNew] = useState<boolean>(false)
+  const [textSearch, setTextSearch] = useState<string>()
+  const onChangeSearchProduct = (e: ChangeEvent<HTMLInputElement>) => {
+    setTextSearch(e.target.value)
+  }
+  const onEnterSearchProduct = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      dispatch(filterProductShop({ text_search: textSearch }))
+      setTextSearch('')
+    }
+  }
+
+  const onFollowShop = (code_shop: string) => {
+    if (isLogged) {
+      dispatch(followShopByUser({ code_shop: code_shop }))
+      setIsFollow(true)
+    }
+    else {
+      dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }))
+    }
+  }
+  useEffect(() => {
+    if (isFollow && !dataFollowShop.loading) {
+      const query_code = (router.query.code as string) || "";
+      if (query_code) {
+        const code_shop = query_code.split(".");
+        dispatch(getDataDetailShopByCodeShop({ code_shop: code_shop[0] }));
+        dispatch(addNewNotifyShop({
+          title: 'Thông báo từ hệ thống',
+          info: 'Bạn nhận được 1 theo dõi từ người dùng 🙏 🙏',
+          code_shop: code_shop[0]
+        }))
+        if (socketRdx) {
+          socketRdx.emit('notification_follow', {
+            code_shop: code_shop[0],
+            message: 'Bạn nhận được 1 theo dõi từ người dùng'
+          })
+        }
+        toast.success('🦄 Theo dõi thành công', {
+          position: "bottom-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+      }
+    }
+    //eslint-disable-next-line
+  }, [isFollow, dataFollowShop.loading])
+
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="shopIf__flex">
+
         <div className="shopIf__flex___logo">
           <div className="logo">
             <picture>
@@ -14,7 +98,9 @@ const ShopHeader = () => {
             </picture>
           </div>
           <div className="nameWp">
-            <h4 className="nameWp__hw">Lẩu thái nhà làm</h4>
+            <h4 className="nameWp__hw">
+              {dataShopDetail.data && dataShopDetail.data.name_shop}
+            </h4>
             <div className="ticker">
               <span className="ticker__sc">
                 Đang tin cậy
@@ -24,21 +110,33 @@ const ShopHeader = () => {
             <div className="star">
               <span>
                 <i className="fa-solid fa-star fa-size" />
-                4.8/5
+                {dataShopDetail.data && dataShopDetail.data.evaluate}/10
               </span>
             </div>
           </div>
         </div>
         <div className="shopIf__flex___wp">
+          {
+            dataShopDetail.data && dataShopDetail.data.is_follow
+              ? <button disabled={true} onClick={() => onFollowShop(dataShopDetail.data && dataShopDetail.data.code_shop)} className="follow">
+                <i className="fa-solid fa-user-plus" />
+                Hủy theo dõi
+              </button>
+              : <button onClick={() => onFollowShop(dataShopDetail.data && dataShopDetail.data.code_shop)} className="follow">
+                <i className="fa-solid fa-user-plus" />
+                Theo dõi
+              </button>
+          }
           <button className="follow">
-            <i className="fa-solid fa-user-plus" /> Theo dõi
+            <i className="fa-solid fa-user-plus" />
+            Nhắn tin với shop
           </button>
         </div>
       </div>
       <div className="shopIf__menu">
         <div className="wp">
           <ul className="menu">
-            <Link href={"/"}>
+            <Link href={`${clientRoutes.SHOP}/${router.query.code}?tow=shop`}>
               <a>
                 <li
                   className={
@@ -51,7 +149,9 @@ const ShopHeader = () => {
                 </li>
               </a>
             </Link>
-            <Link href={""}>
+            <Link
+              href={`${clientRoutes.SHOP}/${router.query.code}?tow=product`}
+            >
               <a>
                 <li
                   className={
@@ -64,7 +164,7 @@ const ShopHeader = () => {
                 </li>
               </a>
             </Link>
-            <Link href={"/"}>
+            <Link href={`${clientRoutes.SHOP}/${router.query.code}?tow=info`}>
               <a>
                 <li
                   className={
@@ -97,6 +197,9 @@ const ShopHeader = () => {
           <input
             type="text"
             name=""
+            value={textSearch}
+            onChange={onChangeSearchProduct}
+            onKeyPress={onEnterSearchProduct}
             placeholder="Tìm sản phẩm tại cửa hàng này "
             id=""
           />

@@ -1,14 +1,16 @@
 import { formatPriceVND } from "@/lib/formatPrice";
 import { selectOrderSliceDataOrderDetail } from "@/redux/features/order/order-selects";
 import { getOrderDetailByCodeOrder } from "@/redux/features/order/order-thunks";
+import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const UserOrderDetail = () => {
   const router = useRouter()
   const dispatch = useAppDispatch()
-  const [dataOrder, setDataOrder] = useState<any>()
+  const socketRdx = useAppSelector(selectSocketSliceSocket)
   const dataOrderDetail = useAppSelector(selectOrderSliceDataOrderDetail)
   useEffect(() => {
     if (router.query.code) {
@@ -16,30 +18,29 @@ const UserOrderDetail = () => {
     }
   }, [router.query, dispatch])
   useEffect(() => {
-    if (dataOrderDetail.data && dataOrderDetail.data.data && dataOrderDetail.data.data[0]) {
-
-      setDataOrder(dataOrderDetail.data.data[0])
+    if (socketRdx) {
+      socketRdx.on('notification_progress', (data) => {
+        if (data.code_order && router.query.code) {
+          if (data.code_order === router.query.code) {
+            dispatch(getOrderDetailByCodeOrder({ code_order: router.query.code as string || '' }))
+          }
+        }
+      })
     }
-  }, [dataOrderDetail.data])
+  }, [socketRdx])
 
-  const activeStatusOrder = (status: number, start: number, end: number) => {
-    if (start < end) {
-      return false;
-    }
-    return true;
-  }
   return (
     <div className="content">
       <div className="title">
         <h4>
           <i className="fa-solid fa-circle-info" />
-          Chi tiết đơn hàng : {dataOrderDetail.data && dataOrderDetail.data.data[0].code_order}
+          Chi tiết đơn hàng : {dataOrderDetail.data && dataOrderDetail.data.code_order}
         </h4>
         <i id="showMenuUserIdx" className="fa-solid fa-bars" />
       </div>
       <div className="content__order">
         {
-          dataOrderDetail.data && dataOrderDetail.data.data.map((item: any, key: number) => {
+          dataOrderDetail.data && dataOrderDetail.data.product_order.map((item: any, key: number) => {
             return (
               <div className="content__order___imageName" key={item.code_product}>
                 <picture>
@@ -91,7 +92,7 @@ const UserOrderDetail = () => {
           }}
           className="result_price">
           <h4 style={{ color: '#DC3545' }}>
-            Tổng tiền : {dataOrderDetail.data && formatPriceVND(dataOrderDetail.data.data[0].total_order)}
+            Tổng tiền : {dataOrderDetail.data && formatPriceVND(dataOrderDetail.data.total_order)}
           </h4>
         </div>
         <div className="content__order___infoW">
@@ -102,117 +103,111 @@ const UserOrderDetail = () => {
             <li
               className={`
                 statusMain__item 
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 1 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 1 ? 'active' : ''}`}
+                ${dataOrderDetail.data && dataOrderDetail.data.progress === -1 ? '' : 'active'}`}
             >
               {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 1 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 1
-                  ? <i className="fa-solid fa-check fa-size" /> : <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                dataOrderDetail.data && dataOrderDetail.data.progress === -1
+                  ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" /> : <i className="fa-solid fa-check fa-size" />
               }
               <span> Đang xác nhận</span>
             </li>
             <li
               className={`
                 statusMain__item 
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 2 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 2 ? 'active' : ''}
-                `
-              }
+                ${dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 1
+                  || dataOrderDetail.data && dataOrderDetail.data.progress < 1
+                  ? '' : 'active'}`}
             >
-              {console.log(dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order))}
               {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 2
-                  || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 2 ? <i className="fa-solid fa-check fa-size" />
-                  : dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== -1 && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 1 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                dataOrderDetail.data && dataOrderDetail.data.progress === 1 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                  : dataOrderDetail.data && dataOrderDetail.data.progress > 1 ? <i className="fa-solid fa-check fa-size" />
                     : <i className="fa-solid fa-quote-left fa-size" />
+
+
               }
-              <span>Gửi yều câu đến shipper </span>
+              <span>Đơn hàng đã được xác nhận </span>
             </li>
             <li className={`
               statusMain__item
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 3 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 3 ? 'active' : ''}
+                ${dataOrderDetail.data
+                && dataOrderDetail.data.progress === 2
+                || dataOrderDetail.data && dataOrderDetail.data.progress < 2 ? '' : 'active'}
             `}>
               {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 3
-                  || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 3 ? <i className="fa-solid fa-check fa-size" />
-                  : dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== -1
-                    && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== 1 && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 2 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 2 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                  : dataOrderDetail.data && dataOrderDetail.data.progress > 2 ? <i className="fa-solid fa-check fa-size" />
                     : <i className="fa-solid fa-quote-left fa-size" />
               }
-              <span>Shipper đã nhận đơn hàng </span>
+              <span>Đơn hàng đang chế biến </span>
             </li>
             <li
               className={`
-                statusMain__item 
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 4 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 4 ? 'active' : ''}
-              `}
+              statusMain__item
+                ${dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 3
+                  || dataOrderDetail.data && dataOrderDetail.data.progress < 3 ? '' : 'active'}
+            `}
             >
               {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 4
-                  || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 4 ? <i className="fa-solid fa-check fa-size" />
-                  : dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== -1
-                    && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== 1 && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 3 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 3 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                  : dataOrderDetail.data && dataOrderDetail.data.progress > 3 ? <i className="fa-solid fa-check fa-size" />
                     : <i className="fa-solid fa-quote-left fa-size" />
               }
-              <span> Gửi yêu cầu người bán </span>
+              <span>Shipper đã nhận đơn hàng</span>
             </li>
             <li
               className={`
-                statusMain__item
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 5 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 5 ? 'active' : ''}
-              `}
+              statusMain__item
+                ${dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 4
+                  || dataOrderDetail.data && dataOrderDetail.data.progress < 4 ? '' : 'active'}
+
+             `}
             >
               {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 5
-                  || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 5 ? <i className="fa-solid fa-check fa-size" />
-                  : dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== -1
-                    && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== 1 && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 4 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 4 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                  : dataOrderDetail.data && dataOrderDetail.data.progress > 4 ? <i className="fa-solid fa-check fa-size" />
                     : <i className="fa-solid fa-quote-left fa-size" />
               }
-              <span> Người bán đã nhận yêu cầu</span>
+              <span>Đơn hàng đang được giao</span>
             </li>
             <li
               className={`
-                statusMain__item
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 6 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 6 ? 'active' : ''}
-              `}
+              statusMain__item
+                ${dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 5
+                  || dataOrderDetail.data && dataOrderDetail.data.progress < 5 ? '' : 'active'}
+
+             `}
             >
               {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 6
-                  || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 6 ? <i className="fa-solid fa-check fa-size" />
-                  : dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== -1
-                    && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== 1 && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 5 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                dataOrderDetail.data
+                  && dataOrderDetail.data.progress === 5 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                  : dataOrderDetail.data && dataOrderDetail.data.progress > 5 ? <i className="fa-solid fa-check fa-size" />
                     : <i className="fa-solid fa-quote-left fa-size" />
               }
-              <span> Đang chuẩn bị</span>
+              <span>Giao thành công</span>
             </li>
             <li
               className={`
-                statusMain__item
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 7 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 7 ? 'active' : ''}
-              `}
+              statusMain__item
+                ${dataOrderDetail.data
+                  && dataOrderDetail.data.progress === -2
+                  || dataOrderDetail.data && dataOrderDetail.data.progress > -2 ? '' : 'active'}
+
+             `}
             >
               {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 7
-                  || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 7 ? <i className="fa-solid fa-check fa-size" />
-                  : dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== -1
-                    && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== 1 && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 6 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                dataOrderDetail.data
+                  && dataOrderDetail.data.progress === -2 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                  : dataOrderDetail.data && dataOrderDetail.data.progress < -2 ? <i className="fa-solid fa-check fa-size" />
                     : <i className="fa-solid fa-quote-left fa-size" />
               }
-              <span> Đang giao hàng</span>
-            </li>
-            <li
-              className={`
-                statusMain__item
-                ${dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 8 || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 8 ? 'active' : ''}
-              `}
-            >
-              {
-                dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) > 8
-                  || dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 8 ? <i className="fa-solid fa-check fa-size" />
-                  : dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== -1
-                    && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) !== 1 && dataOrderDetail.data && Number(dataOrderDetail.data.data[0].status_order) === 7 ? <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
-                    : <i className="fa-solid fa-quote-left fa-size" />
-              }
-              <span> Giao hàng thành công </span>
+              <span>Giao thất bại </span>
             </li>
           </ul>
           <div className="gifOrder">
@@ -247,13 +242,13 @@ const UserOrderDetail = () => {
                   <li className="nd__item">
                     <span>
                       <i className="fa-solid fa-signature fa-size" />
-                      Tên của hàng :<b>{dataOrderDetail.data && dataOrderDetail.data.data[0].name_shop} </b>
+                      Tên của hàng :<b>{dataOrderDetail.data && dataOrderDetail.data.name_shop} </b>
                     </span>
                   </li>
                   <li className="nd__item">
                     <span>
                       <i className="fa-solid fa-phone fa-size" /> Số điện thoại
-                      : <b> {dataOrderDetail.data && dataOrderDetail.data.data[0].phone_shop}</b>
+                      : <b> {dataOrderDetail.data && dataOrderDetail.data.phone_shop}</b>
                     </span>
                   </li>
                   <li className="nd__item">
@@ -261,7 +256,7 @@ const UserOrderDetail = () => {
                       <i className="fa-solid fa-bowl-rice fa-size" />
                       Sản phẩm đặt :
                       <b>
-                        {dataOrderDetail.data && dataOrderDetail.data.data.map((item: any, key: number) => {
+                        {dataOrderDetail.data && dataOrderDetail.data.product_order.map((item: any, key: number) => {
                           return (
                             item.name + ' , '
                           )
@@ -278,7 +273,7 @@ const UserOrderDetail = () => {
                     </span>
                     <p style={{ fontSize: '0.9rem', fontWeight: '500' }}>
                       {
-                        dataOrderDetail.data && dataOrderDetail.data.data.map((item: any, key: number) => {
+                        dataOrderDetail.data && dataOrderDetail.data.product_order.map((item: any, key: number) => {
                           return (
                             item.info_order || 'Không có' + ' - '
                           )
@@ -373,7 +368,8 @@ const UserOrderDetail = () => {
                   </li>
                 </ul>
               </div>
-              */}
+              */
+              }
             </div>
           </div>
         </div>

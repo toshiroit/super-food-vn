@@ -4,6 +4,7 @@ export const clientRoutes = {
   PRODUCT_DETAIL: (nameProduct: string, codeProduct: string) => {
     return `/product-detail/${nameProduct}.${codeProduct}`
   },
+  SHOP: '/shop',
   SHOP_INDEX: (name: string, code?: string) => {
     return `/shop/${name}`
   },
