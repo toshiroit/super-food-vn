@@ -3,95 +3,108 @@ import { selectUserSliceDataUpdateW1 } from "@/redux/features/user/user-selects"
 import { addInfoUser } from "@/redux/features/user/user-slice";
 import { updateUserInfoW1 } from "@/redux/features/user/user-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { ChangeInfoUser, UpdateUserW1Info, UserDate, UserInfoFull } from "@/types/user/user";
+import {
+  ChangeInfoUser,
+  UpdateUserW1Info,
+  UserDate,
+  UserInfoFull,
+} from "@/types/user/user";
 import Link from "next/link";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
 
 const UserInfo = () => {
   const { data } = useAuthContext();
-  const dispatch = useAppDispatch()
-  const dataUpdateW1Rx = useAppSelector(selectUserSliceDataUpdateW1)
+  const dispatch = useAppDispatch();
+  const dataUpdateW1Rx = useAppSelector(selectUserSliceDataUpdateW1);
   const month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
   const [settingUser, setSettingUser] = useState<ChangeInfoUser>({
     isChangeEmail: false,
     isChangePhone: false,
     isPasswordV1: false,
-    isPasswordV2: false
-  })
-  const [fullName, setFullName] = useState<string>(data && data.data.payload && data.data.payload.full_name)
-  const [sex, setSex] = useState<boolean>(false)
+    isPasswordV2: false,
+  });
+  const [fullName, setFullName] = useState<string>(
+    data && data.data.payload && data.data.payload.full_name
+  );
+  const [sex, setSex] = useState<boolean>(false);
   const [date, setDate] = useState<UserDate>({
-    day: formDateVN(data && data.data.payload && data.data.payload.date_birth).getDay().toString(),
-    month: formDateVN(data && data.data.payload && data.data.payload.date_birth).getMonth().toString(),
-    five: formDateVN(data && data.data.payload && data.data.payload.date_birth).getFullYear().toString()
-  })
-  const [dataUser, setDataUser] = useState<UserInfoFull | undefined>(data && data.data.payload)
+    day: formDateVN(data && data.data && data.data[0].date_birth)
+      .getDay()
+      .toString(),
+    month: formDateVN(data && data.data && data.data[0].date_birth)
+      .getMonth()
+      .toString(),
+    five: formDateVN(data && data.data && data.data[0].date_birth)
+      .getFullYear()
+      .toString(),
+  });
+  const [dataUser, setDataUser] = useState<UserInfoFull | undefined>(
+    data && data.data && data.data[0]
+  );
 
   /* Formik validation form user info */
   const onChangeDate = (e: ChangeEvent<HTMLSelectElement>) => {
     setDate({
       ...date,
-      [e.target.name]: e.target.value
-    })
-  }
+      [e.target.name]: e.target.value,
+    });
+  };
   const onCheckSex = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === 'female') {
-      setSex(true)
+    if (e.target.name === "female") {
+      setSex(true);
+    } else {
+      setSex(false);
     }
-    else {
-      setSex(false)
-    }
-  }
+  };
   const onChangeUser = (e: ChangeEvent<HTMLInputElement>) => {
     setDataUser({
       ...dataUser,
-      [e.target.name]: e.target.value
-    })
+      [e.target.name]: e.target.value,
+    });
   };
   const onSubmitUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     let newDataUser = { ...dataUser };
-    newDataUser.date = `${date?.day + '/' + date?.month + '/' + date?.five}`;
+    newDataUser.date = `${date?.day + "/" + date?.month + "/" + date?.five}`;
     newDataUser.sex = sex;
     const dataUpdate: UpdateUserW1Info = {
-      fullName: newDataUser.full_name || '',
-      date: '2022-10-20 00:00:00',
-      sex: newDataUser.sex
-    }
-    console.log("DATA : ", dataUpdate)
-    dispatch(updateUserInfoW1(dataUpdate))
+      fullName: newDataUser.full_name || "",
+      date: "2022-10-20 00:00:00",
+      sex: newDataUser.sex,
+    };
+    dispatch(updateUserInfoW1(dataUpdate));
     //dispatch(addInfoUser(newDataUser));
   };
-  const onChangeSetting = (nameSetting: 'phone' | 'email' | 'passv1' | 'passv2') => {
-    if (nameSetting === 'phone') {
+  const onChangeSetting = (
+    nameSetting: "phone" | "email" | "passv1" | "passv2"
+  ) => {
+    if (nameSetting === "phone") {
       setSettingUser({
         ...settingUser,
-        isChangePhone: !settingUser.isChangePhone
-      })
+        isChangePhone: !settingUser.isChangePhone,
+      });
     }
-    if (nameSetting === 'email') {
+    if (nameSetting === "email") {
       setSettingUser({
         ...settingUser,
-        isChangeEmail: !settingUser.isChangeEmail
-      })
+        isChangeEmail: !settingUser.isChangeEmail,
+      });
     }
-    if (nameSetting === 'passv1') {
+    if (nameSetting === "passv1") {
       setSettingUser({
         ...settingUser,
-        isPasswordV1: !settingUser.isPasswordV1
-      })
+        isPasswordV1: !settingUser.isPasswordV1,
+      });
     }
-    if (nameSetting === 'passv2') {
+    if (nameSetting === "passv2") {
       setSettingUser({
         ...settingUser,
-        isPasswordV2: !settingUser.isPasswordV2
-      })
+        isPasswordV2: !settingUser.isPasswordV2,
+      });
     }
-  }
-  const onChangeUpdate = () => {
-
   };
+  const onChangeUpdate = () => {};
   return (
     <div className="content">
       <div className="title">
@@ -112,7 +125,7 @@ const UserInfo = () => {
             <i className="fa-solid fa-pen fa-size" />
           </div>
           <ul className="infoUser inline">
-            <form onSubmit={onSubmitUser} >
+            <form onSubmit={onSubmitUser}>
               <li className="infoUser__item">
                 <label htmlFor="">
                   <i className="fa-solid fa-signature fa-size" />
@@ -137,7 +150,8 @@ const UserInfo = () => {
                     id=""
                     onChange={onChangeDate}
                     defaultValue={
-                      data && formDateVN(data.data.payload && data.data.payload.date_birth).getDay()
+                      data &&
+                      formDateVN(data.data && data.data[0].date_birth).getDay()
                     }
                   >
                     <option value={-1}>Ngày</option>
@@ -159,7 +173,11 @@ const UserInfo = () => {
                     id=""
                     defaultValue={
                       data &&
-                      month[formDateVN(data.data.payload && data.data.payload.date_birth).getMonth()]
+                      month[
+                        formDateVN(
+                          data.data && data.data[0].date_birth
+                        ).getMonth()
+                      ]
                     }
                   >
                     <>
@@ -201,7 +219,9 @@ const UserInfo = () => {
                     id=""
                     defaultValue={
                       data &&
-                      formDateVN(data.data.payload && data.data.payload.date_birth).getFullYear()
+                      formDateVN(
+                        data.data && data.data[0].date_birth
+                      ).getFullYear()
                     }
                   >
                     <option value={-1}>Năm</option>
@@ -262,7 +282,9 @@ const UserInfo = () => {
                       type="radio"
                       name="female"
                       onChange={onCheckSex}
-                      defaultChecked={data && data.data.payload && data.data.payload.sex ? true : false}
+                      defaultChecked={
+                        data && data.data && data.data[0].sex ? true : false
+                      }
                       checked={sex ? true : false}
                     />
                     <span>Nam </span>
@@ -272,7 +294,9 @@ const UserInfo = () => {
                       type="radio"
                       name="male"
                       onChange={onCheckSex}
-                      defaultChecked={data && data.data.payload && data.data.payload.sex ? false : true}
+                      defaultChecked={
+                        data && data.data && data.data[0].sex ? false : true
+                      }
                       checked={sex ? false : true}
                     />
                     <span>Nữ </span>
@@ -304,9 +328,7 @@ const UserInfo = () => {
                 <button type="submit">
                   <>
                     <i className="fa-solid fa-floppy-disk fa-size" />
-                    {
-                      dataUpdateW1Rx.loading ? 'Đang lưu ' : 'Lưu thông tin'
-                    }
+                    {dataUpdateW1Rx.loading ? "Đang lưu " : "Lưu thông tin"}
                   </>
                 </button>
               </div>
@@ -322,11 +344,14 @@ const UserInfo = () => {
                 Địa chỉ thư điện tử
               </label>
               <div className="ipn">
-                <input disabled={settingUser.isChangeEmail ? true : false} type="text" onChange={onChangeUser} name="email" />
-                <button onClick={() => onChangeSetting('email')} type="button">
-                  {
-                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
-                  }
+                <input
+                  disabled={settingUser.isChangeEmail ? true : false}
+                  type="text"
+                  onChange={onChangeUser}
+                  name="email"
+                />
+                <button onClick={() => onChangeSetting("email")} type="button">
+                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
                 </button>
               </div>
             </li>
@@ -339,13 +364,11 @@ const UserInfo = () => {
                   type="text"
                   onChange={onChangeUpdate}
                   disabled={settingUser.isChangePhone ? true : false}
-                  defaultValue={data && data.data.payload && data.data.payload.phone.trim()}
+                  defaultValue={data && data.data && data.data[0].phone.trim()}
                   name="phone"
                 />
-                <button onClick={() => onChangeSetting('phone')} type="button">
-                  {
-                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
-                  }
+                <button onClick={() => onChangeSetting("phone")} type="button">
+                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
                 </button>
               </div>
             </li>
@@ -358,11 +381,14 @@ const UserInfo = () => {
                 Mật khẩu cấp 1
               </label>
               <div className="ipn">
-                <input disabled={settingUser.isPasswordV1 ? true : false} type="password" defaultValue="##########" onChange={onChangeUser} />
-                <button onClick={() => onChangeSetting('passv1')} type="button">
-                  {
-                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
-                  }
+                <input
+                  disabled={settingUser.isPasswordV1 ? true : false}
+                  type="password"
+                  defaultValue="##########"
+                  onChange={onChangeUser}
+                />
+                <button onClick={() => onChangeSetting("passv1")} type="button">
+                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
                 </button>
               </div>
             </li>
@@ -372,11 +398,14 @@ const UserInfo = () => {
                 Mật khẩu cấp 2
               </label>
               <div className="ipn">
-                <input disabled={settingUser.isPasswordV2 ? true : false} type="password" defaultValue="##########" onChange={onChangeUser} />
-                <button onClick={() => onChangeSetting('passv2')} type="button">
-                  {
-                    settingUser.isChangeEmail ? 'Thay đổi' : 'Xác nhận '
-                  }
+                <input
+                  disabled={settingUser.isPasswordV2 ? true : false}
+                  type="password"
+                  defaultValue="##########"
+                  onChange={onChangeUser}
+                />
+                <button onClick={() => onChangeSetting("passv2")} type="button">
+                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
                 </button>
               </div>
             </li>

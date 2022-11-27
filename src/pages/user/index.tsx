@@ -17,12 +17,15 @@ const UserHomePage = ({ children }: UserHomeChildren) => {
   const onChangeSetTextSearch = (e: ChangeEvent<HTMLInputElement>) => {};
 
   useEffect(() => {
-    if (sizeWindow) {
-      if (sizeWindow < 654) {
-        router.push("/user");
-      } else {
-        router.push("/user/info");
-      }
+    if (router.asPath && sizeWindow && router.pathname) {
+      // if (sizeWindow) {
+      //   if (sizeWindow < 654) {
+      //     router.push("/user");
+      //   } else {
+      //     router.push("/user/info");
+      //   }
+      // }
+      //console.log(router);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sizeWindow]);
@@ -31,7 +34,7 @@ const UserHomePage = ({ children }: UserHomeChildren) => {
       <Head>
         <title>Danh sách chọn </title>
       </Head>
-      <User UserChildrenProps={{}} />
+      <User UserChildrenProps={{ contentUser: <UserInfo /> }} />
     </>
   );
 };

@@ -95,7 +95,7 @@ const CheckoutPrice = () => {
       dataCheckoutW.dataCheckout.data
     ) {
       if (dataCheckoutW.dataCheckout.data.status === 200) {
-        const code_user = data.data.payload.code_user;
+        const code_user = data.data[0].code_user;
         const code_product: Array<string> = [];
         dataCartLocal.map((item) => {
           if (item.code_product) {

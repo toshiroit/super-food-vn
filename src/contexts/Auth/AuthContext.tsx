@@ -1,6 +1,4 @@
-import {
-  selectAuthData,
-} from "@/redux/features/auth/auth-selects";
+import { selectAuthData } from "@/redux/features/auth/auth-selects";
 import { authGetMe } from "@/redux/features/auth/auth-thunks";
 import { selectDisplayIsShowLogin } from "@/redux/features/display/display-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
@@ -31,22 +29,27 @@ export function AuthProvider({ children, jwt }: AuthProviderProps) {
   const router = useRouter();
   const [isLogged, setIsLogged] = useState<boolean>(false);
   useEffect(() => {
-    let isCanelledAPI = true
+    let isStop = true;
     function getMe() {
-      if (isCanelledAPI) {
+      if (isStop) {
+        console.log("GET DATA USER");
         dispatch(authGetMe());
       }
     }
-    getMe()
+    getMe();
     return () => {
-      isCanelledAPI = false
-    }
-  }, [router.pathname, dataDisplay, dispatch, isLogged]);
+      isStop = false;
+    };
+    //es-line-disable-next-line
+  }, [isLogged]);
   return (
     <AuthContext.Provider
-      value={{ isLogged: data ? true : false, data: data, toggleLogged: setIsLogged }}
+      value={{
+        isLogged: data ? true : false,
+        data: data,
+        toggleLogged: setIsLogged,
+      }}
     >
-
       {children}
     </AuthContext.Provider>
   );

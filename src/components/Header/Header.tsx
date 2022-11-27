@@ -182,7 +182,7 @@ const Header = () => {
                           <a>
                             <div className="inner">
                               <span className="name">
-                                {data?.data?.payload?.phone}{" "}
+                                {data && data.data && data.data[0].phone}
                               </span>
                               <div className="woi">
                                 <li className="woi__item">Số dư : 0</li>

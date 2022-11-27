@@ -1,5 +1,7 @@
+import { getAllMessengerUserByShop } from "@/redux/features/chat/chat-thunks";
 import { selectShopSliceDataShopDetail } from "@/redux/features/shop/shop-selects";
 import { getDataDetailShopByCodeShop } from "@/redux/features/shop/shop-thunks";
+import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
@@ -8,9 +10,10 @@ import LoadingSpinner from "../Loading/LoadingSpinner";
 import ShopHeader from "./ShopHeader";
 
 const Shop = ({ children }: any) => {
-  const dispatch = useAppDispatch()
-  const router = useRouter()
+  const dispatch = useAppDispatch();
+  const router = useRouter();
   const dataShopDetail = useAppSelector(selectShopSliceDataShopDetail);
+  const socketRdx = useAppSelector(selectSocketSliceSocket);
   useEffect(() => {
     const query_code = (router.query.code as string) || "";
     if (query_code) {
@@ -19,6 +22,7 @@ const Shop = ({ children }: any) => {
     }
     //eslint-disable-next-line
   }, [router.query, dispatch]);
+
   return (
     <>
       <div className="shop">
@@ -31,23 +35,21 @@ const Shop = ({ children }: any) => {
             </ul>
           </div>
           <div className="shop__content">
-            <div className="shop__content___inner" >
-              {console.log(dataShopDetail)}
-              {
-                dataShopDetail.loading ?
-                  <LoadingSpinner css={{ textAlign: 'center', width: '100%' }} />
-                  :
-                  <div className="shopIf">
-                    <ShopHeader />
-                    {/**Shop Info */}
-                    <>{children}</>
-                  </div>
-              }
+            <div className="shop__content___inner">
+              {dataShopDetail.loading ? (
+                <LoadingSpinner css={{ textAlign: "center", width: "100%" }} />
+              ) : (
+                <div className="shopIf">
+                  <ShopHeader />
+                  {/**Shop Info */}
+                  <>{children}</>
+                </div>
+              )}
             </div>
           </div>
         </div>
       </div>
-      <ChatBox />
+      <ChatBox data_shop={dataShopDetail.data} />
     </>
   );
 };

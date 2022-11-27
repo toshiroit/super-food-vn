@@ -6,79 +6,90 @@ import { useEffect, useState } from "react";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import { useRouter } from "next/router";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { addCartByCodeUser, getCartByCodeUser } from "@/redux/features/cart/cart-thunks";
-import { selectCartSliceData, selectCartSliceDataLocal, selectCartSliceLoading } from "@/redux/features/cart/cart-selects";
+import {
+  addCartByCodeUser,
+  getCartByCodeUser,
+} from "@/redux/features/cart/cart-thunks";
+import {
+  selectCartSliceData,
+  selectCartSliceDataLocal,
+  selectCartSliceLoading,
+} from "@/redux/features/cart/cart-selects";
 import { restCart, setCartLocal } from "@/redux/features/cart/cart-slice";
 import { joinProductShop } from "@/lib/joinProductShop";
 import * as CartType from "@/types/cart/cart";
 const Cart = () => {
-  const { data, isLogged } = useAuthContext()
-  const dataCartAPI = useAppSelector(selectCartSliceData)
-  const dataCartLocal = useAppSelector(selectCartSliceDataLocal)
+  const { data, isLogged } = useAuthContext();
+  const dataCartAPI = useAppSelector(selectCartSliceData);
+  const dataCartLocal = useAppSelector(selectCartSliceDataLocal);
   // const [dataCartLocal, setDataCartLocal] = useState<any[]>()
-  const loadingCartAPI = useAppSelector(selectCartSliceLoading)
-  const dispatch = useAppDispatch()
-  const router = useRouter()
-  const onOrder = () => { };
+  const loadingCartAPI = useAppSelector(selectCartSliceLoading);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const onOrder = () => {};
   useEffect(() => {
     if (localStorage.getItem("cart")) {
       if (isLogged) {
         if (data) {
-          if (data.data.payload) {
+          if (data.data && data.data[0]) {
             //localStorage.removeItem('cart')
             if (dataCartLocal.length !== 0) {
               dispatch(
                 addCartByCodeUser({
                   data_cart: dataCartLocal,
-                  code_user: data.data.payload.code_user,
-
+                  code_user: data.data && data.data[0].code_user,
                 })
-              )
+              );
             }
           }
         }
       }
     }
     // eslint-disable-next-line
-  }, [router.pathname, isLogged, data, dispatch])
+  }, [router.pathname, isLogged, data, dispatch]);
   useEffect(() => {
     if (isLogged && data) {
-      let isStop = true
+      let isStop = true;
       function getCartByCodeUserFc() {
         if (isStop) {
           //dispatch(setCartLocal())
-          dispatch(getCartByCodeUser({ code_user: data.data.payload && data.data.payload.code_user }))
+          dispatch(
+            getCartByCodeUser({
+              code_user: data.data && data.data[0].code_user,
+            })
+          );
         }
       }
-      getCartByCodeUserFc()
+      getCartByCodeUserFc();
       return () => {
-        isStop = false
-      }
-    }
-    else {
-      dispatch(setCartLocal())
+        isStop = false;
+      };
+    } else {
+      dispatch(setCartLocal());
     }
     // eslint-disable-next-line
-  }, [router.pathname, dispatch, isLogged])
+  }, [router.pathname, dispatch, isLogged]);
 
-  const joinProductShopTest = (data: CartType.CartItem[]): CartType.CartItemShop[] => {
-    let cpData = [...data]
-    const itemsByCodeShop: any = {}
+  const joinProductShopTest = (
+    data: CartType.CartItem[]
+  ): CartType.CartItemShop[] => {
+    let cpData = [...data];
+    const itemsByCodeShop: any = {};
     for (const item of cpData) {
-      itemsByCodeShop[item.code_shop || ''] ??= {
+      itemsByCodeShop[item.code_shop || ""] ??= {
         shop: {
           name_shop: item.name_shop,
-          code_shop: item.code_shop
+          code_shop: item.code_shop,
         },
-        cart: []
-      }
-      itemsByCodeShop[item.code_shop || ''].cart.push(item)
+        cart: [],
+      };
+      itemsByCodeShop[item.code_shop || ""].cart.push(item);
     }
     if (itemsByCodeShop) {
-      return Object.values(itemsByCodeShop)
+      return Object.values(itemsByCodeShop);
     }
-    return []
-  }
+    return [];
+  };
   return (
     <div className="cart">
       <div className="container">
@@ -98,43 +109,65 @@ const Cart = () => {
                 </Link>
               </div>
               <div className="cart__content___main____inner">
-                {
-                  dataCartLocal && dataCartLocal.length === 0 ? <div
-                    style={{ width: '100%', flexDirection: 'column', alignItems: 'center', height: 'auto', display: 'flex' }}
-                    className="cartNotFound">
+                {dataCartLocal && dataCartLocal.length === 0 ? (
+                  <div
+                    style={{
+                      width: "100%",
+                      flexDirection: "column",
+                      alignItems: "center",
+                      height: "auto",
+                      display: "flex",
+                    }}
+                    className="cartNotFound"
+                  >
                     <picture>
-                      <img style={{ width: '450px' }} src="/images/empty-cart.png" alt="" />
+                      <img
+                        style={{ width: "450px" }}
+                        src="/images/empty-cart.png"
+                        alt=""
+                      />
                     </picture>
-                    <p className="" style={{ margin: 'auto', fontSize: '1.5rem', fontWeight: '700' }}>Không có sản phẩm </p>
-                  </div> :
-                    <>
-                      <div className="left">
-                        <div className="header">
-                          <ul className="header__main">
-                            <li className="header__main___item">
-                              <input type="checkbox" className="" name="" id="" />
-                              <label className="check-box" />
-                              <span>Tất cả ( {dataCartLocal.length} sản phẩm ) </span>
-                            </li>
-                            <li className="header__main___item price">
-                              <span>Đơn giá </span>
-                            </li>
-                            <li className="header__main___item quality">
-                              <span>Số lượng </span>
-                            </li>
-                            <li className="header__main___item priceResult">
-                              <span>Thành tiền </span>
-                            </li>
-                            <li className="header__main___item remove">
-                              <span>
-                                <i className="fa-solid fa-delete-left" />
-                              </span>
-                            </li>
-                          </ul>
-                        </div>
-                        <ul className="main">
-                          {
-                            /* 
+                    <p
+                      className=""
+                      style={{
+                        margin: "auto",
+                        fontSize: "1.5rem",
+                        fontWeight: "700",
+                      }}
+                    >
+                      Không có sản phẩm{" "}
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    <div className="left">
+                      <div className="header">
+                        <ul className="header__main">
+                          <li className="header__main___item">
+                            <input type="checkbox" className="" name="" id="" />
+                            <label className="check-box" />
+                            <span>
+                              Tất cả ( {dataCartLocal.length} sản phẩm ){" "}
+                            </span>
+                          </li>
+                          <li className="header__main___item price">
+                            <span>Đơn giá </span>
+                          </li>
+                          <li className="header__main___item quality">
+                            <span>Số lượng </span>
+                          </li>
+                          <li className="header__main___item priceResult">
+                            <span>Thành tiền </span>
+                          </li>
+                          <li className="header__main___item remove">
+                            <span>
+                              <i className="fa-solid fa-delete-left" />
+                            </span>
+                          </li>
+                        </ul>
+                      </div>
+                      <ul className="main">
+                        {/* 
     * {joinProductShop(dataCartLocal).map((item, key) => {
                                 return <CartItem
                                   cartItem={item.cartItem}
@@ -143,20 +176,19 @@ const Cart = () => {
                                   key={key}
                                 />
                               }
-                              )}*/
-                          }
-                          <CartItem
-                            code_shop={''}
-                            name_shop={'124'}
-                            cartItem={joinProductShopTest(dataCartLocal)}
-                          />
-                        </ul>
-                      </div>
-                      <div className="right">
-                        <CartPay />
-                      </div>
-                    </>
-                }
+                              )}*/}
+                        <CartItem
+                          code_shop={""}
+                          name_shop={"124"}
+                          cartItem={joinProductShopTest(dataCartLocal)}
+                        />
+                      </ul>
+                    </div>
+                    <div className="right">
+                      <CartPay />
+                    </div>
+                  </>
+                )}
               </div>
             </form>
           </div>

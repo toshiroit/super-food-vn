@@ -43,7 +43,7 @@ const UserSlider = () => {
               <li className="content__main___wp____item">
                 <i className="fa-solid fa-truck-fast fa-size" />
                 <span>Đơn hàng </span>
-                <b className="status_w">3</b>
+                {/* <b className="status_w">3</b> */}
               </li>
             </a>
           </Link>

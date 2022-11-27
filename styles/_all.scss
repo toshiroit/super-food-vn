@@ -1209,98 +1209,121 @@ a {
   }
 }
 .completionOrder {
-    width: 100%;
-    background-color: #f1f1f1;
-    height: 100vh;
-    &__inner {
-      .image {
-        text-align: center;
-        img {
-          width: 800px;
-        }
-      }
-      .text {
-        text-align: center;
-        .w {
-          color: #3cb878;
-          font-weight: 600;
-          font-size: 1.5rem;
-        }
+  width: 100%;
+  background-color: #f1f1f1;
+  height: 100vh;
+  &__inner {
+    .image {
+      text-align: center;
+      img {
+        width: 800px;
       }
     }
+    .text {
+      text-align: center;
+      .w {
+        color: #3cb878;
+        font-weight: 600;
+        font-size: 1.5rem;
+      }
+    }
+  }
 }
-
 
 .loader {
-	 position: relative;
-	 width: 2.5em;
-	 height: 2.5em;
-	 transform: rotate(165deg);
+  position: relative;
+  width: 2.5em;
+  height: 2.5em;
+  transform: rotate(165deg);
 }
- .loader:before, .loader:after {
-	 content: '';
-	 position: absolute;
-	 top: 50%;
-	 left: 50%;
-	 display: block;
-	 width: 0.5em;
-	 height: 0.5em;
-	 border-radius: 0.25em;
-	 transform: translate(-50%, -50%);
+.loader:before,
+.loader:after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: block;
+  width: 0.5em;
+  height: 0.5em;
+  border-radius: 0.25em;
+  transform: translate(-50%, -50%);
 }
- .loader:before {
-	 animation: before 2s infinite;
+.loader:before {
+  animation: before 2s infinite;
 }
- .loader:after {
-	 animation: after 2s infinite;
+.loader:after {
+  animation: after 2s infinite;
 }
- @keyframes before {
-	 0% {
-		 width: 0.5em;
-		 box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75), -1em 0.5em rgba(111, 202, 220, 0.75);
-	}
-	 35% {
-		 width: 2.5em;
-		 box-shadow: 0 -0.5em rgba(225, 20, 98, 0.75), 0 0.5em rgba(111, 202, 220, 0.75);
-	}
-	 70% {
-		 width: 0.5em;
-		 box-shadow: -1em -0.5em rgba(225, 20, 98, 0.75), 1em 0.5em rgba(111, 202, 220, 0.75);
-	}
-	 100% {
-		 box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75), -1em 0.5em rgba(111, 202, 220, 0.75);
-	}
+@keyframes before {
+  0% {
+    width: 0.5em;
+    box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75),
+      -1em 0.5em rgba(111, 202, 220, 0.75);
+  }
+  35% {
+    width: 2.5em;
+    box-shadow: 0 -0.5em rgba(225, 20, 98, 0.75),
+      0 0.5em rgba(111, 202, 220, 0.75);
+  }
+  70% {
+    width: 0.5em;
+    box-shadow: -1em -0.5em rgba(225, 20, 98, 0.75),
+      1em 0.5em rgba(111, 202, 220, 0.75);
+  }
+  100% {
+    box-shadow: 1em -0.5em rgba(225, 20, 98, 0.75),
+      -1em 0.5em rgba(111, 202, 220, 0.75);
+  }
 }
- @keyframes after {
-	 0% {
-		 height: 0.5em;
-		 box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75), -0.5em -1em rgba(233, 169, 32, 0.75);
-	}
-	 35% {
-		 height: 2.5em;
-		 box-shadow: 0.5em 0 rgba(61, 184, 143, 0.75), -0.5em 0 rgba(233, 169, 32, 0.75);
-	}
-	 70% {
-		 height: 0.5em;
-		 box-shadow: 0.5em -1em rgba(61, 184, 143, 0.75), -0.5em 1em rgba(233, 169, 32, 0.75);
-	}
-	 100% {
-		 box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75), -0.5em -1em rgba(233, 169, 32, 0.75);
-	}
+@keyframes after {
+  0% {
+    height: 0.5em;
+    box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75),
+      -0.5em -1em rgba(233, 169, 32, 0.75);
+  }
+  35% {
+    height: 2.5em;
+    box-shadow: 0.5em 0 rgba(61, 184, 143, 0.75),
+      -0.5em 0 rgba(233, 169, 32, 0.75);
+  }
+  70% {
+    height: 0.5em;
+    box-shadow: 0.5em -1em rgba(61, 184, 143, 0.75),
+      -0.5em 1em rgba(233, 169, 32, 0.75);
+  }
+  100% {
+    box-shadow: 0.5em 1em rgba(61, 184, 143, 0.75),
+      -0.5em -1em rgba(233, 169, 32, 0.75);
+  }
 }
 
 $main-color-1: #2ecc71;
 $main-color-2: #27ae60;
-$second-color-1: #CC8914;
+$second-color-1: #cc8914;
 $background-color: #363636;
 $bot-output-delay: 600ms;
-.chatBox{
+.chatBox {
   position: fixed;
-  right:0;
-  bottom:100px;
-  width:300px;
-  height: 350px;
-  z-index: 999;
+  right: 0;
+  bottom: 17px;
+  width: 330px;
+  height: auto;
+  z-index: 9999;
+  .header {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding: 10px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    background-color: #29b4ff;
+    h5 {
+      color: #2c1b1b;
+    }
+    .close {
+      cursor: pointer;
+    }
+  }
 }
 
 .chatbot__overview {
@@ -1312,18 +1335,19 @@ $bot-output-delay: 600ms;
   padding: 0.5em;
   padding-bottom: 0;
   max-height: 375px;
-  border-radius: 6px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
   overflow-y: scroll;
   &::-webkit-scrollbar {
     width: 6px;
-    background-color: #F5F5F5;
-  } 
+    background-color: #f5f5f5;
+  }
   &::-webkit-scrollbar-thumb {
     background-color: #000000;
   }
   &::-webkit-scrollbar-track {
-    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3);
-    background-color: #F5F5F5;
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #f5f5f5;
   }
 }
 
@@ -1332,16 +1356,17 @@ $bot-output-delay: 600ms;
 
 .chatlist {
   font-family: inherit;
-  font-size: 1em;
+  font-size: 0.9rem;
   display: flex;
   flex-flow: column nowrap;
   align-items: flex-end;
   width: 100%;
   max-width: 35em;
   margin: 0 auto;
-  .userInput, .bot__output {
-    padding: 0.85em;
-    margin: 0.5em;
+  .userInput,
+  .bot__output {
+    padding: 5.5px;
+    margin: 7.5px;
     max-width: 100%;
     background-color: #fff;
     border-radius: 5px;
@@ -1352,14 +1377,14 @@ $bot-output-delay: 600ms;
     box-shadow: 1px 1px 2px #666;
     border-top: 4px solid $second-color-1;
 
-
     animation-name: animateBubble;
     animation-duration: 400ms;
     animation-iteration-count: 1;
     animation-play-state: running;
     animation-fill-mode: forwards;
   }
-  .box__output,.userInput {
+  .box__output,
+  .userInput {
     font-size: 0.9rem;
   }
   .bot__output {
@@ -1381,19 +1406,19 @@ $bot-output-delay: 600ms;
     font-weight: 600;
     padding: 0.1em;
   }
-  .bot__output:nth-child(1){
+  .bot__output:nth-child(1) {
     animation-delay: $bot-output-delay;
     animation-play-state: running;
   }
-  .bot__output:nth-child(2){
+  .bot__output:nth-child(2) {
     animation-delay: ($bot-output-delay * 2);
     animation-play-state: running;
   }
-  .bot__output:nth-child(3){
+  .bot__output:nth-child(3) {
     animation-delay: ($bot-output-delay * 3);
     animation-play-state: running;
   }
-  .bot__output--standard:last-child{
+  .bot__output--standard:last-child {
     display: block;
   }
   .bot__output--failed {
@@ -1409,23 +1434,19 @@ $bot-output-delay: 600ms;
 }
 
 @keyframes animateBubble {
-  0%{
+  0% {
     transform: translateY(-20%);
     opacity: 0;
   }
-  100%{
+  100% {
     transform: translateY(0);
     opacity: 1;
   }
 }
 
-
-
-
 .block--background {
   // background-color: $main-color-2;
 }
-
 
 .chatbox-area {
   margin: 0 auto;
@@ -1433,25 +1454,59 @@ $bot-output-delay: 600ms;
   bottom: 0;
   height: auto;
   width: 100%;
-  #chatform {
-    display: flex;
-    margin-top:5px;
-    textarea{
-      border-radius: 4px;
-      padding: 4px;
-      width:80%;
-      outline:none;
-      border:1px solid #0d69db;
+  background-color: #fff;
+  box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px,
+    rgba(27, 31, 35, 0.15) 0px 0px 0px 1px;
+  .fa-left,
+  .fa-right {
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    margin-top: 3px;
+    line-height: 24px;
+  }
+  .fa-left {
+    float: left;
+  }
+  .fa-right {
+    float: right;
+  }
+  textarea {
+    height: 30px;
+    width: 81.8%;
+    resize: none;
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 4px;
+    margin-top: 3px;
+    outline: none;
+  }
+  button {
+    border-radius: 4px;
+    width: 20%;
+    cursor: pointer;
+    border: 1px solid #036aff;
+    i {
+      color: #036aff;
     }
-    button {
-      border-radius: 4px;
-      width:20%;
-      cursor: pointer;
-      border:1px solid #036aff;
-      i{
-        color:#036aff;
-      }
-    }
+  }
+}
 
+.boxChat {
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+  &__inner {
+    width: 60px;
+    height: 60px;
+    background-color: #036aff;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 67px;
+    cursor: pointer;
+    .fa-css {
+      color: #fff;
+      font-size: 1.7rem;
+    }
   }
 }

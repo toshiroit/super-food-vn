@@ -129,8 +129,9 @@ const ProductDetailShow = () => {
                     return (
                       <li
                         onClick={() => onShowImage(item, key)}
-                        className={`photo__side___item ${imageShow && imageShow.id === key ? "active" : ""
-                          }`}
+                        className={`photo__side___item ${
+                          imageShow && imageShow.id === key ? "active" : ""
+                        }`}
                         key={key}
                       >
                         <picture>
@@ -232,7 +233,7 @@ const ProductDetailShow = () => {
                       className="fa-solid fa-minus fa-size"
                     />
                     <input
-                      onChange={() => { }}
+                      onChange={() => {}}
                       type="number"
                       name=""
                       value={quality}
@@ -376,7 +377,9 @@ const ProductDetailShow = () => {
                   <div className="content__info___btnShow">
                     <Link
                       href={clientRoutes.SHOP_INDEX(
-                        `${data.code_shop && data.code_shop.trim()}.${slug(data.name_shop ? data.name_shop.trim() : '')}`
+                        `${data.code_shop && data.code_shop.trim()}.${slug(
+                          data.name_shop ? data.name_shop.trim() : ""
+                        )}`
                       )}
                     >
                       <a>

@@ -2,6 +2,7 @@ import { combineReducers } from "@reduxjs/toolkit";
 import addressSlice from "../features/address/address-slice";
 import authSlice from "../features/auth/auth-slice";
 import cartSlice from "../features/cart/cart-slice";
+import chatSlice from "../features/chat/chat-slice";
 import checkoutSlice from "../features/checkout/checkout-slice";
 import commentSlice from "../features/comment/comment-slice";
 import displaySlice from "../features/display/display-slice";
@@ -30,5 +31,6 @@ export default combineReducers({
   paymentSlice,
   socketSlice,
   shopSlice,
-  notifySlice
+  notifySlice,
+  chatSlice,
 });
