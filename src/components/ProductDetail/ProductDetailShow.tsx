@@ -12,11 +12,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { NotifyCationForm } from "@/types/notifycation/notifycation";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
-import NotifycationForm from "../Notification/NotificationForm";
-
+import { useRouter } from "next/router";
+import { TypeProductValue } from "@/types/product/product";
 const ProductDetailShow = () => {
   const { isLogged } = useAuthContext();
+  const router = useRouter();
   const [timeShow, setTimeShow] = useState<number>(4);
   const [infoProduct, setInfoProduct] = useState<string>("");
   const [showNotify, setShowNotify] = useState<NotifyCationForm>({
@@ -26,8 +28,9 @@ const ProductDetailShow = () => {
   const data = useAppSelector(selectProductSliceDataProductDetail);
   const loading = useAppSelector(selectProductSliceLoading);
   const dispatch = useAppDispatch();
+
   const [quality, setQuality] = useState<number>(1);
-  const [activeType, setActiveType] = useState<string>();
+  const [typeProduct, setTypeProduct] = useState<TypeProductValue | null>(null);
   const [imageShow, setImageShow] = useState<any>();
   useEffect(() => {
     if (showNotify.show == "show") {
@@ -47,33 +50,32 @@ const ProductDetailShow = () => {
     }
   }, [timeShow, showNotify]);
   const onAddCart = (data: any, infoProduct: string) => {
-    if (!isLogged) {
-      dispatch(
-        addCart({ item: data, quality: quality, infoProduct: infoProduct })
-      );
-      setShowNotify({
-        show: "show",
-        type: "danger",
-        message: "Thêm vào giỏ hàng thành công ",
-      });
-    } else {
-      dispatch(
-        addCart({ item: data, quality: quality, infoProduct: infoProduct })
-      );
-      setShowNotify({
-        show: "show",
-        type: "danger",
-        message: "Đã đănng nhập tài khoản  ",
-      });
-    }
+    toast("🦄 Thêm vào giỏ hàng thành công", {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+      theme: "colored",
+    });
+    dispatch(
+      addCart({
+        item: data,
+        quality: quality,
+        infoProduct: infoProduct,
+        type_product: typeProduct,
+      })
+    );
   };
   const priceDiscountResult = (discount: number, price: number) => {
     const discountw = discount / 100;
     const priceResult = price - price * discountw;
     return priceResult;
   };
-  const onSelectType = (code: string) => {
-    setActiveType(code);
+  const onSelectType = (value: TypeProductValue) => {
+    setTypeProduct(value);
   };
   const onChangeQuality = (type: "+" | "-") => {
     if (type === "+") {
@@ -83,6 +85,17 @@ const ProductDetailShow = () => {
     }
   };
 
+  const onPayProduct = (data: any, infoProduct: string) => {
+    dispatch(
+      addCart({
+        item: data,
+        quality: quality,
+        infoProduct: infoProduct,
+        type_product: typeProduct,
+      })
+    );
+    router.push("/cart");
+  };
   const onShowImage = (data: any, id: number) => {
     setImageShow({
       id,
@@ -91,10 +104,17 @@ const ProductDetailShow = () => {
   };
   return (
     <>
-      <NotifycationForm
-        show={showNotify?.show}
-        type={showNotify.type}
-        message={showNotify.message}
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
       />
       <div className="common">
         <div className="photo">
@@ -201,7 +221,16 @@ const ProductDetailShow = () => {
                     data.type_product.map((item: any) => {
                       if (item.code && item.name.length > 0)
                         return (
-                          <li key={item.code} className="itemSelect">
+                          <li
+                            onClick={() => onSelectType(item)}
+                            key={item.code}
+                            className={`itemSelect ${
+                              typeProduct &&
+                              typeProduct.code.trim() === item.code
+                                ? "active"
+                                : ""
+                            }`}
+                          >
                             {item.name}
                           </li>
                         );
@@ -248,7 +277,11 @@ const ProductDetailShow = () => {
                   </div>
                 </div>
                 <div className="btnProduct__main">
-                  <button type="button" className="btn btn-buy">
+                  <button
+                    onClick={() => onPayProduct(data, infoProduct)}
+                    type="button"
+                    className="btn btn-buy"
+                  >
                     <i className="fa-solid fa-bag-shopping fa-size" /> MUA NGAY
                   </button>
                   <button

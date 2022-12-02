@@ -66,77 +66,77 @@ export type ProductSliceState = {
   dataProductDetailShop: {
     data: any | null;
     loading: boolean;
-    error: any
-  },
+    error: any;
+  };
   dataProductSearch: {
-    loading: boolean,
-    data: any | null
+    loading: boolean;
+    data: any | null;
   };
   dataProductShopNew: {
     data: any | null;
     loading: boolean;
-    error: any
-  },
+    error: any;
+  };
   dataProductProductNew: {
     data: any | null;
     loading: boolean;
-    error: any
-  },
+    error: any;
+  };
   dataProductProductHot: {
     data: any | null;
     loading: boolean;
-    error: any
-  },
+    error: any;
+  };
   dataProductPayTop: {
     data: any | null;
     loading: boolean;
-    error: any
-
-  },
+    error: any;
+  };
   dataProductEvaluate: {
     data: any | null;
     loading: boolean;
-    error: any
-
-  },
+    error: any;
+  };
   dataProductDetaiLike: {
     data: any | null;
     loading: boolean;
     error: any;
-  },
+  };
 
   addTypeProduct: {
     message: any | null;
     loading: boolean;
-    error: any | null
-  }
+    error: any | null;
+  };
 
   dataAll?: any | null;
   count?: number;
   pageSize?: number;
-}
+};
 export type ProductGetDetailDataAPI = {
   code: string | null;
   name: string | null;
-}
-
+};
 
 export type ShowProductList = {
-  typeShow: 'SHOP-NEW' | 'PRODUCT-NEW' | 'HOT' | 'GOOD' | 'TOP' | 'ANY',
-
-}
+  typeShow: "SHOP-NEW" | "PRODUCT-NEW" | "HOT" | "GOOD" | "TOP" | "ANY";
+};
 export interface ShowProductListProps {
   item: ShowProductList;
-  dataProductAll: any
+  dataProductAll: any;
 }
-
 
 export type GetAllProductTypeAPIThunk = {
   limit?: number;
-  type: 'new-product' | 'shop-new' | 'pay-top' | 'evaluate'
-}
+  type: "new-product" | "shop-new" | "pay-top" | "evaluate";
+};
 
 export type GetAllProductTypeShop = {
   code_shop: string;
   limit: string;
-}
+};
+
+export type TypeProductValue = {
+  code: string;
+  name: string;
+};

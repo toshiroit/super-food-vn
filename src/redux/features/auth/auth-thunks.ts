@@ -33,7 +33,9 @@ export const authLoginPhone = createAsyncThunk(
         contentType: "application/json",
         body: data,
       });
-      // login(responsive.data.token as string);
+      if (responsive.data.message) {
+        return thunkAPI.rejectWithValue("Tài khoản hoặc mật khẩu không đúng");
+      }
       return {
         data: responsive.data,
         error: responsive.error,
@@ -50,7 +52,6 @@ export const authLogin = createAsyncThunk(
   "auth/login",
   async (user: LoginConfirmation, thunkAPI) => {
     try {
-      console.log(`${URL} + '/auth/login`);
       const responsive = await RequestServices.post({
         method: "POST",
         isAuthRequired: false,
@@ -59,12 +60,13 @@ export const authLogin = createAsyncThunk(
         contentType: "application/json",
         body: user,
       });
-      console.log(responsive.data);
       return {
         data: responsive,
       };
     } catch (err: any) {
-      console.log("Error : ", err);
+      return {
+        error: err,
+      };
     }
   }
 );
@@ -84,7 +86,7 @@ export const authCheckPhone = createAsyncThunk(
         error: responsive.error,
         data: responsive.data,
       };
-    } catch (error) { }
+    } catch (error) {}
   }
 );
 
@@ -108,18 +110,26 @@ export const authSendCode = createAsyncThunk(
 export const authVerifyCode = createAsyncThunk(
   "auth/verify-code",
   async ({ code }: { code: string }, thunkAPI) => {
-    const responsive = await RequestServices.post({
-      method: "POST",
-      isAuthRequired: false,
-      url: `${URL + "/auth/check-code"}`,
-      authorization: "",
-      contentType: "application/json",
-      body: { code },
-    });
-    return {
-      data: responsive.data,
-      error: responsive.error,
-    };
+    try {
+      const responsive = await RequestServices.post({
+        method: "POST",
+        isAuthRequired: false,
+        url: `${URL + "/auth/check-code"}`,
+        authorization: "",
+        contentType: "application/json",
+        body: { code },
+      });
+
+      return {
+        data: responsive.data,
+        error: responsive.error,
+      };
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue({
+        code: error.response.status,
+        message: error.response.data.message || " Không xác định ",
+      });
+    }
   }
 );
 export const authLogout = createAsyncThunk("auth-logout", async () => {

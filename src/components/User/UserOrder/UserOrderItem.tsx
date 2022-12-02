@@ -6,8 +6,8 @@ import Link from "next/link";
 
 const UserOrderItem = ({ itemOrder }: ItemOrderProps) => {
   const converImageStringToArray = (image: string) => {
-    return image.split(',')
-  }
+    return image.split(",");
+  };
   return (
     <Link href={clientRoutes.USER_ORDER_DETAIL_BY_ID(itemOrder.code_order)}>
       {}
@@ -15,19 +15,26 @@ const UserOrderItem = ({ itemOrder }: ItemOrderProps) => {
         <div className="content__order___item">
           <div className="content__order___item____dateIsShip">
             <span className="fxLeft">
-              Ngày mua : {formatDatePostSQL(itemOrder.date_order)} ------ Mã đơn hàng : {itemOrder.code_order}
+              Ngày mua : {formatDatePostSQL(itemOrder.date_order)} ------ Mã đơn
+              hàng : {itemOrder.code_order}
             </span>
             <span className="fxRight">
               <i className="fa-solid fa-truck-fast" />
-              {
-                itemOrder.progress === 1 ? 'Chờ xác nhận'
-                  : itemOrder.progress === 2 ? 'Đang chế biến'
-                    : itemOrder.progress === 3 ? 'Đang giao hàng'
-                      : itemOrder.progress === 4 ? 'Giao thanh công'
-                        : itemOrder.progress === -1 ? 'Bị hủy'
-                          : itemOrder.progress === -2 ? 'Giao không thành công'
-                            : ''
-              }
+              {itemOrder.progress === -1
+                ? "Chờ xác nhận"
+                : itemOrder.progress === 1
+                ? "Đã xác nhận "
+                : itemOrder.progress === 2
+                ? "Đang chế biến"
+                : itemOrder.progress === 3
+                ? "Chờ Shipper giao hàng"
+                : itemOrder.progress === 4
+                ? "Đã nhận hàng"
+                : itemOrder.progress === 5
+                ? "Đơn hàng đang giao"
+                : itemOrder.progress === 6
+                ? "Giao thành công "
+                : ""}
             </span>
           </div>
           <div className="content__order___item____wp">

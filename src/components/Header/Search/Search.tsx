@@ -21,6 +21,9 @@ const Search = () => {
         placeholder="Tìm kiếm sản phẩm ........... "
         id=""
       />
+      <select>
+        <option>124124</option>
+      </select>
       <i className="fa-solid fa-magnifying-glass fa-size fa-search-sett" />
       {isDisplaySearchList.display ? (
         <SearchList refInputSearch={refInputSearch} nameSearch={"124"} />

@@ -1,6 +1,9 @@
 import { RootState } from "@/types/redux/redux";
-
-export const selectAddressSliceData = (state: RootState) => state.addressSlice.data
-export const selectAddressSliceError = (state: RootState) => state.addressSlice.error
-export const selectAddressSliceLoading = (state: RootState) => state.addressSlice.loading
-export const selectAddressSliceMessage = (state: RootState) => state.addressSlice.message
+export const selectAddressSliceDataAddress = (state: RootState) =>
+  state.addressSlice.dataAddress;
+export const selectAddressSliceDataAddAddress = (state: RootState) =>
+  state.addressSlice.dataAddAddress;
+export const selectAddressSliceDataAddressDetail = (state: RootState) =>
+  state.addressSlice.dataAddressDetail;
+export const selectAddressSliceDataUpdateAddress = (state: RootState) =>
+  state.addressSlice.dataUpdateAddress;

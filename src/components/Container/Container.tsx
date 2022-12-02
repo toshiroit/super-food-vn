@@ -54,7 +54,7 @@ const Container = ({ children }: ContainerProps) => {
       socketRdx.on("notification_order_all", (data) => {
         toast(`${data.message}`, {
           position: "bottom-right",
-          autoClose: 5000,
+          autoClose: 3000,
           hideProgressBar: false,
           closeOnClick: true,
           pauseOnHover: true,
@@ -71,7 +71,7 @@ const Container = ({ children }: ContainerProps) => {
         if (data.status === -1) {
           toast.error(`${data.message}`, {
             position: "bottom-right",
-            autoClose: 5000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -82,7 +82,7 @@ const Container = ({ children }: ContainerProps) => {
         } else {
           toast.success(`${data.message}`, {
             position: "bottom-right",
-            autoClose: 5000,
+            autoClose: 3000,
             hideProgressBar: false,
             closeOnClick: true,
             pauseOnHover: true,
@@ -99,7 +99,7 @@ const Container = ({ children }: ContainerProps) => {
       <div className="desktop supership">
         <ToastContainer
           position="bottom-right"
-          autoClose={5000}
+          autoClose={3000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick

@@ -2,6 +2,7 @@ import { AuthUserState } from "./../../../types/user/user";
 import {
   authCheckPhone,
   authGetMe,
+  authLogin,
   authLoginPhone,
   authLogout,
   authSendCode,
@@ -14,6 +15,20 @@ const initialState: AuthUserState = {
   error: null,
   checkPhone: false,
   verifyCode: null,
+  login_register: {
+    loading: false,
+    error: null,
+  },
+  data_verifyCode: {
+    loading: false,
+    error: null,
+    message: null,
+  },
+  dataSendCode: {
+    error: null,
+    loading: false,
+    message: null,
+  },
 };
 const authSlice = createSlice({
   name: "authSlice",
@@ -31,7 +46,7 @@ const authSlice = createSlice({
 
   extraReducers(builder) {
     builder
-      .addCase(authCheckPhone.pending, (state, action) => { })
+      .addCase(authCheckPhone.pending, (state, action) => {})
       .addCase(authCheckPhone.rejected, (state, action) => {
         state.error = action.error;
       })
@@ -40,54 +55,60 @@ const authSlice = createSlice({
       });
     builder
       .addCase(authLoginPhone.pending, (state, action) => {
-        state.loading = true;
+        state.login_register.loading = true;
       })
       .addCase(authLoginPhone.rejected, (state, action) => {
-        state.loading = false;
+        state.login_register.loading = false;
         state.error = action.error;
       })
       .addCase(authLoginPhone.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload.data;
-        localStorage.setItem('token', action.payload.data.token)
+        state.login_register.loading = false;
+        state.data = action.payload.data?.data;
+        localStorage.setItem("token", action.payload.data?.token);
         state.error = action.payload.error;
       });
     builder
-      .addCase(authGetMe.pending, (state) => {
-        state.loading = true;
-      })
+      .addCase(authGetMe.pending, (state) => {})
       .addCase(authGetMe.rejected, (state, action) => {
-        state.loading = false;
         state.error = action.error;
       })
       .addCase(authGetMe.fulfilled, (state, action) => {
-        state.loading = false;
-        state.data = action.payload.data;
-        state.error = action.payload.error;
+        state.data = action.payload.data.data[0];
       });
     builder
       .addCase(authSendCode.pending, (state) => {
-        state.loading = true;
+        state.dataSendCode.loading = true;
       })
       .addCase(authSendCode.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error;
+        state.dataSendCode.loading = false;
+        state.dataSendCode.error = action.error;
       })
       .addCase(authSendCode.fulfilled, (state, action) => {
-        state.loading = false;
-        state.dataCheckPhone = action.payload.data;
+        state.dataSendCode.loading = false;
+        state.dataSendCode.message = action.payload.data;
       });
     builder
       .addCase(authVerifyCode.pending, (state) => {
-        state.loading = true;
+        state.data_verifyCode.loading = true;
       })
       .addCase(authVerifyCode.rejected, (state, action) => {
+        state.data_verifyCode.loading = false;
+        state.data_verifyCode.error = action.payload;
+      })
+      .addCase(authVerifyCode.fulfilled, (state, action) => {
+        state.data_verifyCode.loading = false;
+        state.data_verifyCode.message = action.payload?.data;
+      });
+    builder
+      .addCase(authLogin.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(authLogin.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error;
       })
-      .addCase(authVerifyCode.fulfilled, (state, action) => {
+      .addCase(authLogin.fulfilled, (state, action) => {
         state.loading = false;
-        state.verifyCode = action.payload.data;
       });
     builder
       .addCase(authLogout.pending, (state) => {
@@ -98,6 +119,7 @@ const authSlice = createSlice({
         state.error = action.error;
       })
       .addCase(authLogout.fulfilled, (state, action) => {
+        state.loading = false;
         state.data = null;
       });
   },

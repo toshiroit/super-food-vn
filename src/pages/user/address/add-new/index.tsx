@@ -1,16 +1,19 @@
 import User from "@/components/User/User";
+import UserAddress from "@/components/User/UserAddress/UserAddress";
 import UserAddressDetail from "@/components/User/UserAddress/UserAddressDetail";
 import Head from "next/head";
 
-const UserAddressDetailPage = () => {
+const UserAddNewAddress = () => {
   return (
     <>
-      <Head>Thông tin địa chỉ #22222</Head>
+      <Head>
+        <title>Thêm địa chỉ mới</title>
+      </Head>
       <User
         UserChildrenProps={{
           contentUser: (
             <UserAddressDetail
-              item={{ title: "Thông tin địa chỉ #000000", type: "edit" }}
+              item={{ title: "Thêm địa chỉ mới ", type: "add" }}
             />
           ),
         }}
@@ -18,4 +21,4 @@ const UserAddressDetailPage = () => {
     </>
   );
 };
-export default UserAddressDetailPage;
+export default UserAddNewAddress;

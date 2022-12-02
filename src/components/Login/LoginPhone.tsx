@@ -2,22 +2,21 @@ import { checkPhone } from "@/lib/checkPhone";
 import {
   selectAuthDataCheckPhone,
   selectAuthLoading,
+  selectAuthSliceDataSendCode,
 } from "@/redux/features/auth/auth-selects";
+import { authSendCode } from "@/redux/features/auth/auth-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectLoginPhone } from "@/redux/features/login/login-selects";
 import { addPhone } from "@/redux/features/login/login-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import {
-  ChangeEvent,
-  FormEvent,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
 const LoginPhone = () => {
   const phoneConfirmation = useAppSelector(selectLoginPhone);
   const loadingCheckPhone = useAppSelector(selectAuthLoading);
   const dataCheckPhone = useAppSelector(selectAuthDataCheckPhone);
+  const dataSendCode = useAppSelector(selectAuthSliceDataSendCode);
+  const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const [phoneLogin, setPhoneLogin] = useState<string>(
     phoneConfirmation && phoneConfirmation
   );
@@ -43,8 +42,8 @@ const LoginPhone = () => {
         message: "",
       });
       dispatch(addPhone({ phone: phoneLogin }));
-      // dispatch(authSendCode({ phone: phoneLogin }));
-      dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+      setIsSubmit(true);
+      //dispatch(authSendCode({ phone: phoneLogin }));
     } else {
       setIsLogin({
         ...isLogin,
@@ -55,11 +54,12 @@ const LoginPhone = () => {
     }
   };
   useEffect(() => {
-    if (dataCheckPhone && !loadingCheckPhone) {
+    if (!dataSendCode.loading && isSubmit) {
       // dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+      dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [loadingCheckPhone, dataCheckPhone]);
+    //eslint-disable-next-line
+  }, [dataSendCode.loading, isSubmit]);
   return (
     <>
       <div className="fixedLogin__inner">
@@ -110,7 +110,7 @@ const LoginPhone = () => {
 
             <div className="btnLogin">
               <button type="submit">
-                {loadingCheckPhone ? (
+                {dataSendCode.loading ? (
                   <div className="loadingio-spinner-spinner-bbeydwj1ls">
                     <div className="ldio-m09wsst1j2">
                       <div></div>

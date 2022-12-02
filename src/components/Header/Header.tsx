@@ -1,6 +1,7 @@
 import { clientRoutes } from "@/constants/router/client/client";
 import { selectAuthError } from "@/redux/features/auth/auth-selects";
 import { authLogout } from "@/redux/features/auth/auth-thunks";
+import { selectCartSliceDataLocal } from "@/redux/features/cart/cart-selects";
 import {
   selectDisplayIsShowLogin,
   selectDisplayShowLogin,
@@ -8,7 +9,8 @@ import {
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { ToastContainer } from "react-toastify";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import Login from "../Login/Login";
 import LoginPhone from "../Login/LoginPhone";
@@ -16,7 +18,9 @@ import LoginPhone from "../Login/LoginPhone";
 const Header = () => {
   const { data, isLogged, toggleLogged } = useAuthContext();
   const authError = useAppSelector(selectAuthError);
+  const dataCartLocal = useAppSelector(selectCartSliceDataLocal);
   const dispatch = useAppDispatch();
+  const [localCart, setLocalCart] = useState<number>(0);
   const isDisplayLogin = useAppSelector(selectDisplayIsShowLogin);
   const onFormLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
@@ -25,8 +29,30 @@ const Header = () => {
     dispatch(authLogout());
     toggleLogged(false);
   };
+  useEffect(() => {
+    if (dataCartLocal.length === 0 || !dataCartLocal) {
+      if (localStorage.getItem("cart")) {
+        const data = JSON.parse(localStorage.getItem("cart") || "");
+        if (data) {
+          setLocalCart(data.length);
+        }
+      }
+    }
+  }, [dataCartLocal]);
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div
         className={
           isDisplayLogin.isShowFixed
@@ -170,7 +196,13 @@ const Header = () => {
                       <div className="text cart">
                         <i className="fa-solid fa-basket-shopping fa-size" />
                         <p>Giỏ hàng</p>
-                        <div className="quality">14</div>
+                        <div className="quality">
+                          {dataCartLocal && dataCartLocal.length === 0
+                            ? localCart
+                            : dataCartLocal.length > 0
+                            ? dataCartLocal.length
+                            : ""}
+                        </div>
                       </div>
                     </a>
                   </Link>
@@ -181,9 +213,7 @@ const Header = () => {
                         <Link href={clientRoutes.USER_INFO}>
                           <a>
                             <div className="inner">
-                              <span className="name">
-                                {data && data.data && data.data[0].phone}
-                              </span>
+                              <span className="name">{data && data.phone}</span>
                               <div className="woi">
                                 <li className="woi__item">Số dư : 0</li>
                               </div>

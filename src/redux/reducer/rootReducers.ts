@@ -6,6 +6,7 @@ import chatSlice from "../features/chat/chat-slice";
 import checkoutSlice from "../features/checkout/checkout-slice";
 import commentSlice from "../features/comment/comment-slice";
 import displaySlice from "../features/display/display-slice";
+import evaluateSlice from "../features/evaluate/evaluate-slice";
 import loginSlice from "../features/login/login-slice";
 import notifySlice from "../features/notify/notify-slice";
 import orderSlice from "../features/order/order-slice";
@@ -33,4 +34,5 @@ export default combineReducers({
   shopSlice,
   notifySlice,
   chatSlice,
+  evaluateSlice,
 });

@@ -27,7 +27,8 @@ const UserOrder = () => {
   };
   useEffect(() => {
     dispatch(getListOrderByCodeUser({ page: current_page }));
-  }, [current_page, dispatch]);
+    //eslint-disable-next-line
+  }, [current_page]);
   useEffect(() => {
     window.scrollTo(0, 0);
   }, [current_page]);
@@ -54,7 +55,7 @@ const UserOrder = () => {
       }
     }
     // eslint-disable-next-line
-  }, [current_page, dispatch]);
+  }, [current_page, dataListOrder]);
   return (
     <div className="content">
       <div className="title">
@@ -77,7 +78,15 @@ const UserOrder = () => {
             return <UserOrderItem itemOrder={item} key={item.code_order} />;
           })
         ) : (
-          <span style={{ textAlign: "center" }}> Không có đơn hàng nào</span>
+          <div style={{ textAlign: "center" }}>
+            <span
+              style={{
+                fontWeight: 500,
+              }}
+            >
+              Không có đơn hàng nào
+            </span>
+          </div>
         )}
       </div>
       {pageOrder.length !== 0 || pageOrder.length > 1 ? (

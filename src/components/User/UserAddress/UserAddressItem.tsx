@@ -12,7 +12,8 @@ const UserAddressItem = ({ itemAddress }: ItemAddressShowProps) => {
     >
       <div className="title">
         <h4>
-          <i className="fa-solid fa-location-dot" /> Địa chỉ gốc
+          <i className="fa-solid fa-location-dot" />{" "}
+          {itemAddress.status ? "Địa chỉ gốc" : "Địa chỉ phụ"}
         </h4>
       </div>
       <div className="content">
@@ -20,7 +21,7 @@ const UserAddressItem = ({ itemAddress }: ItemAddressShowProps) => {
           <span>
             <i className="fa-solid fa-signature fa-size" /> Họ và tên :{" "}
             {/* <b >{addRess} </b> */}
-            {itemAddress.full_name}
+            <b> {itemAddress.full_name}</b>
             {/* {value.name} */}
           </span>
         </div>
@@ -33,7 +34,7 @@ const UserAddressItem = ({ itemAddress }: ItemAddressShowProps) => {
         <div className="content__address tw">
           <span>
             <i className="fa-solid fa-location-dot fa-size" />
-            Địa chỉ :<b>24/71 Hà huy tập , ......... ,...........</b>
+            Địa chỉ :<b>{itemAddress.detail_address}</b>
           </span>
         </div>
       </div>

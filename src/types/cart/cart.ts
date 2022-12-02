@@ -1,4 +1,5 @@
-import { VoucherT } from '../voucher/voucher'
+import { TypeProductValue } from "../product/product";
+import { VoucherT } from "../voucher/voucher";
 export type CartState<T> = {
   data: Array<T> | null;
   loading: boolean;
@@ -14,9 +15,8 @@ export type CartState<T> = {
     loading: boolean;
     error: any | null;
     data: any | null;
-  }
-}
-
+  };
+};
 
 export interface CartItem extends VoucherT {
   readonly code_cart: string | null;
@@ -37,40 +37,44 @@ export interface CartItem extends VoucherT {
   type?: string;
   createdat?: string | null;
   updatedat?: string | null;
-  info_product: string;
+  info_product: {
+    note: string;
+    type: TypeProductValue | null;
+  };
 }
 
 export interface CartItemProps {
   item: CartItem;
   quality?: number;
   infoProduct?: string;
+  type_product: TypeProductValue | null;
 }
 export type OnChangeCartType = {
-  type: '+' | '-' | 'remove';
+  type: "+" | "-" | "remove";
   data?: CartItem;
-}
+};
 export type CartShop = {
   code_shop: string;
   name_shop: string;
-  cartItem: CartItem[]
-}
+  cartItem: any[];
+};
 export type CartItemShop = {
-  shop: any
-  cart: CartItem[]
-}
+  shop: any;
+  cart: CartItem[];
+};
 
 export type PriceResultCartData = {
   data: CartItem[];
   price_gift?: number;
   code_gift?: string;
-}
+};
 
 export type GiftT = {
   code?: string;
   isCheck?: boolean;
   price_gift?: number;
-  show?: 'SHOW' | 'HIDE'
-}
+  show?: "SHOW" | "HIDE";
+};
 export type SetDataCartLocalAction = {
-  data: Array<any>
-}
+  data: Array<any>;
+};

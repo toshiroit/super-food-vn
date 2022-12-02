@@ -32,7 +32,6 @@ export function AuthProvider({ children, jwt }: AuthProviderProps) {
     let isStop = true;
     function getMe() {
       if (isStop) {
-        console.log("GET DATA USER");
         dispatch(authGetMe());
       }
     }
@@ -40,8 +39,8 @@ export function AuthProvider({ children, jwt }: AuthProviderProps) {
     return () => {
       isStop = false;
     };
-    //es-line-disable-next-line
-  }, [isLogged]);
+    //eslint-disable-next-line
+  }, [isLogged, router.pathname]);
   return (
     <AuthContext.Provider
       value={{

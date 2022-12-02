@@ -56,6 +56,7 @@ const LoginPassword = () => {
       dispatch(onDisplayLogin({ isShowFixed: false }));
       router.push("/");
     }
+    //eslint-disable-next-line
   }, [loadingAuth, authDataLogin]);
   return (
     <>

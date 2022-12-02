@@ -31,16 +31,14 @@ const Cart = () => {
     if (localStorage.getItem("cart")) {
       if (isLogged) {
         if (data) {
-          if (data.data && data.data[0]) {
-            //localStorage.removeItem('cart')
-            if (dataCartLocal.length !== 0) {
-              dispatch(
-                addCartByCodeUser({
-                  data_cart: dataCartLocal,
-                  code_user: data.data && data.data[0].code_user,
-                })
-              );
-            }
+          if (dataCartLocal.length !== 0) {
+            console.log(dataCartLocal);
+            dispatch(
+              addCartByCodeUser({
+                data_cart: dataCartLocal,
+                code_user: data.code_user || "",
+              })
+            );
           }
         }
       }
@@ -55,7 +53,7 @@ const Cart = () => {
           //dispatch(setCartLocal())
           dispatch(
             getCartByCodeUser({
-              code_user: data.data && data.data[0].code_user,
+              code_user: data.code_user || "",
             })
           );
         }
@@ -70,9 +68,7 @@ const Cart = () => {
     // eslint-disable-next-line
   }, [router.pathname, dispatch, isLogged]);
 
-  const joinProductShopTest = (
-    data: CartType.CartItem[]
-  ): CartType.CartItemShop[] => {
+  const joinProductShopTest = (data: CartType.CartItem[]): any[] => {
     let cpData = [...data];
     const itemsByCodeShop: any = {};
     for (const item of cpData) {

@@ -1,6 +1,10 @@
 const CompletionPass = () => {
   return (
-    <div id="fromConfirmPass" className="fxConfirm">
+    <div
+      id="fromConfirmPass"
+      style={{ display: "block" }}
+      className="fxConfirm"
+    >
       <div className="fxConfirm__inner">
         <h4 className="title">
           <i className="fa-solid fa-unlock" /> Xác nhận mật khẩu của bạn

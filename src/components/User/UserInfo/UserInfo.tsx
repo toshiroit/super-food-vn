@@ -6,109 +6,107 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import {
   ChangeInfoUser,
   UpdateUserW1Info,
+  UserDataInfo,
   UserDate,
   UserInfoFull,
 } from "@/types/user/user";
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
 
 const UserInfo = () => {
   const { data } = useAuthContext();
   const dispatch = useAppDispatch();
+  const [dataUser, setDataUser] = useState<UserDataInfo>({
+    box1: {
+      full_name: "",
+      address: "",
+      date: {
+        day: 1,
+        month: 1,
+        five: 1975,
+      },
+      sex: false,
+    },
+    box2: {
+      email: "",
+      phone: "",
+    },
+  });
   const dataUpdateW1Rx = useAppSelector(selectUserSliceDataUpdateW1);
-  const month = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-  const [settingUser, setSettingUser] = useState<ChangeInfoUser>({
-    isChangeEmail: false,
-    isChangePhone: false,
-    isPasswordV1: false,
-    isPasswordV2: false,
-  });
-  const [fullName, setFullName] = useState<string>(
-    data && data.data.payload && data.data.payload.full_name
-  );
-  const [sex, setSex] = useState<boolean>(false);
-  const [date, setDate] = useState<UserDate>({
-    day: formDateVN(data && data.data && data.data[0].date_birth)
-      .getDay()
-      .toString(),
-    month: formDateVN(data && data.data && data.data[0].date_birth)
-      .getMonth()
-      .toString(),
-    five: formDateVN(data && data.data && data.data[0].date_birth)
-      .getFullYear()
-      .toString(),
-  });
-  const [dataUser, setDataUser] = useState<UserInfoFull | undefined>(
-    data && data.data && data.data[0]
-  );
-
-  /* Formik validation form user info */
-  const onChangeDate = (e: ChangeEvent<HTMLSelectElement>) => {
-    setDate({
-      ...date,
-      [e.target.name]: e.target.value,
-    });
-  };
-  const onCheckSex = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.name === "female") {
-      setSex(true);
-    } else {
-      setSex(false);
-    }
-  };
-  const onChangeUser = (e: ChangeEvent<HTMLInputElement>) => {
-    setDataUser({
-      ...dataUser,
-      [e.target.name]: e.target.value,
-    });
-  };
   const onSubmitUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    let newDataUser = { ...dataUser };
-    newDataUser.date = `${date?.day + "/" + date?.month + "/" + date?.five}`;
-    newDataUser.sex = sex;
-    const dataUpdate: UpdateUserW1Info = {
-      fullName: newDataUser.full_name || "",
-      date: "2022-10-20 00:00:00",
-      sex: newDataUser.sex,
-    };
-    dispatch(updateUserInfoW1(dataUpdate));
-    //dispatch(addInfoUser(newDataUser));
+    const date_full = `${dataUser.box1.date.day}/${dataUser.box1.date.month}/${dataUser.box1.date.five}`;
+    dispatch(
+      updateUserInfoW1({
+        fullName: dataUser.box1.full_name,
+        date: "2022-10-06 11:01:47.381",
+        sex: false,
+      })
+    );
   };
-  const onChangeSetting = (
-    nameSetting: "phone" | "email" | "passv1" | "passv2"
+  const onSettingData = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
-    if (nameSetting === "phone") {
-      setSettingUser({
-        ...settingUser,
-        isChangePhone: !settingUser.isChangePhone,
+    if (
+      e.target.name === "day" ||
+      e.target.name === "month" ||
+      e.target.name === "five"
+    ) {
+      setDataUser({
+        ...dataUser,
+        box1: {
+          ...dataUser.box1,
+          date: {
+            ...dataUser.box1.date,
+            day:
+              e.target.name === "day"
+                ? Number(e.target.value)
+                : dataUser.box1.date.day,
+            month:
+              e.target.name === "month"
+                ? Number(e.target.value)
+                : dataUser.box1.date.month,
+            five:
+              e.target.name === "five"
+                ? Number(e.target.value)
+                : dataUser.box1.date.five,
+          },
+        },
       });
-    }
-    if (nameSetting === "email") {
-      setSettingUser({
-        ...settingUser,
-        isChangeEmail: !settingUser.isChangeEmail,
-      });
-    }
-    if (nameSetting === "passv1") {
-      setSettingUser({
-        ...settingUser,
-        isPasswordV1: !settingUser.isPasswordV1,
-      });
-    }
-    if (nameSetting === "passv2") {
-      setSettingUser({
-        ...settingUser,
-        isPasswordV2: !settingUser.isPasswordV2,
+    } else {
+      setDataUser({
+        ...dataUser,
+        box1: {
+          ...dataUser.box1,
+          [e.target.name]: e.target.value,
+        },
       });
     }
   };
-  const onChangeUpdate = () => {};
+  useEffect(() => {
+    if (data) {
+      setDataUser({
+        box1: {
+          full_name: data.full_name,
+          sex: data.sex,
+          date: {
+            day: new Date(data.date_birth).getDay(),
+            month: new Date(data.date_birth).getMonth(),
+            five: new Date(data.date_birth).getFullYear(),
+          },
+          address: "124",
+        },
+        box2: {
+          email: "",
+          phone: data.phone,
+        },
+      });
+    }
+  }, []);
   return (
     <div className="content">
       <div className="title">
-        {console.log(dataUpdateW1Rx)}
         <h4>Thông tin tài khoản</h4>
         <Link href={"/user"}>
           <a>
@@ -134,8 +132,8 @@ const UserInfo = () => {
                 <input
                   type="text"
                   name="full_name"
-                  onChange={onChangeUser}
-                  value={dataUser?.full_name}
+                  onChange={onSettingData}
+                  defaultValue={dataUser.box1.full_name}
                   placeholder="Thêm tên người dùng "
                 />
               </li>
@@ -148,14 +146,12 @@ const UserInfo = () => {
                   <select
                     name="day"
                     id=""
-                    onChange={onChangeDate}
-                    defaultValue={
-                      data &&
-                      formDateVN(data.data && data.data[0].date_birth).getDay()
-                    }
+                    onChange={onSettingData}
+                    value={dataUser.box1.date.day}
                   >
                     <option value={-1}>Ngày</option>
-                    <option value={1}>1</option> <option value={2}>2</option>
+                    <option value={1}>1</option>
+                    <option value={2}>2</option>
                     <option value={3}>3</option>
                     <option value={4}>4</option>
                     <option value={5}>5</option>
@@ -169,16 +165,9 @@ const UserInfo = () => {
                   </select>
                   <select
                     name="month"
-                    onChange={onChangeDate}
+                    onChange={onSettingData}
                     id=""
-                    defaultValue={
-                      data &&
-                      month[
-                        formDateVN(
-                          data.data && data.data[0].date_birth
-                        ).getMonth()
-                      ]
-                    }
+                    value={dataUser.box1.date.month}
                   >
                     <>
                       <option value={1}>1</option>
@@ -215,16 +204,12 @@ const UserInfo = () => {
                   </select>
                   <select
                     name="five"
-                    onChange={onChangeDate}
+                    onChange={onSettingData}
                     id=""
-                    defaultValue={
-                      data &&
-                      formDateVN(
-                        data.data && data.data[0].date_birth
-                      ).getFullYear()
-                    }
+                    value={dataUser.box1.date.five}
                   >
                     <option value={-1}>Năm</option>
+                    <option value={1975}>1975</option>
                     <option value={1980}>1980</option>
                     <option value={1981}>1981</option>
                     <option value={1982}>1982</option>
@@ -279,25 +264,17 @@ const UserInfo = () => {
                 <div className="checkSex">
                   <div className="checkSex__item">
                     <input
+                      defaultChecked={dataUser.box1.sex ? false : true}
                       type="radio"
                       name="female"
-                      onChange={onCheckSex}
-                      defaultChecked={
-                        data && data.data && data.data[0].sex ? true : false
-                      }
-                      checked={sex ? true : false}
                     />
                     <span>Nam </span>
                   </div>
                   <div className="checkSex__item">
                     <input
+                      defaultChecked={dataUser.box1.sex ? true : false}
                       type="radio"
                       name="male"
-                      onChange={onCheckSex}
-                      defaultChecked={
-                        data && data.data && data.data[0].sex ? false : true
-                      }
-                      checked={sex ? false : true}
                     />
                     <span>Nữ </span>
                   </div>
@@ -325,7 +302,10 @@ const UserInfo = () => {
                 </div>
               </li>
               <div className="save">
-                <button type="submit">
+                <button
+                  disabled={dataUpdateW1Rx.loading ? true : false}
+                  type="submit"
+                >
                   <>
                     <i className="fa-solid fa-floppy-disk fa-size" />
                     {dataUpdateW1Rx.loading ? "Đang lưu " : "Lưu thông tin"}
@@ -344,15 +324,8 @@ const UserInfo = () => {
                 Địa chỉ thư điện tử
               </label>
               <div className="ipn">
-                <input
-                  disabled={settingUser.isChangeEmail ? true : false}
-                  type="text"
-                  onChange={onChangeUser}
-                  name="email"
-                />
-                <button onClick={() => onChangeSetting("email")} type="button">
-                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
-                </button>
+                <input type="text" name="email" />
+                <button type="submit">Thay đổi</button>
               </div>
             </li>
             <li className="infoUser__item">
@@ -360,16 +333,8 @@ const UserInfo = () => {
                 <i className="fa-solid fa-phone fa-size" /> Số điện thoại
               </label>
               <div className="ipn">
-                <input
-                  type="text"
-                  onChange={onChangeUpdate}
-                  disabled={settingUser.isChangePhone ? true : false}
-                  defaultValue={data && data.data && data.data[0].phone.trim()}
-                  name="phone"
-                />
-                <button onClick={() => onChangeSetting("phone")} type="button">
-                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
-                </button>
+                <input value={dataUser.box2.phone} type="text" name="phone" />
+                <button type="button">Thay đổi</button>
               </div>
             </li>
           </div>
@@ -381,15 +346,8 @@ const UserInfo = () => {
                 Mật khẩu cấp 1
               </label>
               <div className="ipn">
-                <input
-                  disabled={settingUser.isPasswordV1 ? true : false}
-                  type="password"
-                  defaultValue="##########"
-                  onChange={onChangeUser}
-                />
-                <button onClick={() => onChangeSetting("passv1")} type="button">
-                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
-                </button>
+                <input type="password" defaultValue="##########" />
+                <button type="button">Thay đổi</button>
               </div>
             </li>
             <li className="infoUser__item">
@@ -398,15 +356,8 @@ const UserInfo = () => {
                 Mật khẩu cấp 2
               </label>
               <div className="ipn">
-                <input
-                  disabled={settingUser.isPasswordV2 ? true : false}
-                  type="password"
-                  defaultValue="##########"
-                  onChange={onChangeUser}
-                />
-                <button onClick={() => onChangeSetting("passv2")} type="button">
-                  {settingUser.isChangeEmail ? "Thay đổi" : "Xác nhận "}
-                </button>
+                <input type="password" />
+                <button type="button">Thay đổi</button>
               </div>
             </li>
           </div>

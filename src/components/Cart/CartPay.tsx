@@ -1,9 +1,13 @@
 import { clientRoutes } from "@/constants/router/client/client";
 import { formatPriceVND } from "@/lib/formatPrice";
 import { getGiftProductCart } from "@/lib/getGiftProductCart";
-import { selectAddressSliceData } from "@/redux/features/address/address-selects";
+import { selectAddressSliceDataAddress } from "@/redux/features/address/address-selects";
 import { getAddressByUser } from "@/redux/features/address/address-thunks";
-import { selectCartSliceDataLocal, selectCartSlicePriceDiscount, selectCartSlicePriceResult } from "@/redux/features/cart/cart-selects";
+import {
+  selectCartSliceDataLocal,
+  selectCartSlicePriceDiscount,
+  selectCartSlicePriceResult,
+} from "@/redux/features/cart/cart-selects";
 import { priceResultData } from "@/redux/features/cart/cart-slice";
 import { addDataCheckout } from "@/redux/features/checkout/checkout-slice";
 import { checkoutOrder } from "@/redux/features/checkout/checkout-thunks";
@@ -17,119 +21,127 @@ import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import GiftItem from "../Gift/GiftItem";
 
 const CartPay = () => {
-  const dataCartLocal = useAppSelector(selectCartSliceDataLocal)
-  const priceResultW = useAppSelector(selectCartSlicePriceResult)
-  const dataAddressUser = useAppSelector(selectAddressSliceData)
-  const priceDiscountW = useAppSelector(selectCartSlicePriceDiscount)
-  const dispatch = useAppDispatch()
-  const router = useRouter()
-  const { isLogged } = useAuthContext()
+  const dataCartLocal = useAppSelector(selectCartSliceDataLocal);
+  const priceResultW = useAppSelector(selectCartSlicePriceResult);
+  const dataAddressUser = useAppSelector(selectAddressSliceDataAddress);
+  const priceDiscountW = useAppSelector(selectCartSlicePriceDiscount);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+  const { isLogged } = useAuthContext();
   useEffect(() => {
-    let isStoped = true
+    let isStoped = true;
     const onGetAddress = () => {
       if (isStoped) {
-        dispatch(getAddressByUser())
+        dispatch(getAddressByUser());
       }
       return () => {
-        isStoped = false
-      }
-    }
-    onGetAddress()
-  }, [dataCartLocal, dispatch])
+        isStoped = false;
+      };
+    };
+    onGetAddress();
+  }, [dataCartLocal, dispatch]);
   const [codeGift, setCodeGift] = useState<GiftT>({
-    code: '',
-    isCheck: true
-  })
+    code: "",
+    isCheck: true,
+  });
   const onChangeCodeGift = (e: ChangeEvent<HTMLInputElement>) => {
     setCodeGift({
       isCheck: true,
       code: e.target.value,
-    })
+    });
   };
   const onPayCheckout = () => {
     if (dataCartLocal) {
       if (dataCartLocal.length > 0) {
         if (isLogged) {
           if (dataAddressUser) {
-            if (dataAddressUser.length > 0) {
-              dispatch(addDataCheckout({
-                address: {
-                  fullName: '124',
-                  code: '124'
-                },
-                data: dataCartLocal,
-                priceResult: priceResultW as number || 0,
-                priceDiscount: priceDiscountW as number || 0,
-              }))
-              router.push(clientRoutes.CHECKOUT)
-            }
-            else {
-              router.push(clientRoutes.USER_ADDRESS)
+            if (dataAddressUser.data && dataAddressUser.data.length > 0) {
+              dispatch(
+                addDataCheckout({
+                  address: {
+                    fullName: "124",
+                    code: "124",
+                  },
+                  data: dataCartLocal,
+                  priceResult: (priceResultW as number) || 0,
+                  priceDiscount: (priceDiscountW as number) || 0,
+                })
+              );
+              router.push(clientRoutes.CHECKOUT);
+            } else {
+              router.push(clientRoutes.USER_ADDRESS);
             }
           }
+        } else {
+          dispatch(
+            onDisplayLogin({
+              isShowPhone: true,
+              isShowFixed: true,
+            })
+          );
         }
-        else {
-          dispatch(onDisplayLogin({
-            isShowPhone: true,
-            isShowFixed: true
-          }))
-        }
-
       }
     }
-  }
+  };
   const onCheckCodeGift = () => {
     if (codeGift.code) {
       if (codeGift.code.length > 0) {
-        let data = getGiftProductCart(dataCartLocal).filter(item => item.code_w_voucher.trim() === codeGift.code)
+        let data = getGiftProductCart(dataCartLocal).filter(
+          (item) => item.code_w_voucher.trim() === codeGift.code
+        );
         if (data.length > 0) {
           setCodeGift({
             ...codeGift,
             isCheck: true,
-            show: 'SHOW',
-            price_gift: data[0].price_voucher
-          })
-          dispatch(priceResultData({
-            data: dataCartLocal,
+            show: "SHOW",
             price_gift: data[0].price_voucher,
-            code_gift: data[0].code_w_voucher
-          }))
-        }
-        else {
+          });
+          dispatch(
+            priceResultData({
+              data: dataCartLocal,
+              price_gift: data[0].price_voucher,
+              code_gift: data[0].code_w_voucher,
+            })
+          );
+        } else {
           setCodeGift({
             ...codeGift,
             isCheck: false,
-
-          })
+          });
         }
       }
     }
   };
   const priceResultQuality = (price: number, quality: number) => {
     return price * quality;
-  }
+  };
   const priceDiscount = (price: number, discount: number) => {
     const discountResult = discount / 100;
-    return price - (price * discountResult);
+    return price - price * discountResult;
   };
   const priceResult = () => {
     let result: number = 0;
-    dataCartLocal.map(item => {
-      result += priceDiscount(priceResultQuality(item.price, item.quality_product), item.discount)
-    })
+    dataCartLocal.map((item) => {
+      result += priceDiscount(
+        priceResultQuality(item.price, item.quality_product),
+        item.discount
+      );
+    });
     return result;
-  }
+  };
   useEffect(() => {
     if (dataCartLocal) {
-      dispatch(priceResultData({
-        data: dataCartLocal,
-        price_gift: codeGift.price_gift
-      }))
+      dispatch(
+        priceResultData({
+          data: dataCartLocal,
+          price_gift: codeGift.price_gift,
+        })
+      );
     }
-  }, [dispatch, dataCartLocal, codeGift])
+  }, [dispatch, dataCartLocal, codeGift]);
   return (
     <>
-      {isLogged ?
+      {isLogged ? (
         <>
           <div className="header">
             <div className="inline">
@@ -147,29 +159,44 @@ const CartPay = () => {
               </Link>
             </div>
             <>
-              {dataAddressUser && dataAddressUser.length === 0 ? dataAddressUser.map((item => {
-                if (item.status)
-                  return (
-                    <>
-                      <div className="info">
-                        <div className="info__name">
-                          <span>{item.full_name}</span>
+              {dataAddressUser.data && dataAddressUser.data.length > 0 ? (
+                dataAddressUser.data.map((item) => {
+                  if (item.status)
+                    return (
+                      <>
+                        <div className="info">
+                          <div className="info__name">
+                            <span>{item.full_name}</span>
+                          </div>
+                          <i className="bd" />
+                          <div className="info__phone">
+                            <span>{item.phone}</span>
+                          </div>
                         </div>
-                        <i className="bd" />
-                        <div className="info__phone">
-                          <span>{item.phone}</span>
+                        <div className="address">
+                          <p>
+                            {item.detail_address ||
+                              item.street +
+                                " , " +
+                                item.village +
+                                " , " +
+                                item.city}
+                          </p>
                         </div>
-                      </div>
-                      <div className="address">
-                        <p>{item.detail_address
-                          ||
-                          item.street + ' , ' + item.village + ' , ' + item.province}</p>
-                      </div>
-
-                    </>
-                  )
-              })) : <h4 style={{ textAlign: 'center', fontWeight: '400', fontSize: '0.9rem' }}>Chưa có địa chỉ thanh toán </h4>
-              }
+                      </>
+                    );
+                })
+              ) : (
+                <h4
+                  style={{
+                    textAlign: "center",
+                    fontWeight: "400",
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  Chưa có địa chỉ thanh toán{" "}
+                </h4>
+              )}
             </>
           </div>
           <div className="main">
@@ -192,13 +219,16 @@ const CartPay = () => {
                 })
               }
               */}
-              {
-                dataCartLocal.map((item, key) => {
-                  return (
-                    <GiftItem code={item.code_w_voucher} image="124" title={item.name_voucher} key={key} />
-                  )
-                })
-              }
+              {dataCartLocal.map((item, key) => {
+                return (
+                  <GiftItem
+                    code={item.code_w_voucher}
+                    image="124"
+                    title={item.name_voucher}
+                    key={key}
+                  />
+                );
+              })}
             </ul>
             <div className="main__input">
               <div className="main__input___owp">
@@ -209,25 +239,32 @@ const CartPay = () => {
                   onChange={onChangeCodeGift}
                   id=""
                 />
-                <button type="button" onClick={onCheckCodeGift}>Áp dụng</button>
+                <button type="button" onClick={onCheckCodeGift}>
+                  Áp dụng
+                </button>
               </div>
               <p
                 style={{
                   fontSize: "0.9rem",
-                  color: `${!codeGift.isCheck ? '#e7000e' : '#408140'}`, marginTop: "5px"
+                  color: `${!codeGift.isCheck ? "#e7000e" : "#408140"}`,
+                  marginTop: "5px",
                 }}
                 className="error"
               >
-                {
-                  !codeGift.isCheck ? <>
-                    Mã giảm giá không chính xác
-                  </> : codeGift.show === 'SHOW' ? 'Đã áp dụng ' : ''
-                }
+                {!codeGift.isCheck ? (
+                  <>Mã giảm giá không chính xác</>
+                ) : codeGift.show === "SHOW" ? (
+                  "Đã áp dụng "
+                ) : (
+                  ""
+                )}
               </p>
             </div>
           </div>
-        </> : ''
-      }
+        </>
+      ) : (
+        ""
+      )}
       <div className="footer">
         <ul className="price__main">
           <li className="price__main___item">
@@ -251,10 +288,7 @@ const CartPay = () => {
         <div className="buy">
           <button type="button" onClick={onPayCheckout} className="btn btn-buy">
             <i className="fa-solid fa-bag-shopping" />
-            {
-              !isLogged ? 'Đăng nhập để đặt hàng ' :
-                'ĐẶT NGAY'
-            }
+            {!isLogged ? "Đăng nhập để đặt hàng " : "ĐẶT NGAY"}
           </button>
         </div>
       </div>

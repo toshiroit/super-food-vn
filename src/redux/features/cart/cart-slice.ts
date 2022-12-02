@@ -1,33 +1,44 @@
 import { randomLengthText } from "@/lib/random";
-import { CartItem, CartItemProps, CartState, OnChangeCartType, PriceResultCartData, SetDataCartLocalAction } from "@/types/cart/cart";
+import {
+  CartItem,
+  CartItemProps,
+  CartState,
+  OnChangeCartType,
+  PriceResultCartData,
+  SetDataCartLocalAction,
+} from "@/types/cart/cart";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { getCartByCodeUser, removeCartByCodeProductAndCart, removeCartItemByCodeCart } from "./cart-thunks";
+import {
+  getCartByCodeUser,
+  removeCartByCodeProductAndCart,
+  removeCartItemByCodeCart,
+} from "./cart-thunks";
 
 const initialState: CartState<CartItem> = {
   data: null,
   loading: false,
-  error: '',
+  error: "",
   dataLocal: [],
   message: null,
-  codeGift: '',
+  codeGift: "",
   priceDiscount: 0,
-  code_address: '',
+  code_address: "",
   removeCartByProduct: {
     loading: false,
     error: null,
-    data: null
-  }
-}
+    data: null,
+  },
+};
 const cartSlice = createSlice({
-  name: 'cart-slice',
+  name: "cart-slice",
   initialState: initialState,
   reducers: {
     addCart: (state, action: PayloadAction<CartItemProps>) => {
-      const item = action.payload.item || null
+      const item = action.payload.item || null;
       if (item) {
-        const cartLocal = localStorage.getItem('cart')
+        const cartLocal = localStorage.getItem("cart");
         const cartItem: CartItem = {
-          name_shop: '',
+          name_shop: "",
           code_cart: randomLengthText(14),
           code_product: item.code_product,
           code_user: null,
@@ -52,148 +63,164 @@ const cartSlice = createSlice({
           createdat: item.createdat,
           type: item.type,
           updatedat: item.updatedat,
-          info_product: action.payload.infoProduct || ''
-        }
+          info_product: {
+            note: action.payload.infoProduct || "",
+            type: action.payload.type_product,
+          },
+        };
         if (!cartLocal) {
-          const cartArr = []
-          cartArr.push(
-            cartItem
-          )
+          const cartArr = [];
+          cartArr.push(cartItem);
           if (cartArr) {
-            localStorage.setItem('cart', JSON.stringify(cartArr))
+            localStorage.setItem("cart", JSON.stringify(cartArr));
           }
           state.dataLocal = cartArr;
-        }
-        else {
-          const arrCartLocal = JSON.parse(cartLocal) as [any]
-          const isCheck = arrCartLocal.some(item => item.code_product === cartItem.code_product)
+        } else {
+          const arrCartLocal = JSON.parse(cartLocal) as [any];
+          const isCheck = arrCartLocal.some(
+            (item) => item.code_product === cartItem.code_product
+          );
           if (!isCheck) {
-            arrCartLocal.push(cartItem)
+            arrCartLocal.push(cartItem);
           }
-          localStorage.setItem('cart', JSON.stringify(arrCartLocal))
-          state.dataLocal = arrCartLocal
+          localStorage.setItem("cart", JSON.stringify(arrCartLocal));
+          state.dataLocal = arrCartLocal;
         }
       }
-      return state
+      return state;
     },
     onChangeCart: (state, action: PayloadAction<OnChangeCartType>) => {
-      let data: any[] = []
+      let data: any[] = [];
       if (state.dataLocal) {
-        data = state.dataLocal
-      }
-      else {
-        data = JSON.parse(localStorage.getItem('cart') || '')
+        data = state.dataLocal;
+      } else {
+        data = JSON.parse(localStorage.getItem("cart") || "");
       }
       if (data) {
-        if (action.payload.type === '+') {
-          data.map(item => {
+        if (action.payload.type === "+") {
+          data.map((item) => {
             if (item.code_product === action.payload.data?.code_product) {
-              item.quality_product += 1
+              item.quality_product += 1;
             }
-          })
-          state.dataLocal = data
-
-        }
-        else if (action.payload.type === '-') {
-          data.map(item => {
-            if (item.code_product === action.payload.data?.code_product) {
-              if (item.quality_product > 0)
-                item.quality_product -= 1
-            }
-          })
-          state.dataLocal = data
-        }
-        else if (action.payload.type == 'remove') {
-          data = data.filter(item => item.code_product !== action.payload.data?.code_product)
+          });
           state.dataLocal = data;
+        } else if (action.payload.type === "-") {
+          data.map((item) => {
+            if (item.code_product === action.payload.data?.code_product) {
+              if (item.quality_product > 0) item.quality_product -= 1;
+            }
+          });
+          state.dataLocal = data;
+        } else if (action.payload.type == "remove") {
+          data = data.filter(
+            (item) => item.code_product !== action.payload.data?.code_product
+          );
+          state.dataLocal = data;
+        } else {
         }
-        else {
-
-        }
-        localStorage.setItem('cart', JSON.stringify(data))
+        localStorage.setItem("cart", JSON.stringify(data));
       }
       return state;
     },
     setCartLocal: (state) => {
-      if (localStorage.getItem('cart')) {
-        if (JSON.parse(localStorage.getItem('cart') || '').length !== 0) {
-          state.dataLocal = JSON.parse(localStorage.getItem('cart') || '')
+      if (localStorage.getItem("cart")) {
+        if (JSON.parse(localStorage.getItem("cart") || "").length !== 0) {
+          state.dataLocal = JSON.parse(localStorage.getItem("cart") || "");
+        } else {
         }
-        else {
-
-        }
-
       }
-
     },
     priceResultData: (state, action: PayloadAction<PriceResultCartData>) => {
-      let result: number = 0
+      let result: number = 0;
       const priceResultQuality = (price: number, quality: number) => {
         return price * quality;
-      }
+      };
       const priceDiscount = (price: number, discount: number) => {
         const discountResult = discount / 100;
-        return price - (price * discountResult);
+        return price - price * discountResult;
       };
-      action.payload.data.map(item => {
-        result += priceDiscount(priceResultQuality(item.price as number, item.quality_product as number), item.discount as number)
-      })
+      action.payload.data.map((item) => {
+        result += priceDiscount(
+          priceResultQuality(
+            item.price as number,
+            item.quality_product as number
+          ),
+          item.discount as number
+        );
+      });
 
       if (action.payload.price_gift) {
-        state.codeGift = action.payload.code_gift
-        state.priceDiscount = result - priceDiscount(result, action.payload.price_gift)
-        result = priceDiscount(result, action.payload.price_gift)
+        state.codeGift = action.payload.code_gift;
+        state.priceDiscount =
+          result - priceDiscount(result, action.payload.price_gift);
+        result = priceDiscount(result, action.payload.price_gift);
       }
-      state.priceResult = result
+      state.priceResult = result;
 
       return state;
-
     },
     restCart: (state) => {
-      state.data = null
+      state.data = null;
     },
-    resultPay: (state) => {
-
-    },
-    setDataCartLocal: (state, action: PayloadAction<SetDataCartLocalAction>) => {
-      localStorage.setItem('cart', JSON.stringify([]))
-      state.dataLocal = action.payload.data
+    resultPay: (state) => {},
+    setDataCartLocal: (
+      state,
+      action: PayloadAction<SetDataCartLocalAction>
+    ) => {
+      localStorage.setItem("cart", JSON.stringify([]));
+      state.dataLocal = action.payload.data;
       return state;
-    }
+    },
   },
   extraReducers(builder) {
-    builder.addCase(getCartByCodeUser.pending, (state) => {
-      state.loading = true
-    }).addCase(getCartByCodeUser.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error
-    }).addCase(getCartByCodeUser.fulfilled, (state, action) => {
-      localStorage.setItem('cart', JSON.stringify(action.payload.data))
-      state.loading = false;
-      state.data = action.payload.data
-      state.dataLocal = action.payload.data
-    })
+    builder
+      .addCase(getCartByCodeUser.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(getCartByCodeUser.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(getCartByCodeUser.fulfilled, (state, action) => {
+        localStorage.setItem("cart", JSON.stringify(action.payload.data));
+        state.loading = false;
+        state.data = action.payload.data;
+        state.dataLocal = action.payload.data;
+      });
 
-    builder.addCase(removeCartItemByCodeCart.pending, (state) => {
-      state.loading = true
-    }).addCase(removeCartItemByCodeCart.rejected, (state, action) => {
-      state.loading = false;
-      state.error = action.error
-    }).addCase(removeCartItemByCodeCart.fulfilled, (state, action) => {
-      state.loading = false;
-      state.message = action.payload.data
-    })
+    builder
+      .addCase(removeCartItemByCodeCart.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(removeCartItemByCodeCart.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error;
+      })
+      .addCase(removeCartItemByCodeCart.fulfilled, (state, action) => {
+        state.loading = false;
+        state.message = action.payload.data;
+      });
 
-    builder.addCase(removeCartByCodeProductAndCart.pending, (state) => {
-      state.removeCartByProduct.loading = true
-    }).addCase(removeCartByCodeProductAndCart.rejected, (state, action) => {
-      state.removeCartByProduct.loading = false
-      state.removeCartByProduct.error = action.error
-    }).addCase(removeCartByCodeProductAndCart.fulfilled, (state, action) => {
-      state.removeCartByProduct.loading = false
-      state.removeCartByProduct.data = action.payload.data
-    })
+    builder
+      .addCase(removeCartByCodeProductAndCart.pending, (state) => {
+        state.removeCartByProduct.loading = true;
+      })
+      .addCase(removeCartByCodeProductAndCart.rejected, (state, action) => {
+        state.removeCartByProduct.loading = false;
+        state.removeCartByProduct.error = action.error;
+      })
+      .addCase(removeCartByCodeProductAndCart.fulfilled, (state, action) => {
+        state.removeCartByProduct.loading = false;
+        state.removeCartByProduct.data = action.payload.data;
+      });
   },
-})
-export const { setDataCartLocal, setCartLocal, onChangeCart, addCart, restCart, priceResultData } = cartSlice.actions;
+});
+export const {
+  setDataCartLocal,
+  setCartLocal,
+  onChangeCart,
+  addCart,
+  restCart,
+  priceResultData,
+} = cartSlice.actions;
 export default cartSlice.reducer;

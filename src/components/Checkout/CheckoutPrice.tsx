@@ -1,5 +1,4 @@
 import { formatPriceVND } from "@/lib/formatPrice";
-import { selectAddressSliceData } from "@/redux/features/address/address-selects";
 import { selectCartSliceDataLocal } from "@/redux/features/cart/cart-selects";
 import {
   priceResultData,
@@ -19,13 +18,14 @@ import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import { removeCartByCodeProductAndCart } from "@/redux/features/cart/cart-thunks";
 import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
 import { joinProductShop } from "@/lib/joinProductShop";
+import { selectAddressSliceDataAddress } from "@/redux/features/address/address-selects";
 const CheckoutPrice = () => {
   const socketRdx = useAppSelector(selectSocketSliceSocket);
   const code_payment = useAppSelector(selectDataPayment);
   const { data, isLogged } = useAuthContext();
+  const dataAddress = useAppSelector(selectAddressSliceDataAddress);
   const [dataCheckout, setDataCheckout] = useState<any>();
   const dataCartLocal = useAppSelector(selectCartSliceDataLocal);
-  const dataAddress = useAppSelector(selectAddressSliceData);
   const dataCheckoutW = useAppSelector(selectDataCheckout);
   const dataPayment = useAppSelector(selectPaymentSliceData);
   const [isUpload, setIsUpload] = useState<boolean>(false);
@@ -63,8 +63,8 @@ const CheckoutPrice = () => {
 
   const orderCheckout = () => {
     let address_root = "";
-    if (dataAddress) {
-      dataAddress.map((item) => {
+    if (dataAddress.data) {
+      dataAddress.data.map((item) => {
         if (item.status) {
           address_root = item.code_address;
         }
@@ -95,7 +95,6 @@ const CheckoutPrice = () => {
       dataCheckoutW.dataCheckout.data
     ) {
       if (dataCheckoutW.dataCheckout.data.status === 200) {
-        const code_user = data.data[0].code_user;
         const code_product: Array<string> = [];
         dataCartLocal.map((item) => {
           if (item.code_product) {
@@ -112,8 +111,8 @@ const CheckoutPrice = () => {
         dispatch(
           removeCartByCodeProductAndCart({ code_product: code_product })
         );
-        dispatch(restCheckout());
         router.replace("/checkout/completion");
+        dispatch(restCheckout());
       }
     }
   }, [dataCheckoutW.dataCheckout.loading, dispatch, isUpload]);

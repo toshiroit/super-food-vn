@@ -2,6 +2,7 @@ import {
   selectAuthData,
   selectAuthDataCheckPhone,
   selectAuthLoading,
+  selectAuthSliceDataVerifyCode,
   selectAuthVerifyCode,
 } from "@/redux/features/auth/auth-selects";
 import { restartAuth } from "@/redux/features/auth/auth-slice";
@@ -32,7 +33,7 @@ const LoginCode = () => {
     code6: "",
   });
   const loadingCheckPhone = useAppSelector(selectAuthLoading);
-  const dataVerifyCode = useAppSelector(selectAuthVerifyCode);
+  const dataVerifyCode = useAppSelector(selectAuthSliceDataVerifyCode);
   const dataCheckPhone = useAppSelector(selectAuthDataCheckPhone);
   const phoneLogin = useAppSelector(selectLoginPhone);
   const formik = useFormik({
@@ -40,8 +41,15 @@ const LoginCode = () => {
     validationSchema: validationCodeSchema,
     onSubmit: (value) => {
       if (formik.isValid) {
-        dispatch(authCheckPhone({ phone: phoneLogin }));
-        dispatch(authVerifyCode({ code: "666666" }));
+        const resultCode = `${
+          value.code1 +
+          value.code2 +
+          value.code3 +
+          value.code4 +
+          value.code5 +
+          value.code6
+        }`;
+        dispatch(authVerifyCode({ code: resultCode }));
       }
     },
   });
@@ -55,16 +63,22 @@ const LoginCode = () => {
     dispatch(restartAuth());
   };
   useEffect(() => {
+    if (!dataVerifyCode.loading && dataVerifyCode.message) {
+      dispatch(authCheckPhone({ phone: phoneLogin }));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dataVerifyCode.loading]);
+
+  useEffect(() => {
     if (dataCheckPhone) {
       if (dataCheckPhone.data === 0) {
         dispatch(
-          onDisplayLogin({ isShowConfirmation: true, isShowFixed: true })
+          onDisplayLogin({ isShowFixed: true, isShowConfirmation: true })
         );
       } else if (dataCheckPhone.data === 1) {
         dispatch(onDisplayLogin({ isShowPassword: true, isShowFixed: true }));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dataCheckPhone]);
   return (
     <div className="fixedLogin">
@@ -174,9 +188,24 @@ const LoginCode = () => {
               >
                 {loadingSendCode ? "Đang gửi" : " Gửi lại mã xác nhận"}
               </button> */}
+              {dataVerifyCode.loading ? (
+                <></>
+              ) : (
+                dataVerifyCode.error && (
+                  <p
+                    style={{
+                      color: "#F33033",
+                      fontWeight: 500,
+                      fontSize: "0.9rem",
+                    }}
+                  >
+                    {dataVerifyCode.error.message}
+                  </p>
+                )
+              )}
               <a href="">
                 <button type="submit">
-                  {loadingCheckPhone ? (
+                  {dataVerifyCode.loading ? (
                     <div className="loadingio-spinner-spinner-bbeydwj1ls">
                       <div className="ldio-m09wsst1j2">
                         <div></div>

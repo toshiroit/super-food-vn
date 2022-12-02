@@ -7,12 +7,12 @@ export type searchListProps = {
 
 export type SearchActionDispatch = {
   textSearch?: string;
-  searchType?: SearchType
-}
+  searchType?: SearchType;
+};
 
 /**
- * @description 
- * searchType Array 
+ * @description
+ * searchType Array
  *  0 ; "SORT"
  *  1 : "TYPE-SHOW",
  *  2 : "LIST-SHOP"
@@ -24,17 +24,28 @@ export type SearchSliceState = {
   error: any;
   message?: string;
   loading: boolean;
-}
+  listTextSearch: {
+    data: any;
+    loading: boolean;
+    error: any;
+  };
+  listShop: {
+    data: any;
+    loading: boolean;
+    error: any;
+  };
+};
+
 export type SearchType = {
   valueType: string;
-  nameType: 'LIST-SHOP' | 'SORT' | 'TYPE-SHOW' | '';
-}
+  nameType: "LIST-SHOP" | "SORT" | "TYPE-SHOW" | "";
+};
 export type FilterSearch = {
-  name: 'LIST-SHOP' | 'SORT' | 'TYPE-SHOW' | '',
+  name: "LIST-SHOP" | "SORT" | "TYPE-SHOW" | "";
   value: string;
-}
+};
 export type SearchDataAPI = {
-  value: SearchType[]
+  value: SearchType[];
   textSearch: string;
   page?: string;
-}
+};
