@@ -4,7 +4,8 @@ export type EvaluateData = {
   evaluate_product: number;
   evaluate_ship: number;
   evaluate_progress: number;
-  images: ImageEvaluate[] | null;
+  images: FileList | undefined;
+  images_link: any[] | null;
   code_order: string;
 };
 export type ImageEvaluate = {

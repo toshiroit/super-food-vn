@@ -1,6 +1,34 @@
+import { selectAddressSliceDataAddress } from "@/redux/features/address/address-selects";
+import { useAppSelector } from "@/redux/hooks/hooks";
 import React from "react";
 
 const CheckoutAddress = () => {
+  const dataAddressUser = useAppSelector(selectAddressSliceDataAddress);
+  const getAddressRoot = (dataAddress: any) => {
+    let result: any[] = [];
+    dataAddress.data?.map((item: any) => {
+      console.log(item);
+      if (item.status) {
+        result.push(
+          <>
+            <div key={item.code_address} className="info">
+              <div className="info__name">
+                <span>{item.full_name}</span>
+              </div>
+              <i className="bd" />
+              <div className="info__phone">
+                <span>{item.phone.trim()}</span>
+              </div>
+            </div>
+            <div className="address">
+              <p>{item.street + "-" + item.village + "-" + item.city}</p>
+            </div>
+          </>
+        );
+      }
+    });
+    return result;
+  };
   return (
     <>
       <div className="inline">
@@ -13,18 +41,7 @@ const CheckoutAddress = () => {
           Thay đổi
         </span>
       </div>
-      <div className="info">
-        <div className="info__name">
-          <span>Đậu Văn Nam </span>
-        </div>
-        <i className="bd" />
-        <div className="info__phone">
-          <span>0948124851</span>
-        </div>
-      </div>
-      <div className="address">
-        <p>Đăk lakw, Phường Tân Lợi, Thành phố Buôn Ma Thuột, Đắk Lắk</p>
-      </div>
+      {getAddressRoot(dataAddressUser)}
     </>
   );
 };

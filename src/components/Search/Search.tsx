@@ -12,7 +12,10 @@ import {
   selectSearchSliceSearchType,
   selectSearchSliceTextSearch,
 } from "@/redux/features/search/search-selects";
-import { changeSearch } from "@/redux/features/search/search-slice";
+import {
+  changeSearch,
+  changeSearchType,
+} from "@/redux/features/search/search-slice";
 import { getShopByNameOrCode } from "@/redux/features/search/search-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { FilterSearch } from "@/types/search/search";
@@ -33,10 +36,11 @@ const Search = () => {
   const dataProduct = useAppSelector(selectProductSliceDataSearch);
   const loadingSearch = useAppSelector(selectProductSliceLoadingSearch);
 
-  const onFilter = (value: FilterSearch) => {
+  const onChangeFilter = (value: FilterSearch) => {
     dispatch(
-      changeSearch({
-        searchType: { valueType: value.value, nameType: value.name },
+      changeSearchType({
+        searchType: value.name,
+        textSearch: value.value,
       })
     );
   };
@@ -56,30 +60,29 @@ const Search = () => {
         setTypeSearch("PRODUCT");
       }
     }
+    //eslint-disable-next-line
   }, [router.query]);
   useEffect(() => {
-    let isCanelledAPI = true;
+    let isStopAPI = true;
     const page = router.query.page || 1;
     let textSearch = dataTextSearch;
     if (dataTextSearch.length === 0) {
       textSearch = localStorage.getItem("text_search") || "";
     }
-    if (dataTextSearch.length === 0 || !dataTextSearch) {
-      function searchProduct() {
-        if (isCanelledAPI) {
-          dispatch(
-            searchProductByName({
-              value: searchType,
-              textSearch: textSearch,
-              page: String(page),
-            })
-          );
-        }
+    function searchProduct() {
+      if (isStopAPI) {
+        dispatch(
+          searchProductByName({
+            textSearch: textSearch,
+            page: String(page),
+            type_filter: searchType,
+          })
+        );
       }
-      searchProduct();
     }
+    searchProduct();
     return () => {
-      isCanelledAPI = false;
+      isStopAPI = false;
     };
   }, [router.query, dispatch, searchType, dataTextSearch]);
   const paginationEl = (size: number): React.ReactElement[] => {
@@ -87,8 +90,6 @@ const Search = () => {
       result = [],
       j = 0,
       pageLimit = 7;
-    const page = router.query.page || 1;
-    const maxPageLimit = 5;
     for (i = 1; i <= size; i++) {
       result.push(
         <Link href={`/search?q=${router.query.q}&page=${i}`}>
@@ -109,7 +110,6 @@ const Search = () => {
   const onChangePage = (change: "pre" | "next") => {
     if (router.query.page) {
       if (change === "pre") {
-        console.log(router);
         router.query.page = "1";
       }
     }
@@ -123,11 +123,13 @@ const Search = () => {
               <div className="header">
                 <ul className="header__list">
                   <li
-                    onClick={() => onFilter({ name: "LIST-SHOP", value: "0" })}
+                    onClick={() =>
+                      onChangeFilter({ name: "OPEN-SHOP", value: 1 })
+                    }
                     className={`header__list___item ${
                       searchType &&
                       searchType[2] &&
-                      searchType[2].valueType === "0"
+                      searchType[2].value.value_name_type === 1
                         ? "active"
                         : ""
                     }`}
@@ -135,11 +137,13 @@ const Search = () => {
                     Đang mở cửa
                   </li>
                   <li
-                    onClick={() => onFilter({ name: "LIST-SHOP", value: "1" })}
+                    onClick={() =>
+                      onChangeFilter({ name: "DISCOUNT", value: 1 })
+                    }
                     className={`header__list___item ${
                       searchType &&
                       searchType[2] &&
-                      searchType[2].valueType === "1"
+                      searchType[2].value.value_name_type === 2
                         ? "active"
                         : ""
                     }`}
@@ -147,11 +151,13 @@ const Search = () => {
                     Đang giảm giá
                   </li>
                   <li
-                    onClick={() => onFilter({ name: "LIST-SHOP", value: "2" })}
+                    onClick={() =>
+                      onChangeFilter({ name: "FREE-SHIP", value: 1 })
+                    }
                     className={`header__list___item ${
                       searchType &&
                       searchType[2] &&
-                      searchType[2].valueType === "2"
+                      searchType[2].value.value_name_type === 3
                         ? "active"
                         : ""
                     }`}
@@ -159,11 +165,13 @@ const Search = () => {
                     FreeShip
                   </li>
                   <li
-                    onClick={() => onFilter({ name: "LIST-SHOP", value: "3" })}
+                    onClick={() =>
+                      onChangeFilter({ name: "EVALUATE-TOP", value: 1 })
+                    }
                     className={`header__list___item ${
                       searchType &&
                       searchType[2] &&
-                      searchType[2].valueType === "3"
+                      searchType[2].value.value_name_type === 4
                         ? "active"
                         : ""
                     }`}
@@ -174,7 +182,10 @@ const Search = () => {
                 <div className="header__sort">
                   <select
                     onChange={(e) =>
-                      onFilter({ name: "SORT", value: e.target.value })
+                      onChangeFilter({
+                        name: "SORT",
+                        value: Number(e.target.value),
+                      })
                     }
                     className="header__sort___item"
                   >
@@ -186,7 +197,10 @@ const Search = () => {
                   </select>
                   <select
                     onChange={(e) =>
-                      onFilter({ name: "TYPE-SHOW", value: e.target.value })
+                      onChangeFilter({
+                        name: "TYPE-SHOW",
+                        value: Number(e.target.value),
+                      })
                     }
                     className="header__sort___item"
                   >

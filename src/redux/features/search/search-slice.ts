@@ -1,3 +1,4 @@
+import { ChangeSearchType } from "./../../../types/search/search";
 import { SearchActionDispatch, SearchSliceState } from "@/types/search/search";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
@@ -7,7 +8,50 @@ import {
 } from "./search-thunks";
 
 const searchState: SearchSliceState = {
-  searchType: [],
+  searchType: [
+    {
+      nameType: "OPEN-SHOP",
+      value: {
+        value_name_type: 1,
+        value_type: -1,
+      },
+    },
+    {
+      nameType: "DISCOUNT",
+      value: {
+        value_name_type: 2,
+        value_type: -1,
+      },
+    },
+    {
+      nameType: "FREE-SHIP",
+      value: {
+        value_name_type: 3,
+        value_type: -1,
+      },
+    },
+    {
+      nameType: "EVALUATE-TOP",
+      value: {
+        value_name_type: 4,
+        value_type: -1,
+      },
+    },
+    {
+      nameType: "SORT",
+      value: {
+        value_name_type: 5,
+        value_type: -1,
+      },
+    },
+    {
+      nameType: "TYPE-SHOW",
+      value: {
+        value_name_type: 6,
+        value_type: -1,
+      },
+    },
+  ],
   loading: false,
   product: [],
   error: "",
@@ -35,17 +79,27 @@ const searchSlice = createSlice({
         state.textSearch = action.payload.textSearch || "";
         localStorage.setItem("text_search", action.payload.textSearch);
       }
-
-      if (action.payload.searchType) {
-        if (action.payload.searchType.nameType === "SORT") {
-          state.searchType[0] = action.payload.searchType;
-        } else if (action.payload.searchType.nameType === "TYPE-SHOW") {
-          state.searchType[1] = action.payload.searchType;
-        } else if (action.payload.searchType.nameType === "LIST-SHOP") {
-          state.searchType[2] = action.payload.searchType;
-        }
-      }
       return state;
+    },
+    changeSearchType: (state, action: PayloadAction<ChangeSearchType>) => {
+      if (action.payload.searchType === "OPEN-SHOP") {
+        state.searchType[0].value.value_type = action.payload.textSearch;
+      }
+      if (action.payload.searchType === "DISCOUNT") {
+        state.searchType[1].value.value_type = action.payload.textSearch;
+      }
+      if (action.payload.searchType === "FREE-SHIP") {
+        state.searchType[2].value.value_type = action.payload.textSearch;
+      }
+      if (action.payload.searchType === "EVALUATE-TOP") {
+        state.searchType[3].value.value_type = action.payload.textSearch;
+      }
+      if (action.payload.searchType === "SORT") {
+        state.searchType[4].value.value_type = action.payload.textSearch;
+      }
+      if (action.payload.searchType === "TYPE-SHOW") {
+        state.searchType[5].value.value_type = action.payload.textSearch;
+      }
     },
   },
   extraReducers(builder) {
@@ -85,5 +139,6 @@ const searchSlice = createSlice({
       });
   },
 });
-export const { addSearch, changeSearch } = searchSlice.actions;
+export const { addSearch, changeSearch, changeSearchType } =
+  searchSlice.actions;
 export default searchSlice.reducer;

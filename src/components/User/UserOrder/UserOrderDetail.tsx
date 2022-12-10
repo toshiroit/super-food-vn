@@ -36,6 +36,7 @@ const UserOrderDetail = () => {
   const [productEvaluate, setProductEvaluate] =
     useState<EvaluateProductCheck[]>();
   const [upImage, setUpImage] = useState<Images[]>();
+  const [images, setImages] = useState<FileList>();
   const [showEvaluate, setShowEvaluate] = useState<{
     code_product: string;
     is_show: boolean;
@@ -109,6 +110,7 @@ const UserOrderDetail = () => {
   };
   const onUploadImage = (e: ChangeEvent<HTMLInputElement>) => {
     const files = (e.target.files as FileList) || [];
+    setImages(files);
     let resultImages: Images[] = [];
 
     if (files) {
@@ -132,7 +134,8 @@ const UserOrderDetail = () => {
         evaluate_ship: evaluate.point_star_ship,
         evaluate_progress: evaluate.point_star_progress,
         text: evaluate.text,
-        images: [],
+        images: images,
+        images_link: [],
         code_order: dataOrderDetail.data && dataOrderDetail.data.code_order,
       };
       setIsSubmit(true);
@@ -654,7 +657,7 @@ const UserOrderDetail = () => {
              `}
                 >
                   {dataOrderDetail.data &&
-                  dataOrderDetail.data.progress === -2 ? (
+                  dataOrderDetail.data.progress === -3 ? (
                     <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
                   ) : dataOrderDetail.data &&
                     dataOrderDetail.data.progress < -2 ? (
@@ -663,6 +666,30 @@ const UserOrderDetail = () => {
                     <i className="fa-solid fa-quote-left fa-size" />
                   )}
                   <span>Giao thất bại </span>
+                </li>
+                <li
+                  className={`
+              statusMain__item
+                ${
+                  (dataOrderDetail.data &&
+                    dataOrderDetail.data.progress === -3) ||
+                  (dataOrderDetail.data && dataOrderDetail.data.progress > -2)
+                    ? ""
+                    : "active"
+                }
+
+             `}
+                >
+                  {dataOrderDetail.data &&
+                  dataOrderDetail.data.progress === -99 ? (
+                    <i className="fa-solid fa-rotate fa-size fa-size-waitLoad" />
+                  ) : dataOrderDetail.data &&
+                    dataOrderDetail.data.progress < -2 ? (
+                    <i className="fa-solid fa-check fa-size" />
+                  ) : (
+                    <i className="fa-solid fa-quote-left fa-size" />
+                  )}
+                  <span>Đơn hàng đã bị xoá </span>
                 </li>
               </ul>
               <div className="gifOrder">

@@ -11,21 +11,31 @@ export type ShopState = {
     data: any;
     category_all: any;
     error: SerializedError | null;
-  },
+  };
   dataFilterProductShop: {
     text_search: string | null;
     category_code: string | null;
-    type: string | null
-  },
+    type: string | null;
+  };
   followShopByUser: {
     message: string | null;
     loading: boolean;
-    error: any
-  }
+    error: any;
+  };
+  dataActionFollowShop: {
+    loading: boolean;
+    error: any;
+    message: any;
+  };
+  dataCategoryShop: {
+    loading: boolean;
+    error: any;
+    data: any;
+  };
 };
 
 export type FilterProductAction = {
   text_search?: string;
   category_code?: string;
   type?: string;
-}
+};

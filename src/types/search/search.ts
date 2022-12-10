@@ -7,9 +7,24 @@ export type searchListProps = {
 
 export type SearchActionDispatch = {
   textSearch?: string;
-  searchType?: SearchType;
+  searchType?:
+    | "OPEN-SHOP"
+    | "DISCOUNT"
+    | "FREE-SHIP"
+    | "EVALUATE-TOP"
+    | "SORT"
+    | "TYPE-SHOW";
 };
-
+export type ChangeSearchType = {
+  textSearch: number;
+  searchType:
+    | "OPEN-SHOP"
+    | "DISCOUNT"
+    | "FREE-SHIP"
+    | "EVALUATE-TOP"
+    | "SORT"
+    | "TYPE-SHOW";
+};
 /**
  * @description
  * searchType Array
@@ -37,15 +52,30 @@ export type SearchSliceState = {
 };
 
 export type SearchType = {
-  valueType: string;
-  nameType: "LIST-SHOP" | "SORT" | "TYPE-SHOW" | "";
+  value: {
+    value_name_type: 1 | 2 | 3 | 4 | 5 | 6;
+    value_type: number;
+  };
+  nameType:
+    | "OPEN-SHOP"
+    | "DISCOUNT"
+    | "FREE-SHIP"
+    | "EVALUATE-TOP"
+    | "SORT"
+    | "TYPE-SHOW";
 };
 export type FilterSearch = {
-  name: "LIST-SHOP" | "SORT" | "TYPE-SHOW" | "";
-  value: string;
+  name:
+    | "OPEN-SHOP"
+    | "DISCOUNT"
+    | "FREE-SHIP"
+    | "EVALUATE-TOP"
+    | "SORT"
+    | "TYPE-SHOW";
+  value: number;
 };
 export type SearchDataAPI = {
-  value: SearchType[];
   textSearch: string;
+  type_filter?: SearchType[];
   page?: string;
 };

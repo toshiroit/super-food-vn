@@ -14,6 +14,7 @@ export type CreateRequest = {
   body?: any;
   isAuthRequired: boolean;
   contentType:
+    | "multipart/form-data"
     | "application/json"
     | "text/json"
     | "text/plain"

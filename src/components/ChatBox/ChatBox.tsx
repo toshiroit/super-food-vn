@@ -8,19 +8,23 @@ import { KeyboardEvent, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { ChatDataSend } from "@/types/chat/chat";
 import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
+import { useSocketContext } from "src/contexts/Auth/SocketContext";
+import { useRef } from "react";
 const ChatBox = ({ data_shop }: { data_shop: any }) => {
   const router = useRouter();
-  const socketRdx = useAppSelector(selectSocketSliceSocket);
+  const divMessengerChatRef = useRef<HTMLDivElement>(null);
+  const { socket } = useSocketContext();
   const dispatch = useAppDispatch();
   const [textChat, setTextChat] = useState<string>();
   const [showBox, setShowBox] = useState<boolean>(false);
+  const [statusSend, setStatusSend] = useState<boolean>(false);
   const dataMessenger = useAppSelector(selectChatSliceDataMessenger);
+  const scrollIntoViewChat = () => {
+    divMessengerChatRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+  useEffect(scrollIntoViewChat, [dataMessenger]);
   useEffect(() => {
-    let objDiv = document.getElementById("listMess");
     if (showBox) {
-      if (objDiv) {
-        objDiv.scrollTop = objDiv.scrollHeight;
-      }
       const query_code = (router.query.code as string) || "";
       if (query_code) {
         const code_shop = query_code.split(".");
@@ -33,11 +37,11 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
       }
     }
     //eslint-disable-next-line
-  }, [showBox]);
+  }, [showBox, statusSend]);
   const onShowChatBox = () => {
     setShowBox(!showBox);
   };
-  const onSendMessengerUser = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+  const onSendMessengerUser = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
       const query_code = (router.query.code as string) || "";
       if (query_code && query_code) {
@@ -47,8 +51,8 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
           text_chat: textChat || "",
           type_chat: "1",
         };
-        if (socketRdx) {
-          socketRdx.emit("messenger_send_to_shop", {
+        if (socket) {
+          socket.emit("messenger_send_to_shop", {
             message: "Bạn nhận được 1 tín nhắn mới",
             code_shop: code_shop,
             code_user: "",
@@ -56,24 +60,29 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
           dispatch(sendMessengerChatByUser(dataChat));
         }
       }
+      setStatusSend(!statusSend);
+      setTextChat("");
     }
   };
   useEffect(() => {
-    if (socketRdx) {
+    if (socket) {
       const query_code = (router.query.code as string) || "";
       const code_shop = query_code.split(".")[0] || "";
-      socketRdx.on("notification_messenger_user", (data) => {
+      socket.on("notification_messenger_user", (data) => {
         let objDiv = document.getElementById("listMess");
         if (objDiv) {
           objDiv.scrollTop = objDiv.scrollHeight;
         }
+        // setTimeout(() => {
+        //   console.log("VO DAY : ", data);
         dispatch(
           getAllMessengerUserByShop({ code_shop: code_shop, limit: 20 })
         );
+        // }, 3000);
       });
     }
     //eslint-disable-next-line
-  }, [socketRdx]);
+  }, [socket]);
 
   return (
     <>
@@ -114,18 +123,19 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
                         );
                       }
                     })}
+                  <div ref={divMessengerChatRef} />
                 </ul>
               </div>
               <div className="chatbox-area">
                 <i className="fa-solid fa-camera fa-left"></i>
                 <i className="fa-regular fa-paper-plane fa-right"></i>
-                <textarea
+                <input
                   onChange={(e) => setTextChat(e.target.value)}
                   onKeyPress={onSendMessengerUser}
+                  value={textChat}
                   placeholder="Talk to me!"
                   className="chatbox"
                   name=""
-                  defaultValue={""}
                 />
               </div>
               <div className="block--background" />

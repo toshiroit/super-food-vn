@@ -11,32 +11,6 @@ export const searchProductByName = createAsyncThunk(
     if (data.textSearch) {
       querySearch += `q=${data.textSearch}`;
     }
-    if (data.value) {
-      console.log(data.value[0]);
-      if (
-        data.value[0] &&
-        data.value[0].nameType === "SORT" &&
-        data.value[0].valueType
-      ) {
-        querySearch += `sort=${data.value[0].valueType}`;
-      }
-      if (
-        data.value[1] &&
-        data.value[1].nameType === "TYPE-SHOW" &&
-        data.value[1].valueType
-      ) {
-        querySearch += `typeshow=${data.value[1].valueType}`;
-      }
-      if (
-        data.value[2] &&
-        data.value[2].nameType === "LIST-SHOP" &&
-        data.value[2].valueType
-      ) {
-        querySearch += `listshop=${data.value[2].valueType}`;
-      }
-    }
-
-    console.log("query : ", querySearch);
     const responsive = await RequestServices.get({
       method: "GET",
       authorization: "",
@@ -70,7 +44,14 @@ export const getListTextSearch = createAsyncThunk(
 
 export const getShopByNameOrCode = createAsyncThunk(
   "search/shop-by-name-or-code",
-  async (data: { code_shop: string; name_shop: string }, thunkAPI) => {
+  async (
+    data: {
+      code_shop: string;
+      name_shop: string;
+      type?: "DISCOUNT" | "FREE-SHIP" | "EVALUATE-SHOP";
+    },
+    thunkAPI
+  ) => {
     const responsive = await RequestServices.get({
       method: "GET",
       authorization: "",

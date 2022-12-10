@@ -56,6 +56,7 @@ const LoginPhone = () => {
   useEffect(() => {
     if (!dataSendCode.loading && isSubmit) {
       // dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+      // dispatch(onDisplayLogin({ isShowFixed: true, isShowConfirmation: true }));
       dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
     }
     //eslint-disable-next-line

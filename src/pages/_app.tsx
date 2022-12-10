@@ -1,6 +1,6 @@
 import type { AppContext, AppProps } from "next/app";
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer, toast } from "react-toastify";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store/store";
 import "../../styles/Loader.io.css";
@@ -10,6 +10,7 @@ import { parseCookies } from "nookies";
 import { AuthProvider, useAuthContext } from "src/contexts/Auth/AuthContext";
 import Container from "@/components/Container/Container";
 import { Shield } from "@/components/Shield/Shield";
+import { SocketProvider } from "src/contexts/Auth/SocketContext";
 type AppOwnProps = { cookies: any };
 
 const MyApp = ({ Component, pageProps, cookies }: AppProps & AppOwnProps) => {
@@ -18,11 +19,13 @@ const MyApp = ({ Component, pageProps, cookies }: AppProps & AppOwnProps) => {
   return (
     <Provider store={store}>
       <AuthProvider jwt={cookies}>
-        <Shield>
-          <Container>
-            <AsMyComponent {...pageProps} />
-          </Container>
-        </Shield>
+        <SocketProvider>
+          <Shield>
+            <Container>
+              <AsMyComponent {...pageProps} />
+            </Container>
+          </Shield>
+        </SocketProvider>
       </AuthProvider>
     </Provider>
   );
