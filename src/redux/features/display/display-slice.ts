@@ -7,6 +7,7 @@ const initialState: DisplayState | null = {
     isShowCode: false,
     isShowConfirmation: false,
     isShowPassword: false,
+    isShowRestPassword: false,
   },
 };
 const displaySlice = createSlice({
@@ -22,9 +23,19 @@ const displaySlice = createSlice({
       action.payload.isShowConfirmation;
       state.displayLogin.isShowPassword =
         action.payload.isShowPassword || false;
+      state.displayLogin.isShowRestPassword =
+        action.payload.isShowRestPassword || false;
       return state;
+    },
+    onRestDisplay: (state) => {
+      state.displayLogin.isShowFixed = false;
+      state.displayLogin.isShowPhone = false;
+      state.displayLogin.isShowCode = false;
+      state.displayLogin.isShowConfirmation = false;
+      state.displayLogin.isShowPassword = false;
+      state.displayLogin.isShowRestPassword = false;
     },
   },
 });
-export const { onDisplayLogin } = displaySlice.actions;
+export const { onDisplayLogin, onRestDisplay } = displaySlice.actions;
 export default displaySlice.reducer;

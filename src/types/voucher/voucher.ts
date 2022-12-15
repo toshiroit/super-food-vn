@@ -7,3 +7,17 @@ export interface VoucherT {
   price_voucher: number;
   quality_voucher: number;
 }
+export type VoucherProductData = {
+  code_product: string;
+};
+export type VoucherDataCheck = {
+  code_product: VoucherProductData[];
+  code_w_voucher: string;
+};
+export type VoucherState = {
+  dataCheckVoucher: {
+    loading: boolean;
+    error: any;
+    data: any;
+  };
+};

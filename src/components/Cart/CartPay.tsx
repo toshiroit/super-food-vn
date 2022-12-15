@@ -4,14 +4,20 @@ import { getGiftProductCart } from "@/lib/getGiftProductCart";
 import { selectAddressSliceDataAddress } from "@/redux/features/address/address-selects";
 import { getAddressByUser } from "@/redux/features/address/address-thunks";
 import {
+  selectCartSLiceCodeGift,
   selectCartSliceDataLocal,
   selectCartSlicePriceDiscount,
   selectCartSlicePriceResult,
 } from "@/redux/features/cart/cart-selects";
-import { priceResultData } from "@/redux/features/cart/cart-slice";
+import {
+  priceResultData,
+  setPriceVoucher,
+} from "@/redux/features/cart/cart-slice";
 import { addDataCheckout } from "@/redux/features/checkout/checkout-slice";
 import { checkoutOrder } from "@/redux/features/checkout/checkout-thunks";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
+import { selectVoucherSliceDataVoucherCheck } from "@/redux/features/voucher/voucher-selects";
+import { checkVoucherProductByVoucherShop } from "@/redux/features/voucher/voucher-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { GiftT } from "@/types/cart/cart";
 import Link from "next/link";
@@ -22,9 +28,11 @@ import GiftItem from "../Gift/GiftItem";
 
 const CartPay = () => {
   const dataCartLocal = useAppSelector(selectCartSliceDataLocal);
+  const dataGiftCodeRdx = useAppSelector(selectCartSLiceCodeGift);
   const priceResultW = useAppSelector(selectCartSlicePriceResult);
   const dataAddressUser = useAppSelector(selectAddressSliceDataAddress);
   const priceDiscountW = useAppSelector(selectCartSlicePriceDiscount);
+  const voucherRdx = useAppSelector(selectVoucherSliceDataVoucherCheck);
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isLogged } = useAuthContext();
@@ -40,6 +48,22 @@ const CartPay = () => {
     };
     onGetAddress();
   }, [dataCartLocal, dispatch]);
+  useEffect(() => {
+    if (
+      !voucherRdx.loading &&
+      !voucherRdx.error &&
+      voucherRdx.data &&
+      (!dataGiftCodeRdx || dataGiftCodeRdx.length === 0)
+    ) {
+      const price_voucher = voucherRdx.data.data?.price_voucher;
+      dispatch(
+        setPriceVoucher({
+          price: price_voucher,
+          code_gift: codeGift.code || "",
+        })
+      );
+    }
+  }, [voucherRdx]);
   const [codeGift, setCodeGift] = useState<GiftT>({
     code: "",
     isCheck: true,
@@ -84,33 +108,47 @@ const CartPay = () => {
     }
   };
   const onCheckCodeGift = () => {
-    if (codeGift.code) {
-      if (codeGift.code.length > 0) {
-        let data = getGiftProductCart(dataCartLocal).filter(
-          (item) => item.code_w_voucher.trim() === codeGift.code
-        );
-        if (data.length > 0) {
-          setCodeGift({
-            ...codeGift,
-            isCheck: true,
-            show: "SHOW",
-            price_gift: data[0].price_voucher,
-          });
-          dispatch(
-            priceResultData({
-              data: dataCartLocal,
-              price_gift: data[0].price_voucher,
-              code_gift: data[0].code_w_voucher,
-            })
-          );
-        } else {
-          setCodeGift({
-            ...codeGift,
-            isCheck: false,
-          });
-        }
-      }
+    // if (codeGift.code) {
+    //   if (codeGift.code.length > 0) {
+    //     let data = getGiftProductCart(dataCartLocal).filter(
+    //       (item) => item.code_w_voucher.trim() === codeGift.code
+    //     );
+    //     if (data.length > 0) {
+    //       setCodeGift({
+    //         ...codeGift,
+    //         isCheck: true,
+    //         show: "SHOW",
+    //         price_gift: data[0].price_voucher,
+    //       });
+    //       dispatch(
+    //         priceResultData({
+    //           data: dataCartLocal,
+    //           price_gift: data[0].price_voucher,
+    //           code_gift: data[0].code_w_voucher,
+    //         })
+    //       );
+    //     } else {
+    //       setCodeGift({
+    //         ...codeGift,
+    //         isCheck: false,
+    //       });
+    //     }
+    //   }
+    // }
+    const result_product: any[] = [];
+    if (dataCartLocal) {
+      dataCartLocal.map((item) => {
+        result_product.push({
+          code_product: item.code_product.trim(),
+        });
+      });
     }
+    dispatch(
+      checkVoucherProductByVoucherShop({
+        code_product: result_product,
+        code_w_voucher: codeGift.code || "",
+      })
+    );
   };
   const priceResultQuality = (price: number, quality: number) => {
     return price * quality;
@@ -164,7 +202,7 @@ const CartPay = () => {
                   if (item.status)
                     return (
                       <>
-                        <div className="info">
+                        <div key={item.code_address} className="info">
                           <div className="info__name">
                             <span>{item.full_name}</span>
                           </div>
@@ -240,24 +278,20 @@ const CartPay = () => {
                   id=""
                 />
                 <button type="button" onClick={onCheckCodeGift}>
-                  Áp dụng
+                  Ap dung
                 </button>
               </div>
               <p
                 style={{
                   fontSize: "0.9rem",
-                  color: `${!codeGift.isCheck ? "#e7000e" : "#408140"}`,
+                  color: `${voucherRdx.error ? "#e7000e" : "#408140"}`,
                   marginTop: "5px",
                 }}
                 className="error"
               >
-                {!codeGift.isCheck ? (
-                  <>Mã giảm giá không chính xác</>
-                ) : codeGift.show === "SHOW" ? (
-                  "Đã áp dụng "
-                ) : (
-                  ""
-                )}
+                {voucherRdx.error
+                  ? "Mã giảm giá không không tồn tại hoặc quá hạn"
+                  : ""}
               </p>
             </div>
           </div>
@@ -274,7 +308,9 @@ const CartPay = () => {
           <li className="price__main___item">
             <span>Giảm giá </span>
             <span className="boldPrice salePrice">
-              {formatPriceVND(priceDiscountW as number)}
+              {formatPriceVND(
+                voucherRdx.data && voucherRdx.data.data?.price_voucher
+              )}
             </span>
           </li>
         </ul>

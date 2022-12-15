@@ -4,6 +4,7 @@ import LoginCode from "./LoginCode";
 import LoginConfirmation from "./LoginConfirmation";
 import LoginPassword from "./LoginPassword";
 import LoginPhone from "./LoginPhone";
+import RestPassword from "./RestPassword";
 
 const Login = () => {
   const isShowLogin = useSelector(selectDisplayIsShowLogin);
@@ -11,6 +12,8 @@ const Login = () => {
     <>
       {isShowLogin.isShowPhone ? (
         <LoginPhone />
+      ) : isShowLogin.isShowRestPassword ? (
+        <RestPassword />
       ) : isShowLogin.isShowCode ? (
         <LoginCode />
       ) : isShowLogin.isShowConfirmation ? (

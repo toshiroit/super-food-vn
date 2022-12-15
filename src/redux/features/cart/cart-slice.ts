@@ -6,6 +6,7 @@ import {
   OnChangeCartType,
   PriceResultCartData,
   SetDataCartLocalAction,
+  SetPriceVoucher,
 } from "@/types/cart/cart";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
@@ -23,6 +24,7 @@ const initialState: CartState<CartItem> = {
   codeGift: "",
   priceDiscount: 0,
   code_address: "",
+  priceResult: 0,
   removeCartByProduct: {
     loading: false,
     error: null,
@@ -162,7 +164,15 @@ const cartSlice = createSlice({
     restCart: (state) => {
       state.data = null;
     },
-    resultPay: (state) => {},
+    resultPay: (state, action: PayloadAction<SetPriceVoucher>) => {},
+    setPriceVoucher: (state, action: PayloadAction<SetPriceVoucher>) => {
+      if (state.priceResult) {
+        let price_result = state.priceResult - action.payload.price;
+        state.codeGift = action.payload.code_gift;
+        state.priceResult = price_result;
+      }
+      return state;
+    },
     setDataCartLocal: (
       state,
       action: PayloadAction<SetDataCartLocalAction>
@@ -222,5 +232,6 @@ export const {
   addCart,
   restCart,
   priceResultData,
+  setPriceVoucher,
 } = cartSlice.actions;
 export default cartSlice.reducer;

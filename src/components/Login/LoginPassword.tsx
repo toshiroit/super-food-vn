@@ -58,6 +58,10 @@ const LoginPassword = () => {
     }
     //eslint-disable-next-line
   }, [loadingAuth, authDataLogin]);
+  useEffect(() => {
+    formik.setFieldValue("passwordConfirmation", formik.values.password);
+    //eslint-disable-next-line
+  }, [formik.values.password]);
   return (
     <>
       <div className="fixedLogin" style={{}}>
@@ -97,40 +101,9 @@ const LoginPassword = () => {
                     color: "#f70e0e",
                   }}
                 >
-                  {formik.errors.password}
+                  {formik.touched.password && formik.errors.password}
                 </p>
               </div>
-              <div className="regUser__item">
-                <label htmlFor="user"> Nhập lại mật khẩu </label>
-                <input
-                  onChange={formik.handleChange}
-                  type="password"
-                  value={formik.values.passwordConfirmation}
-                  className={errorPassword.isActive ? "error" : ""}
-                  name="passwordConfirmation"
-                  id=""
-                />
-                <p
-                  className="error"
-                  style={{
-                    marginTop: "5px",
-                    fontSize: "0.9rem",
-                    color: "#f70e0e",
-                  }}
-                >
-                  {formik.errors.passwordConfirmation}
-                </p>
-              </div>
-              <p
-                className="error"
-                style={{
-                  marginTop: "5px",
-                  fontSize: "0.9rem",
-                  color: "#f70e0e",
-                }}
-              >
-                {formik.errors.phone}
-              </p>
               <div className="btnLogin">
                 <p
                   className="error"

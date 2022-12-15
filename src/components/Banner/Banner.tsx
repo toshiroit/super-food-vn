@@ -37,7 +37,9 @@ const Banner = () => {
   const dispatch = useAppDispatch();
   const onChangeSearch = (e: ChangeEvent<HTMLInputElement>) => {
     setTextSearch(e.target.value);
-    dispatch(getListTextSearch({ text: e.target.value }));
+    setTimeout(() => {
+      dispatch(getListTextSearch({ text: e.target.value }));
+    }, 1000);
   };
   const onSearchProduct = (e: FormEvent<EventTarget>) => {
     e.preventDefault();
@@ -47,7 +49,7 @@ const Banner = () => {
       searchInputRef.current?.blur();
       dispatch(changeSearch({ textSearch: textSearch }));
       dispatch(
-        searchProductByName({ value: searchType, textSearch: textSearch })
+        searchProductByName({ type_filter: searchType, textSearch: textSearch })
       );
       router.push(`/search?q=${slug(textSearch || "")}&type=product`);
     }

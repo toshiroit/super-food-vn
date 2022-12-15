@@ -98,12 +98,6 @@ const UserAddress = () => {
               )}
             </>
           )}
-          {/* {userAddressArr &&
-            userAddressArr.address.map((item: any) => {
-              return (
-                <UserAddressItem active={true} value={item} key={item.code} />
-              );
-            })} */}
         </ul>
         <div className="content__address___not">
           <div className="title">

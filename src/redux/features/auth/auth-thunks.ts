@@ -145,3 +145,28 @@ export const authLogout = createAsyncThunk("auth-logout", async () => {
     message: responsive.data,
   };
 });
+
+export const authRestPassword = createAsyncThunk(
+  "auth/auth-rest-password",
+  async (data: { phone: string }, thunkAPI) => {
+    try {
+      const responsive = await RequestServices.post({
+        method: "POST",
+        authorization: "",
+        contentType: "application/json",
+        isAuthRequired: true,
+        url: `${URL + `/auth/rest-password`}`,
+        body: {
+          phone: data.phone,
+        },
+      });
+      return {
+        data: responsive.data,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        message: error,
+      });
+    }
+  }
+);

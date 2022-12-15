@@ -16,6 +16,7 @@ import searchSlice from "../features/search/search-slice";
 import shopSlice from "../features/shop/shop-slice";
 import socketSlice from "../features/socket/socket-slice";
 import userSlice from "../features/user/user-slice";
+import voucherSlice from "../features/voucher/voucher-slice";
 
 export default combineReducers({
   displaySlice,
@@ -35,4 +36,5 @@ export default combineReducers({
   notifySlice,
   chatSlice,
   evaluateSlice,
+  voucherSlice,
 });

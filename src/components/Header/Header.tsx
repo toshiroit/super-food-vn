@@ -132,21 +132,19 @@ const Header = () => {
             <div className="bottombar">
               <div className="bottombar__left">
                 <Link href={"/"}>
-                  {/** 
-<a>
+                  <a>
                     <div className="logo">
                       <picture>
-                        <img src="/images/text-logo.png" alt="" />
+                        <img src="/images/logo1.jpg" alt="" />
                       </picture>
                     </div>
                   </a>
-                  **/}
-                  <a>
+                  {/* <a>
                     <span>
                       <b className="b-1">SUPER</b>
                       <b className="b-2">FOODVN</b>
                     </span>
-                  </a>
+                  </a> */}
                 </Link>
                 <ul className="menu">
                   <li className="menu__item address">
@@ -215,7 +213,7 @@ const Header = () => {
                             <div className="inner">
                               <span className="name">{data && data.phone}</span>
                               <div className="woi">
-                                <li className="woi__item">Số dư : 0</li>
+                                <li className="woi__item">============</li>
                               </div>
                             </div>
                           </a>

@@ -38,7 +38,7 @@ const evaluateSlice = createSlice({
       })
       .addCase(addEvaluateByProduct.fulfilled, (state, action) => {
         state.dataAddEvaluate.loading = false;
-        state.dataAddEvaluate.message = action.payload.data;
+        state.dataAddEvaluate.message = action.payload?.data;
       });
     builder
       .addCase(checkEvaluateByProductUserOrder.pending, (state) => {

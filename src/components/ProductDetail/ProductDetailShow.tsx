@@ -172,12 +172,17 @@ const ProductDetailShow = () => {
               <div className="categorywp">
                 <div className="wp">
                   <span>
-                    Danh mục : <b>Lẩu</b>{" "}
+                    Danh mục :{" "}
+                    <b>
+                      {data.name_product_type
+                        ? data.name_product_type
+                        : "Không rõ"}
+                    </b>{" "}
                   </span>
                 </div>
                 <div className="wp">
                   <span>
-                    Tên quán : <b>Lẩu</b>{" "}
+                    Tên quán : <b>{data && data.name_shop}</b>{" "}
                   </span>
                 </div>
               </div>
@@ -189,10 +194,9 @@ const ProductDetailShow = () => {
                   <i className="fa-solid fa-star fa-size" />
                   <i className="fa-solid fa-star fa-size" />
                   <i className="fa-solid fa-star fa-size" />
-                  <p>( 659 Đánh giá của người dùng )</p>
                 </div>
                 <div className="buy ac">
-                  <span>Đã bán 12.000+</span>
+                  <span>Đã bán {data.purchase}</span>
                 </div>
               </div>
               <div className="pricex">
@@ -294,7 +298,7 @@ const ProductDetailShow = () => {
                   </button>
                 </div>
               </div>
-              <div className="selectGift">
+              {/* <div className="selectGift">
                 <h4 className="selectGift__title">Mã giảm giá</h4>
                 <ul className="selectGift__main">
                   <li className="selectGift__main___item">
@@ -329,7 +333,7 @@ const ProductDetailShow = () => {
                     </li>
                   </ul>
                 </div>
-              </div>
+              </div> */}
               <div className="infoProductwp">
                 <ul className="infoProductwp__main">
                   <li className="infoProductwp__main___item">

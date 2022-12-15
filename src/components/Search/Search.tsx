@@ -35,7 +35,19 @@ const Search = () => {
   const dataTextSearch = useAppSelector(selectSearchSliceTextSearch);
   const dataProduct = useAppSelector(selectProductSliceDataSearch);
   const loadingSearch = useAppSelector(selectProductSliceLoadingSearch);
+  const [pageOrder, setPageOrder] = useState<number[]>([]);
+  const [current_page, setCurrent_page] = useState<number>(1);
+  const range = (from: number, to: number, step = 1) => {
+    let i = from;
+    const range = [];
 
+    while (i <= to) {
+      range.push(i);
+      i += step;
+    }
+
+    return range;
+  };
   const onChangeFilter = (value: FilterSearch) => {
     dispatch(
       changeSearchType({
@@ -44,6 +56,26 @@ const Search = () => {
       })
     );
   };
+  useEffect(() => {
+    const page_w = Number(router.query?.page) || 1;
+    if (dataProduct && dataProduct.totalPages) {
+      const totalNumbers = 2 * 2 + 2;
+      const totalBlocks = totalNumbers + 2;
+      let tempData = [];
+      if (dataProduct.totalPages > totalBlocks) {
+        const startPage = Math.max(2, page_w - 2);
+        const endPage = Math.min(dataProduct.totalPages - 1, page_w + 2);
+        let pages = range(startPage, endPage);
+        tempData = [1, ...pages, dataProduct.totalPages];
+        setPageOrder(tempData);
+      } else {
+        for (let i = 1; i <= dataProduct.totalPages; i++) {
+          tempData.push(i);
+        }
+        setPageOrder(tempData);
+      }
+    }
+  }, [router.query, dataProduct]);
   useEffect(() => {
     const query = router.query;
     if (query) {
@@ -227,8 +259,10 @@ const Search = () => {
                     <div style={{ textAlign: "center" }}>
                       <LoadingDIO />
                     </div>
-                  ) : !dataProduct ? (
-                    <h1>KHONG CO SAN PHAM</h1>
+                  ) : !dataProduct.data || dataProduct.data?.length === 0 ? (
+                    <h3 style={{ textAlign: "center", padding: "50px" }}>
+                      Không có sản phẩm nào
+                    </h3>
                   ) : (
                     <ProductList
                       item={{ typeShow: "ANY" }}
@@ -236,28 +270,51 @@ const Search = () => {
                     />
                   )}
                 </div>
-                <div className="pagination">
-                  <ul className="pagination__main">
-                    {dataProduct && dataProduct.totalPages > 7 ? (
-                      <li
-                        onClick={() => onChangePage("pre")}
-                        className="pagination__main___item arrow"
-                      >
-                        <i className="fa-solid fa-angle-left fa-size" />
-                      </li>
-                    ) : (
-                      ""
-                    )}
-                    {paginationEl(dataProduct && dataProduct.totalPages)}
-                    {dataProduct && dataProduct.totalPages > 7 ? (
-                      <li className="pagination__main___item arrow">
-                        <i className="fa-solid fa-angle-right fa-size" />
-                      </li>
-                    ) : (
-                      ""
-                    )}
-                  </ul>
-                </div>
+                {dataProduct?.data && dataProduct.data?.length > 0 && (
+                  <div className="pagination">
+                    <ul className="pagination__main">
+                      {dataProduct && dataProduct.totalPages > 7 ? (
+                        <li
+                          onClick={() => onChangePage("pre")}
+                          className="pagination__main___item arrow"
+                        >
+                          <i className="fa-solid fa-angle-left fa-size" />
+                        </li>
+                      ) : (
+                        ""
+                      )}
+                      {pageOrder &&
+                        pageOrder.map((item, key) => {
+                          return (
+                            <Link
+                              key={key}
+                              href={`/search?q=${router.query.q}&page=${item}`}
+                            >
+                              <a>
+                                <li
+                                  onClick={() => setCurrent_page(item)}
+                                  className={`pagination__main___item ${
+                                    Number(router.query.page || 1) === item
+                                      ? "active"
+                                      : ""
+                                  }`}
+                                >
+                                  {item}
+                                </li>
+                              </a>
+                            </Link>
+                          );
+                        })}
+                      {dataProduct && dataProduct.totalPages > 7 ? (
+                        <li className="pagination__main___item arrow">
+                          <i className="fa-solid fa-angle-right fa-size" />
+                        </li>
+                      ) : (
+                        ""
+                      )}
+                    </ul>
+                  </div>
+                )}
               </>
             </div>
           ) : dataSearchShop.loading ? (

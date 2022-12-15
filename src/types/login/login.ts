@@ -50,3 +50,6 @@ export type LoginPhone = {
   password: string;
   passwordConfirmation: string;
 };
+export type LoginRestPasswordData = {
+  phone: string;
+};

@@ -1,4 +1,5 @@
 import { formDateVN } from "@/lib/formatDate";
+import { randomLengthText } from "@/lib/random";
 import { selectUserSliceDataUpdateW1 } from "@/redux/features/user/user-selects";
 import { addInfoUser } from "@/redux/features/user/user-slice";
 import { updateUserInfoW1 } from "@/redux/features/user/user-thunks";
@@ -11,7 +12,14 @@ import {
   UserInfoFull,
 } from "@/types/user/user";
 import Link from "next/link";
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  MouseEvent,
+  MouseEventHandler,
+  useEffect,
+  useState,
+} from "react";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
 
 const UserInfo = () => {
@@ -19,6 +27,8 @@ const UserInfo = () => {
   const dispatch = useAppDispatch();
   const [dataUser, setDataUser] = useState<UserDataInfo>({
     box1: {
+      avatar: "",
+      avatar_file: null,
       full_name: "",
       address: "",
       date: {
@@ -36,15 +46,57 @@ const UserInfo = () => {
   const dataUpdateW1Rx = useAppSelector(selectUserSliceDataUpdateW1);
   const onSubmitUser = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const date_full = `${dataUser.box1.date.day}/${dataUser.box1.date.month}/${dataUser.box1.date.five}`;
-    dispatch(
-      updateUserInfoW1({
-        fullName: dataUser.box1.full_name,
-        date: "2022-10-06 11:01:47.381",
-        sex: false,
-      })
-    );
+    dispatch(updateUserInfoW1(dataUser));
   };
+  useEffect(() => {
+    if (data) {
+      const file_name_1 = `IMAGE_SUPER_FOOD-${randomLengthText(15)}`;
+      fetch(data.avatar)
+        .then(async (res) => {
+          const blob = await res.blob();
+          const file = new File([blob], file_name_1, { type: blob.type });
+          setDataUser({
+            box1: {
+              avatar: data.avatar,
+              avatar_file: file,
+              full_name: data.full_name,
+              sex: data.sex,
+              date: {
+                day: new Date(data.date_birth).getDay(),
+                month: new Date(data.date_birth).getMonth(),
+                five: new Date(data.date_birth).getFullYear(),
+              },
+              address: "124",
+            },
+            box2: {
+              email: "",
+              phone: data.phone,
+            },
+          });
+        })
+        .catch((err) => {
+          setDataUser({
+            box1: {
+              avatar: data.avatar,
+              avatar_file: null,
+              full_name: data.full_name,
+              sex: data.sex,
+              date: {
+                day: new Date(data.date_birth).getDay(),
+                month: new Date(data.date_birth).getMonth(),
+                five: new Date(data.date_birth).getFullYear(),
+              },
+              address: "124",
+            },
+            box2: {
+              email: "",
+              phone: data.phone,
+            },
+          });
+        });
+    }
+    //eslint-disable-next-line
+  }, []);
   const onSettingData = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -84,26 +136,40 @@ const UserInfo = () => {
       });
     }
   };
-  useEffect(() => {
-    if (data) {
+  const onSetSex = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.name === "female") {
       setDataUser({
+        ...dataUser,
         box1: {
-          full_name: data.full_name,
-          sex: data.sex,
-          date: {
-            day: new Date(data.date_birth).getDay(),
-            month: new Date(data.date_birth).getMonth(),
-            five: new Date(data.date_birth).getFullYear(),
-          },
-          address: "124",
+          ...dataUser.box1,
+          sex: true,
         },
-        box2: {
-          email: "",
-          phone: data.phone,
+      });
+    } else if (e.target.name === "male") {
+      setDataUser({
+        ...dataUser,
+        box1: {
+          ...dataUser.box1,
+          sex: false,
         },
       });
     }
-  }, []);
+  };
+
+  const onChangeAvatar = (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files;
+    if (file && file[0]) {
+      const url_file_image = URL.createObjectURL(file[0]);
+      setDataUser({
+        ...dataUser,
+        box1: {
+          ...dataUser.box1,
+          avatar: url_file_image,
+          avatar_file: file[0],
+        },
+      });
+    }
+  };
   return (
     <div className="content">
       <div className="title">
@@ -118,12 +184,19 @@ const UserInfo = () => {
         <>
           <div className="avatar inline">
             <picture>
-              <img src="/images/avatar_nam.jpg" alt="" />
+              <img src={dataUser.box1.avatar || ""} alt="" />
             </picture>
             <i className="fa-solid fa-pen fa-size" />
           </div>
           <ul className="infoUser inline">
             <form onSubmit={onSubmitUser}>
+              <li className="infoUser__item">
+                <label htmlFor="">
+                  <i className="fa-solid fa-signature fa-size" />
+                  Ảnh đại diện
+                </label>
+                <input onChange={onChangeAvatar} type="file" name="avatar" />
+              </li>
               <li className="infoUser__item">
                 <label htmlFor="">
                   <i className="fa-solid fa-signature fa-size" />
@@ -264,7 +337,8 @@ const UserInfo = () => {
                 <div className="checkSex">
                   <div className="checkSex__item">
                     <input
-                      defaultChecked={dataUser.box1.sex ? false : true}
+                      onChange={onSetSex}
+                      checked={dataUser.box1.sex}
                       type="radio"
                       name="female"
                     />
@@ -272,7 +346,9 @@ const UserInfo = () => {
                   </div>
                   <div className="checkSex__item">
                     <input
-                      defaultChecked={dataUser.box1.sex ? true : false}
+                      onChange={onSetSex}
+                      checked={dataUser.box1.sex ? false : true}
+                      // defaultChecked={dataUser.box1.sex ? true : false}
                       type="radio"
                       name="male"
                     />
@@ -316,51 +392,6 @@ const UserInfo = () => {
           </ul>
         </>
         <ul className="infoUser inline">
-          <div className="bow">
-            <span className="textFxBow">Số điện thoại / Thư điện tử</span>
-            <li className="infoUser__item">
-              <label htmlFor="">
-                <i className="fa-solid fa-square-envelope fa-size" />
-                Địa chỉ thư điện tử
-              </label>
-              <div className="ipn">
-                <input type="text" name="email" />
-                <button type="submit">Thay đổi</button>
-              </div>
-            </li>
-            <li className="infoUser__item">
-              <label htmlFor="">
-                <i className="fa-solid fa-phone fa-size" /> Số điện thoại
-              </label>
-              <div className="ipn">
-                <input value={dataUser.box2.phone} type="text" name="phone" />
-                <button type="button">Thay đổi</button>
-              </div>
-            </li>
-          </div>
-          <div className="bow">
-            <span className="textFxBow">Bảo mật / Bảo mật cấp 2</span>
-            <li className="infoUser__item">
-              <label htmlFor="">
-                <i className="fa-solid fa-lock fa-size" />
-                Mật khẩu cấp 1
-              </label>
-              <div className="ipn">
-                <input type="password" defaultValue="##########" />
-                <button type="button">Thay đổi</button>
-              </div>
-            </li>
-            <li className="infoUser__item">
-              <label htmlFor="">
-                <i className="fa-solid fa-lock fa-size" />
-                Mật khẩu cấp 2
-              </label>
-              <div className="ipn">
-                <input type="password" />
-                <button type="button">Thay đổi</button>
-              </div>
-            </li>
-          </div>
           <div className="bow">
             <span className="textFxBow">Liên kết mạng xã hội </span>
             <li className="infoUser__item">

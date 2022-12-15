@@ -78,3 +78,8 @@ export type GiftT = {
 export type SetDataCartLocalAction = {
   data: Array<any>;
 };
+
+export type SetPriceVoucher = {
+  code_gift: string;
+  price: number;
+};

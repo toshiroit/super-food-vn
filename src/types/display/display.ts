@@ -4,6 +4,7 @@ export type ShowDisplayLogin = {
   isShowCode?: boolean;
   isShowConfirmation?: boolean;
   isShowPassword?: boolean;
+  isShowRestPassword?: boolean;
 };
 export type DisplayState = {
   displayLogin: {
@@ -12,5 +13,6 @@ export type DisplayState = {
     isShowCode: boolean;
     isShowConfirmation: boolean;
     isShowPassword: boolean;
+    isShowRestPassword: boolean;
   };
 };

@@ -72,11 +72,11 @@ const UserSlider = () => {
           <div className="nameFx">
             <span>Bảo mật </span>
           </div>
-          <Link href={clientRoutes.USER_INFO}>
+          <Link href={clientRoutes.USER_REST_PASS}>
             <a>
               <li className="content__main___wp____item">
                 <i className="fa-solid fa-shield fa-size" />
-                <span>Thông tin bảo mật </span>
+                <span>Thay đổi mật khẩu </span>
               </li>
             </a>
           </Link>
@@ -101,14 +101,6 @@ const UserSlider = () => {
               </li>
             </a>
           </Link>
-          <li className="content__main___wp____item">
-            <i className="fa-solid fa-house-user fa-size" />
-            <span>Thông tin tài khoản </span>
-          </li>
-          <li className="content__main___wp____item">
-            <i className="fa-solid fa-house-user fa-size" />
-            <span>Thông tin tài khoản </span>
-          </li>
         </div>
       </ul>
     </div>

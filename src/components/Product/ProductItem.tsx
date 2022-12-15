@@ -56,7 +56,6 @@ const ProductItem = ({ productItemProps }: ProductItemProps) => {
             </div>
             <div className="col-1">
               {/* <box-icon name='map'></box-icon> */}
-              <b>3.km</b>
             </div>
           </div>
           <div className="address"></div>

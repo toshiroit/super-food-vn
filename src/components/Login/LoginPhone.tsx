@@ -43,7 +43,7 @@ const LoginPhone = () => {
       });
       dispatch(addPhone({ phone: phoneLogin }));
       setIsSubmit(true);
-      //dispatch(authSendCode({ phone: phoneLogin }));
+      dispatch(authSendCode({ phone: phoneLogin }));
     } else {
       setIsLogin({
         ...isLogin,
@@ -55,12 +55,16 @@ const LoginPhone = () => {
   };
   useEffect(() => {
     if (!dataSendCode.loading && isSubmit) {
-      // dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+      dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
       // dispatch(onDisplayLogin({ isShowFixed: true, isShowConfirmation: true }));
-      dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
+      // dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
     }
     //eslint-disable-next-line
   }, [dataSendCode.loading, isSubmit]);
+
+  const onShowRestPassword = () => {
+    dispatch(onDisplayLogin({ isShowFixed: true, isShowRestPassword: true }));
+  };
   return (
     <>
       <div className="fixedLogin__inner">
@@ -142,7 +146,11 @@ const LoginPhone = () => {
             <h4 className="tw">Hoặc</h4>
           </div>
           <div className="orLogin">
-            <button type="button" className="loginGoogle">
+            <button
+              onClick={onShowRestPassword}
+              type="button"
+              className="loginGoogle"
+            >
               Quên mật khẩu
             </button>
           </div>

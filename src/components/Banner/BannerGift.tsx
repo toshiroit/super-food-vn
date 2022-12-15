@@ -27,7 +27,7 @@ const BannerGift = () => {
             <div className="image">
               <picture>
                 <img
-                  src="https://tea-3.lozi.vn/v1/images/resized/banner-mobile-2880-1661156575?w=393&type=o"
+                  src="https://tea-3.lozi.vn/v1/images/resized/banner-mobile-4012-1668410343?w=393&type=o"
                   alt=""
                 />
               </picture>

@@ -33,6 +33,11 @@ export type AuthUserState = {
     message: string | null;
     error: any | null;
   };
+  data_restPass: {
+    loading: boolean;
+    error: any;
+    data: string | null;
+  };
 };
 export type AuthCheckPhone = {
   phone: string;
@@ -83,10 +88,17 @@ export type UserState = {
     loading: boolean;
     error: any | null;
   };
+  updatePassword: {
+    data: any | null;
+    loading: boolean;
+    error: any | null;
+  };
 };
 
 export type UserDataInfo = {
   box1: {
+    avatar: string;
+    avatar_file: any;
     full_name: string;
     date: {
       day: number;
@@ -100,4 +112,16 @@ export type UserDataInfo = {
     email: string;
     phone: string;
   };
+};
+
+export type AuthNewRestPass = {
+  password: string;
+  passwordConfirm: string;
+};
+
+export type AuthUpdatePassword = {
+  phone: string;
+  password_root: string;
+  password_new: string;
+  password_new_confirm: string;
 };

@@ -1,3 +1,4 @@
+import { authRestPassword } from "./auth-thunks";
 import { AuthUserState } from "./../../../types/user/user";
 import {
   authCheckPhone,
@@ -29,6 +30,11 @@ const initialState: AuthUserState = {
     loading: false,
     message: null,
   },
+  data_restPass: {
+    loading: false,
+    data: null,
+    error: null,
+  },
 };
 const authSlice = createSlice({
   name: "authSlice",
@@ -40,6 +46,11 @@ const authSlice = createSlice({
       state.error = null;
       state.checkPhone = false;
       state.dataCheckPhone = false;
+      state.data_verifyCode = {
+        error: null,
+        loading: false,
+        message: null,
+      };
       return state;
     },
   },
@@ -93,10 +104,12 @@ const authSlice = createSlice({
       })
       .addCase(authVerifyCode.rejected, (state, action) => {
         state.data_verifyCode.loading = false;
+        state.data_verifyCode.message = null;
         state.data_verifyCode.error = action.payload;
       })
       .addCase(authVerifyCode.fulfilled, (state, action) => {
         state.data_verifyCode.loading = false;
+        state.data_verifyCode.error = null;
         state.data_verifyCode.message = action.payload?.data;
       });
     builder
@@ -121,6 +134,20 @@ const authSlice = createSlice({
       .addCase(authLogout.fulfilled, (state, action) => {
         state.loading = false;
         state.data = null;
+      });
+    builder
+      .addCase(authRestPassword.pending, (state) => {
+        state.data_restPass.loading = true;
+      })
+      .addCase(authRestPassword.rejected, (state, action) => {
+        state.data_restPass.loading = false;
+        state.data_restPass.data = null;
+        state.data_restPass.error = action.error;
+      })
+      .addCase(authRestPassword.fulfilled, (state, action) => {
+        state.data_restPass.loading = false;
+        state.data_restPass.error = null;
+        state.data_restPass.data = action.payload.data;
       });
   },
 });
