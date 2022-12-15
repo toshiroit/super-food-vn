@@ -42,7 +42,7 @@ const UserAddress = () => {
               >
                 Không có địa chỉ thanh toán nào
               </h4>
-              <Link href={"address/add-new"}>
+              <Link href={"/user/address/add-new"}>
                 <a>
                   <button
                     style={{
@@ -83,7 +83,7 @@ const UserAddress = () => {
                     className="btn"
                     style={{ margin: "auto", border: "none" }}
                   >
-                    <Link href={"address/add-new"}>
+                    <Link href={"/user/address/add-new"}>
                       <a>
                         <button>
                           <i className="fa-solid fa-eye fa-size" />
