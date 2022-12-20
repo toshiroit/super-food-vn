@@ -1,4 +1,5 @@
 import BannerGift from "@/components/Banner/BannerGift";
+import LoadingDIO from "@/components/Loading/LoadingDIO";
 import ProductList from "@/components/Product/ProductList";
 import { firebaseConfig } from "@/config/firebase";
 import {
@@ -150,18 +151,15 @@ const Home: NextPage = () => {
           <div className="main">
             <div className="main__wp1">
               <div className="main__wp1___title">
-                <h4>
-                  <picture>
-                    <img src={"/images/new-items.png"} alt="" />
-                  </picture>
-                  Khám phá quản mới
-                </h4>
+                <h4>Khám phá quản mới</h4>
                 <div className="alw">
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
               {dataProductNew.loading ? (
-                <h1>Dang tai</h1>
+                <div style={{ textAlign: "center" }}>
+                  <LoadingDIO />
+                </div>
               ) : (
                 <ProductList
                   item={{ typeShow: "SHOP-NEW" }}
@@ -173,18 +171,15 @@ const Home: NextPage = () => {
             </div>
             <div className="main__wp1">
               <div className="main__wp1___title">
-                <h4>
-                  <picture>
-                    <img src={"/images/new-items.png"} alt="" />
-                  </picture>
-                  Các món ăn đang HOT trên web
-                </h4>
+                <h4>Các món ăn đang HOT trên web</h4>
                 <div className="alw">
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
               {dataProductTop.loading ? (
-                <h1>Dang tai </h1>
+                <div style={{ textAlign: "center" }}>
+                  <LoadingDIO />
+                </div>
               ) : (
                 <ProductList
                   item={{ typeShow: "HOT" }}
@@ -196,18 +191,15 @@ const Home: NextPage = () => {
             </div>
             <div className="main__wp1">
               <div className="main__wp1___title">
-                <h4>
-                  <picture>
-                    <img src={"/images/new-items.png"} alt="" />
-                  </picture>
-                  Các món đang bán chạy
-                </h4>
+                <h4>Các món đang bán chạy</h4>
                 <div className="alw">
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
               {dataProductPayTop.loading ? (
-                <h1>Dang tai </h1>
+                <div style={{ textAlign: "center" }}>
+                  <LoadingDIO />
+                </div>
               ) : (
                 <ProductList
                   item={{ typeShow: "HOT" }}
@@ -219,18 +211,15 @@ const Home: NextPage = () => {
             </div>
             <div className="main__wp1">
               <div className="main__wp1___title">
-                <h4>
-                  <picture>
-                    <img src={"/images/new-items.png"} alt="" />
-                  </picture>
-                  Sản phẩm tốt
-                </h4>
+                <h4>Sản phẩm tốt</h4>
                 <div className="alw">
                   <i className="fa-size fa-solid fa-paperclip" />
                 </div>
               </div>
               {dataProductPayTop.loading ? (
-                <h1>Dang tai </h1>
+                <div style={{ textAlign: "center" }}>
+                  <LoadingDIO />
+                </div>
               ) : (
                 <ProductList
                   item={{ typeShow: "HOT" }}
@@ -304,6 +293,27 @@ const Home: NextPage = () => {
                   </ul>
                 </div>
               </div>
+            </div>
+
+            <div className="main__wp1">
+              <div className="main__wp1___title">
+                <h4>Các món Vừa đặt</h4>
+                <div className="alw">
+                  <i className="fa-size fa-solid fa-paperclip" />
+                </div>
+              </div>
+              {dataProductPayTop.loading ? (
+                <div style={{ textAlign: "center" }}>
+                  <LoadingDIO />
+                </div>
+              ) : (
+                <ProductList
+                  item={{ typeShow: "HOT" }}
+                  dataProductAll={
+                    dataProductPayTop.data && dataProductPayTop.data.data
+                  }
+                />
+              )}
             </div>
           </div>
           {/* <Trademark /> */}

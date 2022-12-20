@@ -75,6 +75,7 @@ const CommentItem = ({ itemEvaluate }: EvaluateProductItemIProps) => {
   return (
     <>
       <div className="evaluate__point___user">
+        {console.log(itemEvaluate)}
         <div className="left comment">
           <div className="content">
             <div className="avatar">
@@ -142,21 +143,18 @@ const CommentItem = ({ itemEvaluate }: EvaluateProductItemIProps) => {
                 })}
               {CommentItemProps.video &&
                 CommentItemProps.video.map((item, key) => {
-                  return (
-                    <li key={key} className="comment__image___item video">
-                      <picture>
-                        <img
-                          src="https://image.cooky.vn/posproduct/g0/48/s400x400/e5fae484-cd78-488d-ae61-3582adc44cf3.jpeg"
-                          alt=""
-                        />
-                      </picture>
-                      <div className="playVideo">
-                        <i className="fa-size fa-solid fa-video" />
-                        <span>4:30</span>
-                      </div>
-                    </li>
+                  re
                   );
                 })} */}
+              {itemEvaluate.images?.map((item: any, key: number) => {
+                return (
+                  <li key={key} className="comment__image___item video">
+                    <picture>
+                      <img src={item.image} alt="" />
+                    </picture>
+                  </li>
+                );
+              })}
             </ul>
           </div>
           {/* {isLogged ? (

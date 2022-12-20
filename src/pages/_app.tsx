@@ -2,6 +2,8 @@ import type { AppContext, AppProps } from "next/app";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
 import { Provider } from "react-redux";
+import "@tomtom-international/web-sdk-maps/dist/maps.css";
+import tt from "@tomtom-international/web-sdk-maps";
 import { store } from "@/redux/store/store";
 import "../../styles/Loader.io.css";
 import "../../styles/main.scss";
@@ -20,11 +22,9 @@ const MyApp = ({ Component, pageProps, cookies }: AppProps & AppOwnProps) => {
     <Provider store={store}>
       <AuthProvider jwt={cookies}>
         <SocketProvider>
-          <Shield>
-            <Container>
-              <AsMyComponent {...pageProps} />
-            </Container>
-          </Shield>
+          <Container>
+            <AsMyComponent {...pageProps} />
+          </Container>
         </SocketProvider>
       </AuthProvider>
     </Provider>

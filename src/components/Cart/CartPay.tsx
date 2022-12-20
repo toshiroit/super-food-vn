@@ -19,7 +19,7 @@ import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectVoucherSliceDataVoucherCheck } from "@/redux/features/voucher/voucher-selects";
 import { checkVoucherProductByVoucherShop } from "@/redux/features/voucher/voucher-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { CartItem, GiftT } from "@/types/cart/cart";
+import { CartItem, GiftT, LocationData } from "@/types/cart/cart";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -33,6 +33,11 @@ const CartPay = () => {
   const dataAddressUser = useAppSelector(selectAddressSliceDataAddress);
   const priceDiscountW = useAppSelector(selectCartSlicePriceDiscount);
   const voucherRdx = useAppSelector(selectVoucherSliceDataVoucherCheck);
+  const [locationShip, setLocationShip] = useState<any>();
+  const [location, setLocation] = useState<LocationData>({
+    geoError: null,
+    geoLocation: null,
+  });
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isLogged } = useAuthContext();
@@ -64,6 +69,19 @@ const CartPay = () => {
       );
     }
   }, [voucherRdx]);
+  useEffect(() => {
+    navigator.geolocation.getCurrentPosition(
+      (e) => {
+        setLocationShip(e.coords);
+      },
+      async (err) => {
+        setLocation({
+          ...location,
+          geoError: err,
+        });
+      }
+    );
+  }, []);
   const [codeGift, setCodeGift] = useState<GiftT>({
     code: "",
     isCheck: true,
@@ -208,6 +226,7 @@ const CartPay = () => {
                 </a>
               </Link>
             </div>
+
             <>
               {dataAddressUser.data && dataAddressUser.data.length > 0 ? (
                 dataAddressUser.data.map((item) => {
@@ -248,6 +267,12 @@ const CartPay = () => {
                 </h4>
               )}
             </>
+          </div>
+          <div className="main">
+            <span className="l1">#1 : {locationShip?.latitude.toFixed(4)}</span>
+            <span className="l1">
+              #2 : {locationShip?.longitude.toFixed(4)}
+            </span>
           </div>
           <div className="main">
             <div className="main__gift">
@@ -331,6 +356,10 @@ const CartPay = () => {
           <li className="price__main___item">
             <span>Tạm tính </span>
             <span className="boldPrice">{formatPriceVND(priceResult())}</span>
+          </li>
+          <li className="price__main___item">
+            <span>Phí vận chuyển </span>
+            <span className="boldPrice">{formatPriceVND(23000)}</span>
           </li>
           <li className="price__main___item">
             <span>Giảm giá </span>

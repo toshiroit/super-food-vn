@@ -152,7 +152,7 @@ const ProductDetailComment = () => {
           </div>
           <div className="right">
             <div className="title">
-              <h4>Tất cả hình ảnh (6)</h4>
+              <h4>Tất cả đanh giá</h4>
             </div>
             <ul className="image"></ul>
             <div className="sort">
@@ -222,11 +222,17 @@ const ProductDetailComment = () => {
         <>
           {/* <CommentItem /> */}
           {dataEvaluateProduct.data &&
+          dataEvaluateProduct.data?.data.length > 0 ? (
             dataEvaluateProduct.data.data?.map((item: any) => {
               return (
                 <CommentItem key={item.code_evaluate} itemEvaluate={item} />
               );
-            })}
+            })
+          ) : (
+            <h4 style={{ padding: "70px", textAlign: "center" }}>
+              Không có đánh giá nào
+            </h4>
+          )}
         </>
         <div />
       </div>

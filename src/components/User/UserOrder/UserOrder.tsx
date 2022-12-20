@@ -117,7 +117,16 @@ const UserOrder = () => {
     },
   });
   useEffect(() => {
-    if (router.query.type === "1" || !router.query.type) {
+    if (router.query.type === "-1" || !router.query.type) {
+      dispatch(
+        getListOrderByCodeUser({
+          page: current_page,
+          date_filter: {
+            status_order: "all",
+          },
+        })
+      );
+    } else if (router.query.type === "1") {
       dispatch(
         getListOrderByCodeUser({
           page: current_page,
@@ -149,7 +158,7 @@ const UserOrder = () => {
         getListOrderByCodeUser({
           page: current_page,
           date_filter: {
-            status_order: "5",
+            status_order: "56",
           },
         })
       );
@@ -231,6 +240,17 @@ const UserOrder = () => {
         </Link>
       </div>
       <ul className="tabOrder">
+        <Link href={`${clientRoutes.USER_ORDER}?type=-1`}>
+          <a>
+            <li
+              className={`tabOrder__item ${
+                router.query.type === "-1" ? "active" : ""
+              }`}
+            >
+              Tất cả
+            </li>
+          </a>
+        </Link>
         <Link href={`${clientRoutes.USER_ORDER}?type=1`}>
           <a>
             <li

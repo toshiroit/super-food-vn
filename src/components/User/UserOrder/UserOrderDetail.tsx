@@ -178,6 +178,7 @@ const UserOrderDetail = () => {
       dispatch(confirmOrderSuccess({ code_order }));
     }
   };
+  console.log(dataOrderDetail.data);
   return (
     <div className="content">
       <div className="title">
@@ -670,7 +671,7 @@ const UserOrderDetail = () => {
                 ${
                   (dataOrderDetail.data &&
                     dataOrderDetail.data.progress === 5) ||
-                  (dataOrderDetail.data && dataOrderDetail.data.progress < 4)
+                  (dataOrderDetail.data && dataOrderDetail.data.progress < 5)
                     ? "load"
                     : "active"
                 }

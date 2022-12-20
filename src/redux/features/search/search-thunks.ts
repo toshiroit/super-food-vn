@@ -59,7 +59,7 @@ export const getShopByNameOrCode = createAsyncThunk(
       contentType: "application/json",
       url: `${
         URL +
-        `/search/shop-by-name-or-code?code_shop=${data.code_shop}&name_shop=${data.name_shop}`
+        `/search/shop-by-name-or-code?code_shop=${data.code_shop}&name_shop=${data.name_shop}&limit=10`
       }`,
     });
     return {

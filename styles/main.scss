@@ -833,6 +833,7 @@ html {
       }
       .main {
         &__wp1 {
+          margin-top: 30px;
           &___title {
             display: flex;
             align-items: center;
@@ -842,9 +843,11 @@ html {
               display: flex;
               font-weight: 600;
               align-items: center;
-              font-style: normal;
+              //font-style: normal;
               color: #333333;
-              font-size: 1rem;
+              padding: 2px 0;
+
+              font-size: 1.2rem;
               img {
                 width: 47px;
               }
@@ -957,7 +960,7 @@ html {
                   }
                   p {
                     margin-top: 6px;
-                    font-family: "Roboto", sans-serif;
+                    font-weight: 600;
                   }
                 }
               }
@@ -3325,7 +3328,7 @@ html {
                     }
                     &____scroll {
                       margin-top: 15px;
-                      max-height: 320px;
+                      max-height: 600px;
                       overflow-y: scroll;
                       overflow-x: visible;
 
@@ -4011,7 +4014,7 @@ html {
                       font-weight: 300;
                       font-size: 0.8rem;
                       position: absolute;
-                      top: -19px;
+                      top: -17px;
                       background-color: #fff;
                       padding-left: 8px;
                       padding-right: 8px;
@@ -4023,8 +4026,8 @@ html {
                     }
                     .fxRight {
                       right: 10px;
-                      border: 1px solid #ddd;
-                      font-weight: 400;
+                      // border: 1px solid #ddd;
+                      font-weight: 500;
                       padding-top: 3px;
                       padding-bottom: 3px;
                       border-radius: 2px;
@@ -4105,7 +4108,7 @@ html {
                           }
                           span {
                             font-size: 0.8rem;
-                            font-weight: 300;
+                            font-weight: 500;
                             width: auto;
                           }
                           b {

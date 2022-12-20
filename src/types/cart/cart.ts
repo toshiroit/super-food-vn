@@ -83,3 +83,8 @@ export type SetPriceVoucher = {
   code_gift: string;
   price: number;
 };
+
+export type LocationData = {
+  geoLocation: any;
+  geoError: any;
+};

@@ -67,6 +67,8 @@ export type OrderFilterData = {
     | "-11"
     | "23"
     | "34"
+    | "56"
+    | "all"
     | null;
   sort_order?: "1" | "2" | "3" | "4" | null;
 };

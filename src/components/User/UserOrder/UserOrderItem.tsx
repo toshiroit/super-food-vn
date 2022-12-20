@@ -31,7 +31,9 @@ const UserOrderItem = ({ itemOrder }: ItemOrderProps) => {
                 : itemOrder.progress === 4
                 ? "Đang giao hàng"
                 : itemOrder.progress === 5
-                ? "Giao thành công "
+                ? "Giao thành công / Chưa đánh giá "
+                : itemOrder.progress === 6
+                ? "Giao thành công / Đã đánh giá "
                 : itemOrder.progress === -3
                 ? "Giao không thành công"
                 : itemOrder.progress === -2

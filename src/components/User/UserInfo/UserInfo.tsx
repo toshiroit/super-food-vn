@@ -356,27 +356,6 @@ const UserInfo = () => {
                   </div>
                 </div>
               </li>
-              <li className="infoUser__item">
-                <div className="qt">
-                  <label htmlFor="">
-                    <i className="fa-solid fa-earth-africa fa-size" />
-                    Địa điểm
-                  </label>
-                  <select
-                    name="address"
-                    style={{ maxWidth: "100%", width: "100%" }}
-                  >
-                    <option value={-1}>Chọn địa điểm </option>
-                    {/* {Province.map((item) => {
-                      return (
-                        <option key={item.code} value={item.code}>
-                          {item.name}
-                        </option>
-                      );
-                    })} */}
-                  </select>
-                </div>
-              </li>
               <div className="save">
                 <button
                   disabled={dataUpdateW1Rx.loading ? true : false}
@@ -392,6 +371,37 @@ const UserInfo = () => {
           </ul>
         </>
         <ul className="infoUser inline">
+          <div className="bow">
+            <span className="textFxBow">Số điện thoại / Thư điện tử</span>
+            <li className="infoUser__item">
+              <label htmlFor="">
+                <i className="fa-solid fa-square-envelope fa-size" />
+                Địa chỉ thư điện tử
+              </label>
+              <div className="ipn">
+                <input
+                  type="text"
+                  defaultChecked={data && data.email}
+                  name="email"
+                  disabled={true}
+                />
+              </div>
+            </li>
+            <li className="infoUser__item">
+              <label htmlFor="">
+                <i className="fa-solid fa-phone fa-size" /> Số điện thoại
+              </label>
+              <div className="ipn">
+                <input
+                  disabled={true}
+                  type="text"
+                  name="phone"
+                  defaultValue={data && data?.phone.trim()}
+                />
+              </div>
+            </li>
+          </div>
+
           <div className="bow">
             <span className="textFxBow">Liên kết mạng xã hội </span>
             <li className="infoUser__item">
