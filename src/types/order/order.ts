@@ -11,10 +11,16 @@ export type OrderState = {
     message: any | null;
     data: any | null;
   };
+  dataOrderAction: {
+    loading: boolean;
+    error: any | null;
+    data: any | null;
+  };
 };
 
 export type OrderGetDataAPI = {
   page: number;
+  date_filter?: OrderFilterData;
 };
 export type OrderGetDetailAPI = {
   code_order: string;
@@ -43,4 +49,24 @@ export type EvaluateOrder = {
 export type Images = {
   code: string;
   url: string | ArrayBuffer | null;
+};
+export type OrderFilterData = {
+  text_search?: string | null;
+  date_start?: string | null;
+  date_end?: string | null;
+  status_order?:
+    | "-3"
+    | "-1"
+    | "-2"
+    | "1"
+    | "2"
+    | "3"
+    | "4"
+    | "5"
+    | "6"
+    | "-11"
+    | "23"
+    | "34"
+    | null;
+  sort_order?: "1" | "2" | "3" | "4" | null;
 };

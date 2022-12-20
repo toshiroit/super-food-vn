@@ -27,13 +27,15 @@ const UserOrderItem = ({ itemOrder }: ItemOrderProps) => {
                 : itemOrder.progress === 2
                 ? "Đang chế biến"
                 : itemOrder.progress === 3
-                ? "Chờ Shipper giao hàng"
+                ? "Chờ giao hàng"
                 : itemOrder.progress === 4
-                ? "Đã nhận hàng"
+                ? "Đang giao hàng"
                 : itemOrder.progress === 5
-                ? "Đơn hàng đang giao"
-                : itemOrder.progress === 6
                 ? "Giao thành công "
+                : itemOrder.progress === -3
+                ? "Giao không thành công"
+                : itemOrder.progress === -2
+                ? "Bị huỷ"
                 : ""}
             </span>
           </div>
@@ -59,6 +61,19 @@ const UserOrderItem = ({ itemOrder }: ItemOrderProps) => {
                       Lẩu cay , Cơm , Bún
                     </span>
                   </div>
+                </div>
+              </div>
+            </div>
+            <div className="content__order___item____wp_____ifop wp__left">
+              <div className="tw">
+                <div className="tl">
+                  <span>
+                    <i className="fa-solid fa-hand-holding-dollar" />
+                    Tổng tiền thanh toán :
+                  </span>
+                  <b className="tl__price">
+                    {formatPriceVND(itemOrder.total_order)}
+                  </b>
                 </div>
               </div>
             </div>

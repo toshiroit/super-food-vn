@@ -18,10 +18,10 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     const newSocket = io(configAPI.URL_SOCKET_IO as string, {
       transports: ["websocket", "polling", "flashsocket"],
     });
-    //   newSocket.on("disconnect", () => {
-    //     setSocket(null);
-    //     setTimeout(startSocket, 3000);
-    //   });
+    // newSocket.on("disconnect", () => {
+    //   setSocket(null);
+    //   setTimeout(startSocket, 3000);
+    // });
     setSocket(newSocket);
     return () => {
       newSocket.close();

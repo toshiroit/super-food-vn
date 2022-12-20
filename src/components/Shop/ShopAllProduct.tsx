@@ -15,6 +15,7 @@ import ProductItem from "../Product/ProductItem";
 const ShopAllProduct = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [code_type, setCode_type] = useState<string>();
   const [currentPage, setCurrentPage] = useState<number>(1);
   const dataAllProductShop = useAppSelector(
     selectShopSliceDataProductByCodeShop
@@ -32,11 +33,15 @@ const ShopAllProduct = () => {
           code_shop: code_shop[0],
           page: currentPage,
           q: dataFilterProductShop.text_search || "",
+          code_type: code_type,
         })
       );
     }
     //eslint-disable-next-line
   }, [currentPage, dataFilterProductShop]);
+  const onFilerCategory = (code_type: string) => {
+    // setCode_type(code_type);
+  };
   return (
     <div className="allProduct">
       <div className="allProduct__main">
@@ -46,10 +51,22 @@ const ShopAllProduct = () => {
           </div>
           <div className="listCategory">
             <ul className="list">
+              <li
+                onClick={() => onFilerCategory("null")}
+                className={`list__item ${code_type === "null" ? "active" : ""}`}
+              >
+                <span>Tất cả </span>
+              </li>
               {dataAllProductShop.category_all &&
                 dataAllProductShop.category_all.map((item: any) => {
                   return (
-                    <li key={item.code_product_type} className="list__item">
+                    <li
+                      onClick={() => onFilerCategory(item.code_product_type)}
+                      key={item.code_product_type}
+                      className={`list__item ${
+                        item.code_product_type === code_type ? "active" : ""
+                      }`}
+                    >
                       <span>{item.name_product_type}</span>
                     </li>
                   );
@@ -64,7 +81,7 @@ const ShopAllProduct = () => {
                 <LoadingSpinner css={{ textAlign: "center" }} />
               ) : (
                 dataAllProductShop.data &&
-                dataAllProductShop.data?.data.map((item: any) => {
+                dataAllProductShop.data?.data?.map((item: any) => {
                   return (
                     <ProductItem
                       productItemProps={item}

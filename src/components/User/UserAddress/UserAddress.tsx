@@ -14,7 +14,7 @@ const UserAddress = () => {
   useEffect(() => {
     dispatch(getAddressByUser());
     //eslint-disable-next-line
-  }, [router]);
+  }, []);
   return (
     <div className="content">
       <div className="title">

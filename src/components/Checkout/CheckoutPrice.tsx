@@ -19,8 +19,9 @@ import { removeCartByCodeProductAndCart } from "@/redux/features/cart/cart-thunk
 import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
 import { joinProductShop } from "@/lib/joinProductShop";
 import { selectAddressSliceDataAddress } from "@/redux/features/address/address-selects";
+import { useSocketContext } from "src/contexts/Auth/SocketContext";
 const CheckoutPrice = () => {
-  const socketRdx = useAppSelector(selectSocketSliceSocket);
+  const { socket } = useSocketContext();
   const code_payment = useAppSelector(selectDataPayment);
   const { data, isLogged } = useAuthContext();
   const dataAddress = useAppSelector(selectAddressSliceDataAddress);
@@ -101,8 +102,8 @@ const CheckoutPrice = () => {
             code_product.push(item.code_product.trim());
           }
         });
-        if (socketRdx) {
-          socketRdx.emit("notification_order", {
+        if (socket) {
+          socket.emit("notification_order", {
             code_shop: joinProductShop(dataCartLocal),
             data: dataCartLocal,
           });
@@ -115,6 +116,7 @@ const CheckoutPrice = () => {
         dispatch(restCheckout());
       }
     }
+    //eslint-disable-next-line
   }, [dataCheckoutW.dataCheckout.loading, dispatch, isUpload]);
 
   return (

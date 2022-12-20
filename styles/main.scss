@@ -4257,6 +4257,12 @@ html {
                         color: $sp-color-text-primary;
                       }
                     }
+                    .load {
+                      color: $sp-color-text-success;
+                      &:not(:last-child)::after {
+                        color: $sp-color-text-success;
+                      }
+                    }
                     &__item {
                       margin-bottom: 15px;
                       font-size: 0.85rem;
@@ -4389,6 +4395,18 @@ html {
                     }
                   }
                 }
+                .result_price {
+                  button {
+                    margin-top: 10px;
+                    padding: 8px;
+                    border: none;
+                    font-weight: 500;
+                    color: #fff;
+                    cursor: pointer;
+                    border-radius: 4px;
+                    background-color: rgba(40, 167, 69, 1);
+                  }
+                }
               }
               & > .title {
                 padding: 10px;
@@ -4402,6 +4420,89 @@ html {
                   i {
                     width: 20px;
                     text-align: center;
+                  }
+                }
+              }
+              .tabOrder {
+                margin-top: 7px;
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                &__item {
+                  margin: 3px;
+                  // border: 1px solid #ddd;
+                  cursor: pointer;
+                  box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+                    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+                  border-radius: 4px;
+                  padding: 5px;
+                  &:hover {
+                    background-color: #f0f0f0;
+                  }
+                }
+                .active {
+                  background-color: #2d93ff;
+                  color: #fff;
+                }
+              }
+              .filter {
+                border-top: 1px solid #ddd;
+                padding-top: 5px;
+                padding: 3px;
+                margin-top: 3px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                &__date {
+                  display: flex;
+                  align-items: flex-start;
+                  p {
+                    font-size: 0.9rem;
+                    font-weight: 400;
+                    color: #f33003;
+                  }
+                  &___item {
+                    label {
+                      font-weight: 400;
+                      font-size: 0.9rem;
+                    }
+                    input[type="date"] {
+                      margin-left: 3px;
+                      padding: 5px;
+                      border-radius: 4px;
+                      border: 1px solid #c5b9b9;
+                      margin-right: 6px;
+                    }
+                  }
+                }
+                .button {
+                  button {
+                    padding: 5px 10px;
+                    border-radius: 4px;
+                    border: none;
+                    background-color: #2196f3;
+                    font-weight: 400;
+                    color: #fff;
+                    cursor: pointer;
+                  }
+                }
+                &__input {
+                  input {
+                    width: 450px;
+                    max-width: 100%;
+                    border: 1px solid #c5b9b9;
+                    border-radius: 4px;
+                    outline: none;
+                    padding: 5px;
+                  }
+                }
+                &__select {
+                  select {
+                    border: 1px solid #c5b9b9;
+                    border-radius: 4px;
+                    padding: 5px;
+                    outline: none;
+                    margin-right: 5px;
                   }
                 }
               }
@@ -5818,6 +5919,9 @@ html {
                     }
                   }
                   .list {
+                    .active {
+                        background-color: #efefef;
+                    }
                     &__item {
                       padding: 7px 10px 7px 10px;
                       font-weight: 500;

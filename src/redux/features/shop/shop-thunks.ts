@@ -22,7 +22,12 @@ export const getDataDetailShopByCodeShop = createAsyncThunk(
 
 export const getDataProductShopByCodeShop = createAsyncThunk(
   "shop/get-all-product-by-shop",
-  async (data: { code_shop: string; page: number; q?: string }) => {
+  async (data: {
+    code_shop: string;
+    page: number;
+    q?: string;
+    code_type: string | undefined;
+  }) => {
     const responsive = await RequestServices.get({
       method: "GET",
       isAuthRequired: true,
@@ -30,9 +35,7 @@ export const getDataProductShopByCodeShop = createAsyncThunk(
       contentType: "application/json",
       url: `${
         URL +
-        `/shop/all-product?code_shop=${data.code_shop}&page=${data.page}&q=${
-          data.q || ""
-        }`
+        `/shop/all-product?code_shop=${data.code_shop}&page=${data.page}&q=${data.q}&code_type=${data.code_type}`
       }`,
     });
     return {

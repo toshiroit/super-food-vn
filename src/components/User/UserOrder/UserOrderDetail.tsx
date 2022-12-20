@@ -1,6 +1,12 @@
 import { formatPriceVND } from "@/lib/formatPrice";
-import { selectOrderSliceDataOrderDetail } from "@/redux/features/order/order-selects";
-import { getOrderDetailByCodeOrder } from "@/redux/features/order/order-thunks";
+import {
+  selectOrderSLiceDataOrderAction,
+  selectOrderSliceDataOrderDetail,
+} from "@/redux/features/order/order-selects";
+import {
+  confirmOrderSuccess,
+  getOrderDetailByCodeOrder,
+} from "@/redux/features/order/order-thunks";
 import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/router";
@@ -32,6 +38,7 @@ const UserOrderDetail = () => {
     selectEvaluateSliceDataCheckEvaluate
   );
   const dataAddEvaluate = useAppSelector(selectEvaluateSliceDataAdd);
+  const dataOrderAction = useAppSelector(selectOrderSLiceDataOrderAction);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
   const [productEvaluate, setProductEvaluate] =
     useState<EvaluateProductCheck[]>();
@@ -60,7 +67,8 @@ const UserOrderDetail = () => {
         })
       );
     }
-  }, [router.query, dispatch, showEvaluate.is_show]);
+    //eslint-disable-next-line
+  }, [router.query, showEvaluate.is_show, dataOrderAction]);
   useEffect(() => {
     if (socketRdx) {
       socketRdx.on("notification_progress", (data) => {
@@ -76,6 +84,7 @@ const UserOrderDetail = () => {
       });
     }
   }, [socketRdx]);
+  useEffect(() => {}, [dataOrderAction]);
   const onEvaluate = (is_show: boolean, code_product: string) => {
     setShowEvaluate({
       code_product: code_product,
@@ -152,7 +161,6 @@ const UserOrderDetail = () => {
   }, [isSubmit, dataAddEvaluate.loading]);
   //   dispatch(checkEvaluateByProductUserOrder({}))
   const is_check_evaluate = (data: any, item: string): boolean => {
-    console.log(data, item);
     let result = true;
     if (data && data.check_evaluate) {
       for (let j of data.check_evaluate) {
@@ -163,6 +171,12 @@ const UserOrderDetail = () => {
       }
     }
     return result;
+  };
+
+  const onOrderSuccess = (code_order: string) => {
+    if (code_order.length > 0) {
+      dispatch(confirmOrderSuccess({ code_order }));
+    }
   };
   return (
     <div className="content">
@@ -417,78 +431,91 @@ const UserOrderDetail = () => {
         )
       ) : (
         <div className="content__order">
+          {console.log(dataOrderDetail.data)}
           <>
             {dataOrderDetail.data &&
               dataOrderDetail.data.product_order.map((item: any) => {
-                return (
-                  <>
-                    <div
-                      className="content__order___imageName"
-                      key={item.code_product}
-                    >
-                      <picture>
-                        <img src={item.image} alt="" />
-                      </picture>
-                      <div className="namePrice">
-                        <h4>
-                          <i className="fa-solid fa-signature fa-size" />
-                          {item.name}
-                        </h4>
-                        <span className="tag">
-                          <i className="fa-solid fa-tag fa-size" />
-                          {item.name_product_type || "Chưa có"}
-                        </span>
-                        <div className="grpPro">
-                          <span>
-                            <b>
-                              <i className="fa-solid fa-layer-group fa-size" />
-                              Loại sản phẩm
-                            </b>
-                            : Không toping , Thêm bún
-                          </span>
+                return dataOrderDetail.data?.code_product.map((item3: any) => {
+                  if (item.code_product.trim() === item3.code) {
+                    return (
+                      <>
+                        <div
+                          className="content__order___imageName"
+                          key={item.code_product}
+                        >
+                          <picture>
+                            <img src={item.image} alt="" />
+                          </picture>
+                          <div className="namePrice">
+                            <h4>
+                              <i className="fa-solid fa-signature fa-size" />
+                              {console.log(item)}
+                              {item.name}
+                            </h4>
+                            <span className="tag">
+                              <i className="fa-solid fa-tag fa-size" />
+                              {item.name_product_type || "Chưa có"}
+                            </span>
+                            <div className="grpPro">
+                              <span>
+                                <b>
+                                  <i className="fa-solid fa-layer-group fa-size" />
+                                  Thông tin :{" "}
+                                </b>
+                                {`${item3.info_product.note}`}
+                              </span>
+                            </div>
+                            <div className="grpPro">
+                              <span>
+                                <b>
+                                  <i className="fa-brands fa-affiliatetheme fa-size" />
+                                  Số lượng
+                                </b>
+                                : {item3.quatity}
+                              </span>
+                            </div>
+                            <div className="price">
+                              <span className="price__w2">
+                                <b>Tổng tiền : </b>
+                                {formatPriceVND(item3.price_result)}
+                              </span>
+                            </div>
+                          </div>
+                          {is_check_evaluate(
+                            dataOrderDetail.data,
+                            item.code_product
+                          ) && dataOrderDetail.data.progress === 6 ? (
+                            <div className="removeOrder">
+                              <button
+                                onClick={() =>
+                                  onEvaluate(true, item.code_product)
+                                }
+                                style={{
+                                  fontWeight: 500,
+                                }}
+                              >
+                                Đánh giá ngay
+                              </button>
+                            </div>
+                          ) : dataOrderDetail.data.progress !== 6 ? (
+                            <div className="removeOrder"></div>
+                          ) : (
+                            <div className="removeOrder">
+                              <button
+                                style={{
+                                  background: "#4a934a",
+                                  fontWeight: 500,
+                                }}
+                              >
+                                Đã đánh giá
+                              </button>
+                            </div>
+                          )}
                         </div>
-                        <div className="grpPro">
-                          <span>
-                            <b>
-                              <i className="fa-brands fa-affiliatetheme fa-size" />
-                              Số lượng
-                            </b>
-                            : {item.quality}
-                          </span>
-                        </div>
-                      </div>
-                      {console.log(dataOrderDetail.data.progress)}
-                      {is_check_evaluate(
-                        dataOrderDetail.data,
-                        item.code_product
-                      ) && dataOrderDetail.data.progress === 6 ? (
-                        <div className="removeOrder">
-                          <button
-                            onClick={() => onEvaluate(true, item.code_product)}
-                            style={{
-                              fontWeight: 500,
-                            }}
-                          >
-                            Đánh giá ngay
-                          </button>
-                        </div>
-                      ) : dataOrderDetail.data.progress !== 6 ? (
-                        <div className="removeOrder"></div>
-                      ) : (
-                        <div className="removeOrder">
-                          <button
-                            style={{
-                              background: "#4a934a",
-                              fontWeight: 500,
-                            }}
-                          >
-                            Đã đánh giá
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                );
+                      </>
+                    );
+                  }
+                });
               })}
 
             <div
@@ -504,18 +531,35 @@ const UserOrderDetail = () => {
                 {dataOrderDetail.data &&
                   formatPriceVND(dataOrderDetail.data.total_order)}
               </h4>
+              {dataOrderDetail.data?.progress == 5 ? (
+                <>
+                  <button
+                    onClick={() =>
+                      onOrderSuccess(dataOrderDetail.data?.code_order)
+                    }
+                    type="button"
+                  >
+                    Đã nhận được hàng
+                  </button>
+                </>
+              ) : (
+                ""
+              )}
             </div>
+
             <div className="content__order___infoW">
               <ul className="statusMain">
                 <span className="fxNd">
                   <i className="fa-solid fa-truck-fast" /> Tình trạng đơn hàng
                 </span>
+                {console.log(dataOrderDetail.data?.progress)}
                 <li
                   className={`
                 statusMain__item 
                 ${
-                  dataOrderDetail.data && dataOrderDetail.data.progress === -1
-                    ? ""
+                  dataOrderDetail.data?.progress === -1 ||
+                  dataOrderDetail.data?.progress === -2
+                    ? "load"
                     : "active"
                 }`}
                 >
@@ -534,7 +578,7 @@ const UserOrderDetail = () => {
                   (dataOrderDetail.data &&
                     dataOrderDetail.data.progress === 1) ||
                   (dataOrderDetail.data && dataOrderDetail.data.progress < 1)
-                    ? ""
+                    ? "load"
                     : "active"
                 }`}
                 >
@@ -556,7 +600,7 @@ const UserOrderDetail = () => {
                   (dataOrderDetail.data &&
                     dataOrderDetail.data.progress === 2) ||
                   (dataOrderDetail.data && dataOrderDetail.data.progress < 2)
-                    ? ""
+                    ? "load"
                     : "active"
                 }
             `}
@@ -578,11 +622,12 @@ const UserOrderDetail = () => {
                 ${
                   (dataOrderDetail.data &&
                     dataOrderDetail.data.progress === 3) ||
-                  (dataOrderDetail.data && dataOrderDetail.data.progress < 3)
-                    ? ""
+                  (dataOrderDetail.data && dataOrderDetail.data.progress < 4)
+                    ? "load"
                     : "active"
                 }
-            `}
+
+             `}
                 >
                   {dataOrderDetail.data &&
                   dataOrderDetail.data.progress === 3 ? (
@@ -593,7 +638,7 @@ const UserOrderDetail = () => {
                   ) : (
                     <i className="fa-solid fa-quote-left fa-size" />
                   )}
-                  <span>Shipper đã nhận đơn hàng</span>
+                  <span>Đơn hàng đang chuẩn bị giao</span>
                 </li>
                 <li
                   className={`
@@ -602,7 +647,7 @@ const UserOrderDetail = () => {
                   (dataOrderDetail.data &&
                     dataOrderDetail.data.progress === 4) ||
                   (dataOrderDetail.data && dataOrderDetail.data.progress < 4)
-                    ? ""
+                    ? "load"
                     : "active"
                 }
 
@@ -617,7 +662,7 @@ const UserOrderDetail = () => {
                   ) : (
                     <i className="fa-solid fa-quote-left fa-size" />
                   )}
-                  <span>Đơn hàng đang được giao</span>
+                  <span>Đang giao hàng</span>
                 </li>
                 <li
                   className={`
@@ -625,8 +670,8 @@ const UserOrderDetail = () => {
                 ${
                   (dataOrderDetail.data &&
                     dataOrderDetail.data.progress === 5) ||
-                  (dataOrderDetail.data && dataOrderDetail.data.progress < 5)
-                    ? ""
+                  (dataOrderDetail.data && dataOrderDetail.data.progress < 4)
+                    ? "load"
                     : "active"
                 }
 
@@ -689,7 +734,7 @@ const UserOrderDetail = () => {
                   ) : (
                     <i className="fa-solid fa-quote-left fa-size" />
                   )}
-                  <span>Đơn hàng đã bị xoá </span>
+                  <span>Đơn hàng đã bị huỷ</span>
                 </li>
               </ul>
               <div className="gifOrder">

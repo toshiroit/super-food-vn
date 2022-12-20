@@ -42,8 +42,10 @@ const LoginPhone = () => {
         message: "",
       });
       dispatch(addPhone({ phone: phoneLogin }));
+
       setIsSubmit(true);
-      dispatch(authSendCode({ phone: phoneLogin }));
+      dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
+      //   dispatch(authSendCode({ phone: phoneLogin }));
     } else {
       setIsLogin({
         ...isLogin,
@@ -55,9 +57,9 @@ const LoginPhone = () => {
   };
   useEffect(() => {
     if (!dataSendCode.loading && isSubmit) {
-      dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+      // dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
       // dispatch(onDisplayLogin({ isShowFixed: true, isShowConfirmation: true }));
-      // dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
+      //     dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
     }
     //eslint-disable-next-line
   }, [dataSendCode.loading, isSubmit]);
