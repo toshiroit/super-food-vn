@@ -1,3 +1,5 @@
+import { ConfirmationResult } from "firebase/auth";
+
 export type UserChildren = {
   contentUser?: React.ReactNode;
 };
@@ -37,6 +39,9 @@ export type AuthUserState = {
     loading: boolean;
     error: any;
     data: string | null;
+  };
+  dataConfirmOTP: {
+    data: ConfirmationResult | null;
   };
 };
 export type AuthCheckPhone = {
@@ -124,4 +129,8 @@ export type AuthUpdatePassword = {
   password_root: string;
   password_new: string;
   password_new_confirm: string;
+};
+
+export type ConfirmOTPAction = {
+  data: any;
 };

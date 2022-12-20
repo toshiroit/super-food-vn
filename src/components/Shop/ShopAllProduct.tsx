@@ -5,6 +5,7 @@ import {
   selectShopSliceDataFilterProductShop,
   selectShopSliceDataProductByCodeShop,
 } from "@/redux/features/shop/shop-selects";
+import { filterProductShop } from "@/redux/features/shop/shop-slice";
 import { getDataProductShopByCodeShop } from "@/redux/features/shop/shop-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/router";
@@ -79,8 +80,8 @@ const ShopAllProduct = () => {
             <ul className="product__wp">
               {dataAllProductShop.loading ? (
                 <LoadingSpinner css={{ textAlign: "center" }} />
-              ) : (
-                dataAllProductShop.data &&
+              ) : dataAllProductShop.data &&
+                dataAllProductShop.data?.data.length > 0 ? (
                 dataAllProductShop.data?.data?.map((item: any) => {
                   return (
                     <ProductItem
@@ -89,6 +90,10 @@ const ShopAllProduct = () => {
                     />
                   );
                 })
+              ) : (
+                <h4 style={{ padding: "50px", margin: "auto" }}>
+                  Không có sản phẩm
+                </h4>
               )}
             </ul>
           </div>

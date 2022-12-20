@@ -19,3 +19,6 @@ export const selectAuthSliceDataSendCode = (state: RootState) =>
   state.authSlice.dataSendCode;
 export const selectAuthSliceDataRestPassword = (state: RootState) =>
   state.authSlice.data_restPass;
+
+export const selectAuthSliceDataConfirmOTP = (state: RootState) =>
+  state.authSlice.dataConfirmOTP;

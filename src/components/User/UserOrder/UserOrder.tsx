@@ -299,7 +299,7 @@ const UserOrder = () => {
           </a>
         </Link>
       </ul>
-      <div className="filter">
+      <div style={{ display: "block" }} className="filter">
         <div className="filter__input">
           <input
             name="text_search"

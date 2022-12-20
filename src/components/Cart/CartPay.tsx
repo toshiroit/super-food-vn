@@ -19,7 +19,7 @@ import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { selectVoucherSliceDataVoucherCheck } from "@/redux/features/voucher/voucher-selects";
 import { checkVoucherProductByVoucherShop } from "@/redux/features/voucher/voucher-thunks";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
-import { GiftT } from "@/types/cart/cart";
+import { CartItem, GiftT } from "@/types/cart/cart";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -74,6 +74,14 @@ const CartPay = () => {
       code: e.target.value,
     });
   };
+
+  const onSetCodeGift = (code: string) => {
+    setCodeGift({
+      isCheck: true,
+      code: code,
+    });
+  };
+
   const onPayCheckout = () => {
     if (dataCartLocal) {
       if (dataCartLocal.length > 0) {
@@ -107,34 +115,38 @@ const CartPay = () => {
       }
     }
   };
+
+  const codeGiftArray = () => {
+    let result_gift: any[] = [];
+    joinProductShopTest(dataCartLocal).map((item) => {
+      return item.cart?.map((item2: any, key: number) => {
+        return item2.voucher_product?.map((item3: any, key2: number) => {
+          result_gift.push(item3);
+        });
+      });
+    });
+    return result_gift;
+  };
+
+  const joinProductShopTest = (data: CartItem[]): any[] => {
+    let cpData = [...data];
+    const itemsByCodeShop: any = {};
+    for (const item of cpData) {
+      itemsByCodeShop[item.code_shop || ""] ??= {
+        shop: {
+          name_shop: item.name_shop,
+          code_shop: item.code_shop,
+        },
+        cart: [],
+      };
+      itemsByCodeShop[item.code_shop || ""].cart.push(item);
+    }
+    if (itemsByCodeShop) {
+      return Object.values(itemsByCodeShop);
+    }
+    return [];
+  };
   const onCheckCodeGift = () => {
-    // if (codeGift.code) {
-    //   if (codeGift.code.length > 0) {
-    //     let data = getGiftProductCart(dataCartLocal).filter(
-    //       (item) => item.code_w_voucher.trim() === codeGift.code
-    //     );
-    //     if (data.length > 0) {
-    //       setCodeGift({
-    //         ...codeGift,
-    //         isCheck: true,
-    //         show: "SHOW",
-    //         price_gift: data[0].price_voucher,
-    //       });
-    //       dispatch(
-    //         priceResultData({
-    //           data: dataCartLocal,
-    //           price_gift: data[0].price_voucher,
-    //           code_gift: data[0].code_w_voucher,
-    //         })
-    //       );
-    //     } else {
-    //       setCodeGift({
-    //         ...codeGift,
-    //         isCheck: false,
-    //       });
-    //     }
-    //   }
-    // }
     const result_product: any[] = [];
     if (dataCartLocal) {
       dataCartLocal.map((item) => {
@@ -243,8 +255,7 @@ const CartPay = () => {
                 <i className="fa-solid fa-gift fa-size" /> Mã giảm giá
               </span>
               <span>
-                Có thể chọn (2)
-                <i className="fa-solid fa-circle-info fa-size" />
+                Có thể chọn <i className="fa-solid fa-circle-info fa-size" />
               </span>
             </div>
             <ul className="main__list">
@@ -257,7 +268,22 @@ const CartPay = () => {
                 })
               }
               */}
-              {dataCartLocal.map((item, key) => {
+              {codeGiftArray().length > 0 ? (
+                codeGiftArray().map((item) => {
+                  return (
+                    <GiftItem
+                      key={item.code_voucher}
+                      code={item.code_w_voucher}
+                      image="124"
+                      title={item.name_voucher}
+                      onSetVoucher={onSetCodeGift}
+                    />
+                  );
+                })
+              ) : (
+                <span>Không có mã giảm giá nào</span>
+              )}
+              {/* {dataCartLocal.map((item, key) => {
                 return (
                   <GiftItem
                     code={item.code_w_voucher}
@@ -266,7 +292,7 @@ const CartPay = () => {
                     key={key}
                   />
                 );
-              })}
+              })} */}
             </ul>
             <div className="main__input">
               <div className="main__input___owp">
@@ -274,6 +300,7 @@ const CartPay = () => {
                   placeholder="Mã giảm giá của bạn "
                   type="text"
                   name="codeGift"
+                  value={codeGift.code}
                   onChange={onChangeCodeGift}
                   id=""
                 />

@@ -148,7 +148,7 @@ export const authLogout = createAsyncThunk("auth-logout", async () => {
 
 export const authRestPassword = createAsyncThunk(
   "auth/auth-rest-password",
-  async (data: { phone: string }, thunkAPI) => {
+  async (data: { phone: string; password: string }, thunkAPI) => {
     try {
       const responsive = await RequestServices.post({
         method: "POST",
@@ -158,6 +158,7 @@ export const authRestPassword = createAsyncThunk(
         url: `${URL + `/auth/rest-password`}`,
         body: {
           phone: data.phone,
+          password: data.password,
         },
       });
       return {

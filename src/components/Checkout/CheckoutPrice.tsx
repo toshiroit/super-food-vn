@@ -126,13 +126,14 @@ const CheckoutPrice = () => {
           <span>Tạm tính </span>
           <span className="boldPrice">{formatPriceVND(priceResult())}</span>
         </li>
-        <li className="price__main___item">
+        {/* <li className="price__main___item">
           <span>Giảm giá </span>
+          {console.log(dataCheckoutW)}
           <span className="boldPrice salePrice">
             {" "}
             -{formatPriceVND(dataCheckoutW.priceDiscount)}
           </span>
-        </li>
+        </li> */}
       </ul>
       <div className="price__result">
         <h4>Tổng tiền</h4>

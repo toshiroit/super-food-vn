@@ -1,5 +1,5 @@
 import { authRestPassword } from "./auth-thunks";
-import { AuthUserState } from "./../../../types/user/user";
+import { AuthUserState, ConfirmOTPAction } from "@/types/user/user";
 import {
   authCheckPhone,
   authGetMe,
@@ -9,7 +9,7 @@ import {
   authSendCode,
   authVerifyCode,
 } from "@/redux/features/auth/auth-thunks";
-import { createAction, createSlice } from "@reduxjs/toolkit";
+import { createAction, createSlice, PayloadAction } from "@reduxjs/toolkit";
 const initialState: AuthUserState = {
   loading: false,
   data: null,
@@ -35,6 +35,9 @@ const initialState: AuthUserState = {
     data: null,
     error: null,
   },
+  dataConfirmOTP: {
+    data: null,
+  },
 };
 const authSlice = createSlice({
   name: "authSlice",
@@ -51,6 +54,10 @@ const authSlice = createSlice({
         loading: false,
         message: null,
       };
+      return state;
+    },
+    onSetConfirmOTP: (state, action: PayloadAction<ConfirmOTPAction>) => {
+      state.dataConfirmOTP.data = action.payload.data;
       return state;
     },
   },
@@ -152,5 +159,5 @@ const authSlice = createSlice({
   },
 });
 
-export const { restartAuth } = authSlice.actions;
+export const { restartAuth, onSetConfirmOTP } = authSlice.actions;
 export default authSlice.reducer;

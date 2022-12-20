@@ -54,7 +54,12 @@ export const validationNewPassword = Yup.object().shape({
     .required("Mật khẩu không được để trống ")
     .oneOf([Yup.ref("password")], "Mật khẩu không giống nhau "),
 });
-
+export const validationNewPassword2 = Yup.object().shape({
+  password: Yup.string().required("Mật khẩu không được để trống "),
+  repeat_password: Yup.string()
+    .required("Mật khẩu không được để trống ")
+    .oneOf([Yup.ref("password")], "Mật khẩu không giống nhau "),
+});
 export const validateUpdateNewPassword = Yup.object().shape({
   password_root: Yup.string().required("Mật khẩu không được để trống "),
   password_new: Yup.string().required("Mật khẩu không được để trống "),

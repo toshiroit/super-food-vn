@@ -53,3 +53,7 @@ export type LoginPhone = {
 export type LoginRestPasswordData = {
   phone: string;
 };
+export type RestPasswordData = {
+  password: string;
+  repeat_password: string;
+};

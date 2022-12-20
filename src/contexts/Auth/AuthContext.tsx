@@ -4,6 +4,13 @@ import { selectDisplayIsShowLogin } from "@/redux/features/display/display-selec
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { useRouter } from "next/router";
 import {
+  ConfirmationResult,
+  getAuth,
+  RecaptchaVerifier,
+  signInWithPhoneNumber,
+} from "firebase/auth";
+import { authFirebase } from "@/config/firebase";
+import {
   createContext,
   Dispatch,
   SetStateAction,
@@ -15,7 +22,10 @@ import {
 type AuthContextType = {
   isLogged: boolean;
   data: any;
+  loading: boolean;
   toggleLogged: Dispatch<SetStateAction<boolean>>;
+  setLoading: (status: boolean) => void;
+  setUpRecaptcha: (number: string) => Promise<ConfirmationResult>;
 };
 type AuthProviderProps = {
   children: React.ReactNode;
@@ -27,6 +37,7 @@ export function AuthProvider({ children, jwt }: AuthProviderProps) {
   const dataDisplay = useAppSelector(selectDisplayIsShowLogin);
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
   const [isLogged, setIsLogged] = useState<boolean>(false);
   useEffect(() => {
     let isStop = true;
@@ -41,12 +52,25 @@ export function AuthProvider({ children, jwt }: AuthProviderProps) {
     };
     //eslint-disable-next-line
   }, [isLogged, router.pathname]);
+  const setUpReCapCha = (phone: string): Promise<ConfirmationResult> => {
+    setLoading(true);
+    const recaptcharVerifier = new RecaptchaVerifier(
+      "recaptcha-container",
+      {},
+      authFirebase
+    );
+    recaptcharVerifier.render();
+    return signInWithPhoneNumber(authFirebase, phone, recaptcharVerifier);
+  };
   return (
     <AuthContext.Provider
       value={{
         isLogged: data ? true : false,
         data: data,
+        loading: loading,
+        setLoading: setLoading,
         toggleLogged: setIsLogged,
+        setUpRecaptcha: setUpReCapCha,
       }}
     >
       {children}

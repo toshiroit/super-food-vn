@@ -11,3 +11,5 @@ export const configAPI = {
   URL_SOCKET_IO: process.env.NEXT_PUBLIC_URL_BACKEND_SOCKET,
   URL_ALLOW_ORIGIN: process.env.NEXT_PUBLIC_ALLOW_ORIGIN,
 };
+
+export const configRoot = {};

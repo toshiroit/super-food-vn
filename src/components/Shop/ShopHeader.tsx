@@ -37,8 +37,8 @@ const ShopHeader = () => {
   };
   const onEnterSearchProduct = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      console.log(textSearch);
       dispatch(filterProductShop({ text_search: textSearch }));
-      setTextSearch("");
     }
   };
 
@@ -227,7 +227,7 @@ const ShopHeader = () => {
                 </li>
               </a>
             </Link>
-            <Link href={`${clientRoutes.SHOP}/${router.query.code}?tow=info`}>
+            {/* <Link href={`${clientRoutes.SHOP}/${router.query.code}?tow=info`}>
               <a>
                 <li
                   className={
@@ -239,7 +239,7 @@ const ShopHeader = () => {
                   Thông tin cửa hàng
                 </li>
               </a>
-            </Link>
+            </Link> */}
           </ul>
         </div>
         <div className="ipnSearch">

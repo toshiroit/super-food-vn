@@ -372,12 +372,6 @@ const Search = () => {
                               </h5>
                               <span>Hoạt động</span>
                             </li>
-                            <li className="listValue__item">
-                              <h5>
-                                <i className="fa-solid fa-box-open"></i> 101
-                              </h5>
-                              <span>101 Sản phẩm</span>
-                            </li>
                           </ul>
                           <div className="select">
                             <div className="select__btn">

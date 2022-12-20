@@ -1,9 +1,10 @@
 import {
+  selectAuthSliceDataConfirmOTP,
   selectAuthSliceDataRestPassword,
   selectAuthSliceDataSendCode,
   selectAuthSliceDataVerifyCode,
 } from "@/redux/features/auth/auth-selects";
-import { restartAuth } from "@/redux/features/auth/auth-slice";
+import { onSetConfirmOTP, restartAuth } from "@/redux/features/auth/auth-slice";
 import {
   authRestPassword,
   authSendCode,
@@ -17,22 +18,27 @@ import { selectLoginPhone } from "@/redux/features/login/login-selects";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import {
   validationCodeOTP,
-  validationNewPassword,
+  validationNewPassword2,
   validationRestPassword,
 } from "@/schema/userSchema";
-import { LoginRestPasswordData } from "@/types/login/login";
+import { LoginRestPasswordData, RestPasswordData } from "@/types/login/login";
 import { AuthNewRestPass } from "@/types/user/user";
 import { useFormik } from "formik";
 import { ChangeEvent, useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 
 const RestPassword = () => {
+  const { loading, setUpRecaptcha, setLoading } = useAuthContext();
+  const dataConfirmOTP = useAppSelector(selectAuthSliceDataConfirmOTP);
   const phoneRestPassword = useAppSelector(selectLoginPhone);
   const dataVerifyCode = useAppSelector(selectAuthSliceDataVerifyCode);
   const dataRestPassRdx = useAppSelector(selectAuthSliceDataRestPassword);
   const dataSendCode = useAppSelector(selectAuthSliceDataSendCode);
+  const [error, setError] = useState<string>();
   const dispatch = useAppDispatch();
   const [isVerify, setIsVerify] = useState<boolean>(false);
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [isUpdatePass, setIsUpdatePass] = useState<boolean>(false);
   const [dataPasswordConfirm] = useState<AuthNewRestPass>({
     password: "",
     passwordConfirm: "",
@@ -40,38 +46,71 @@ const RestPassword = () => {
   const [dataRestPass] = useState<LoginRestPasswordData>({
     phone: "",
   });
+  const [dataPasswordNew] = useState<RestPasswordData>({
+    password: "",
+    repeat_password: "",
+  });
   const [dataCode] = useState<{ code: string }>({
     code: "",
+  });
+  const formikUpdatePass = useFormik({
+    initialValues: dataPasswordNew,
+    validationSchema: validationNewPassword2,
+    onSubmit(values, formikHelpers) {
+      setIsUpdatePass(true);
+      dispatch(
+        authRestPassword({
+          phone: formik.values.phone,
+          password: values.password,
+        })
+      );
+    },
   });
   const formik = useFormik({
     initialValues: dataRestPass,
     validationSchema: validationRestPassword,
-    onSubmit(values, formikHelpers) {
-      setIsSubmit(true);
-      dispatch(authSendCode({ phone: values.phone }));
+    onSubmit: async (values, formikHelpers) => {
+      try {
+        const response = await setUpRecaptcha(`+84${values.phone}`);
+        dispatch(onSetConfirmOTP({ data: response }));
+        setLoading(false);
+        setIsVerify(true);
+      } catch (error) {
+        setIsVerify(false);
+        setLoading(false);
+      }
     },
   });
 
   const formik2 = useFormik({
     initialValues: dataCode,
     validationSchema: validationCodeOTP,
-    onSubmit(values, formikHelpers) {
-      dispatch(authVerifyCode({ code: values.code }));
-      setIsVerify(true);
+    onSubmit: async (values, formikHelpers) => {
+      try {
+        if (dataConfirmOTP.data) {
+          setLoading(true);
+          await dataConfirmOTP.data.confirm(values.code);
+          setLoading(false);
+          setIsSubmit(true);
+        }
+      } catch (error) {
+        setLoading(false);
+        setError("Mã xác nhận không chính xác vui lòng kiểm tra lại");
+      }
     },
   });
   const onClose = () => {
     dispatch(onRestDisplay());
     dispatch(restartAuth());
   };
-
   useEffect(() => {
-    if (isVerify && !dataVerifyCode.loading && dataVerifyCode.message) {
-      dispatch(authRestPassword({ phone: formik.values.phone }));
+    if (isUpdatePass && !dataRestPassRdx.loading && !dataRestPassRdx.error) {
+      dispatch(onRestDisplay());
+      dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
     }
     //eslint-disable-next-line
-  }, [isVerify, dataVerifyCode]);
-  if (isVerify && !dataVerifyCode.loading && dataVerifyCode.message) {
+  }, [dataRestPassRdx]);
+  if (isSubmit) {
     return (
       <div className="fixedLogin__inner">
         <div onClick={onClose} className="close">
@@ -84,12 +123,35 @@ const RestPassword = () => {
           </div>
           <div className="inputLogin">
             <div className="input">
-              <div className="btnLogin">
-                <button onClick={onClose} type="button">
-                  Thay đổi mật khẩu thành công - Vui lòng kiểm tra tin nhắn mật
-                  khẩu mới nhắn về số điện thoại bạn
-                </button>
-              </div>
+              <form
+                onSubmit={formikUpdatePass.handleSubmit}
+                className="regUser"
+              >
+                <div className="regUser__item">
+                  <label htmlFor="code">Nhập mật khẩu mới</label>
+                  <input
+                    type="password"
+                    name="password"
+                    onChange={formikUpdatePass.handleChange}
+                    value={formikUpdatePass.values.password}
+                    id="code"
+                  />
+                </div>
+                <div className="regUser__item">
+                  <label htmlFor="code">Nhập lại mật khẩu mới</label>
+                  <input
+                    type="password"
+                    name="repeat_password"
+                    onChange={formikUpdatePass.handleChange}
+                    value={formikUpdatePass.values.repeat_password}
+                    id="code"
+                  />
+                </div>
+                {console.log(formikUpdatePass.errors)}
+                <div className="btnLogin">
+                  <button type="submit">Xác nhận</button>
+                </div>
+              </form>
             </div>
           </div>
         </>
@@ -108,7 +170,7 @@ const RestPassword = () => {
         </div>
         <div className="inputLogin">
           <div className="input">
-            {isSubmit && !dataSendCode.loading ? (
+            {isVerify ? (
               <form onSubmit={formik2.handleSubmit} className="regUser">
                 <div className="regUser__item">
                   <label htmlFor="code">Xác nhận mã OTP</label>
@@ -130,7 +192,7 @@ const RestPassword = () => {
                   }}
                 >
                   {formik2.touched.code && formik2.errors.code}
-                  {dataVerifyCode.error && dataVerifyCode.error.message}
+                  {error && error}
                 </p>
                 <div className="btnLogin">
                   <button type="submit">Xác nhận</button>
@@ -149,6 +211,10 @@ const RestPassword = () => {
                     placeholder="Xác nhận số điện thoại"
                   />
                 </div>
+                <div
+                  style={{ display: "flex", justifyContent: "center" }}
+                  id="recaptcha-container"
+                />
                 <p
                   className="error"
                   style={{
@@ -161,7 +227,7 @@ const RestPassword = () => {
                 </p>
                 <div className="btnLogin">
                   <button type="submit">
-                    {dataSendCode.loading ? (
+                    {loading ? (
                       <div className="loadingio-spinner-spinner-bbeydwj1ls">
                         <div className="ldio-m09wsst1j2">
                           <div></div>

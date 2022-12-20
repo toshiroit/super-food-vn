@@ -2,6 +2,7 @@ import {
   selectAuthData,
   selectAuthDataCheckPhone,
   selectAuthLoading,
+  selectAuthSliceDataConfirmOTP,
   selectAuthSliceDataVerifyCode,
   selectAuthVerifyCode,
 } from "@/redux/features/auth/auth-selects";
@@ -20,6 +21,7 @@ import {
 } from "@/types/login/login";
 import { useFormik } from "formik";
 import { FormEvent, useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import { validationCodeSchema } from "src/schemas/userSchema";
 
 const LoginCode = () => {
@@ -32,14 +34,16 @@ const LoginCode = () => {
     code5: "",
     code6: "",
   });
+  const [error, setError] = useState<string>("");
+  const { loading, setLoading } = useAuthContext();
   const loadingCheckPhone = useAppSelector(selectAuthLoading);
-  const dataVerifyCode = useAppSelector(selectAuthSliceDataVerifyCode);
+  const dataConfirmOTP = useAppSelector(selectAuthSliceDataConfirmOTP);
   const dataCheckPhone = useAppSelector(selectAuthDataCheckPhone);
   const phoneLogin = useAppSelector(selectLoginPhone);
   const formik = useFormik({
     initialValues: code,
     validationSchema: validationCodeSchema,
-    onSubmit: (value) => {
+    onSubmit: async (value) => {
       if (formik.isValid) {
         const resultCode = `${
           value.code1 +
@@ -49,7 +53,17 @@ const LoginCode = () => {
           value.code5 +
           value.code6
         }`;
-        dispatch(authVerifyCode({ code: resultCode }));
+        try {
+          if (dataConfirmOTP.data) {
+            setLoading(true);
+            await dataConfirmOTP.data.confirm(resultCode);
+            dispatch(authCheckPhone({ phone: phoneLogin }));
+          }
+        } catch (error) {
+          setLoading(false);
+          setError("Mã xác nhận không chính xác vui lòng kiểm tra lại");
+        }
+        //dispatch(authVerifyCode({ code: resultCode }));
       }
     },
   });
@@ -62,12 +76,6 @@ const LoginCode = () => {
     dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
     dispatch(restartAuth());
   };
-  useEffect(() => {
-    if (!dataVerifyCode.loading && dataVerifyCode.message) {
-      dispatch(authCheckPhone({ phone: phoneLogin }));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dataVerifyCode.loading]);
 
   useEffect(() => {
     if (dataCheckPhone) {
@@ -188,24 +196,18 @@ const LoginCode = () => {
               >
                 {loadingSendCode ? "Đang gửi" : " Gửi lại mã xác nhận"}
               </button> */}
-              {dataVerifyCode.loading ? (
-                <></>
-              ) : (
-                dataVerifyCode.error && (
-                  <p
-                    style={{
-                      color: "#F33033",
-                      fontWeight: 500,
-                      fontSize: "0.9rem",
-                    }}
-                  >
-                    {dataVerifyCode.error.message}
-                  </p>
-                )
-              )}
+              <p
+                style={{
+                  color: "#F33033",
+                  fontWeight: 500,
+                  fontSize: "0.9rem",
+                }}
+              >
+                {error && error}
+              </p>
               <a href="">
                 <button type="submit">
-                  {dataVerifyCode.loading ? (
+                  {loading ? (
                     <div className="loadingio-spinner-spinner-bbeydwj1ls">
                       <div className="ldio-m09wsst1j2">
                         <div></div>

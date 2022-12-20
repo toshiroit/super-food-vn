@@ -18,8 +18,10 @@ import { UserLoginPassword } from "@/types/user/user";
 import { useFormik } from "formik";
 import { useRouter } from "next/router";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
 
 const LoginPassword = () => {
+  const { setLoading } = useAuthContext();
   const phoneConfirmation = useAppSelector(selectLoginPhone);
   const loadingAuth = useAppSelector(selectAuthLoading);
   const authDataLogin = useAppSelector(selectAuthData);
@@ -52,6 +54,7 @@ const LoginPassword = () => {
     dispatch(restartAuth());
   };
   useEffect(() => {
+    setLoading(false);
     if (!loadingAuth && authDataLogin) {
       dispatch(onDisplayLogin({ isShowFixed: false }));
       router.push("/");

@@ -10,13 +10,21 @@ import { selectLoginPhone } from "@/redux/features/login/login-selects";
 import { addPhone } from "@/redux/features/login/login-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
+import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
+import { authFirebase } from "@/config/firebase";
+import { onSetConfirmOTP } from "@/redux/features/auth/auth-slice";
+import { toast, ToastContainer } from "react-toastify";
 
 const LoginPhone = () => {
+  const { setUpRecaptcha, loading, setLoading } = useAuthContext();
   const phoneConfirmation = useAppSelector(selectLoginPhone);
   const loadingCheckPhone = useAppSelector(selectAuthLoading);
   const dataCheckPhone = useAppSelector(selectAuthDataCheckPhone);
   const dataSendCode = useAppSelector(selectAuthSliceDataSendCode);
+  const [error, setError] = useState<string>();
   const [isSubmit, setIsSubmit] = useState<boolean>(false);
+  const [checkCapcha, setCheckCapcha] = useState<boolean>(false);
   const [phoneLogin, setPhoneLogin] = useState<string>(
     phoneConfirmation && phoneConfirmation
   );
@@ -32,7 +40,7 @@ const LoginPhone = () => {
   const hideFromLogin = () => {
     dispatch(onDisplayLogin({ isShowFixed: false }));
   };
-  const onRegPhone = (e: FormEvent<HTMLFormElement>) => {
+  const onRegPhone = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (checkPhone(phoneLogin as string, "VIE")) {
       setIsLogin({
@@ -42,10 +50,26 @@ const LoginPhone = () => {
         message: "",
       });
       dispatch(addPhone({ phone: phoneLogin }));
-
-      setIsSubmit(true);
-      dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
-      //   dispatch(authSendCode({ phone: phoneLogin }));
+      try {
+        const response = await setUpRecaptcha(`+84${phoneLogin}`);
+        dispatch(onSetConfirmOTP({ data: response }));
+        setLoading(false);
+        dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+      } catch (error) {
+        setError("Quá nhiều yêu cầu");
+        //dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
+        toast.error(`Quá nhiều yêu cầu - vui lòng thử lại sau`, {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        setLoading(false);
+      }
     } else {
       setIsLogin({
         ...isLogin,
@@ -55,20 +79,23 @@ const LoginPhone = () => {
       });
     }
   };
-  useEffect(() => {
-    if (!dataSendCode.loading && isSubmit) {
-      // dispatch(onDisplayLogin({ isShowCode: true, isShowFixed: true }));
-      // dispatch(onDisplayLogin({ isShowFixed: true, isShowConfirmation: true }));
-      //     dispatch(onDisplayLogin({ isShowFixed: true, isShowPassword: true }));
-    }
-    //eslint-disable-next-line
-  }, [dataSendCode.loading, isSubmit]);
-
   const onShowRestPassword = () => {
     dispatch(onDisplayLogin({ isShowFixed: true, isShowRestPassword: true }));
   };
   return (
     <>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="fixedLogin__inner">
         <form onSubmit={onRegPhone} action="">
           <div onClick={hideFromLogin} className="close">
@@ -107,6 +134,7 @@ const LoginPhone = () => {
                   name="phone"
                   id=""
                 />
+                {error && error}
                 {isLogin.errorPhone ? (
                   <></>
                 ) : (
@@ -114,10 +142,17 @@ const LoginPhone = () => {
                 )}
               </div>
             </div>
-
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "10px",
+              }}
+              id="recaptcha-container"
+            />
             <div className="btnLogin">
               <button type="submit">
-                {dataSendCode.loading ? (
+                {loading ? (
                   <div className="loadingio-spinner-spinner-bbeydwj1ls">
                     <div className="ldio-m09wsst1j2">
                       <div></div>
