@@ -5,11 +5,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import { validateUpdateNewPassword } from "@/schema/userSchema";
 import { AuthUpdatePassword } from "@/types/user/user";
 import { useFormik } from "formik";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { toast, ToastContainer } from "react-toastify";
 
 const UserRestPassword = () => {
   const dispatch = useAppDispatch();
   const dataUpdatePassword = useAppSelector(selectUserSliceDataUpdatePassword);
+  const [isRestPass, setIsRestPass] = useState<boolean>(false);
   const [dataPassword] = useState<AuthUpdatePassword>({
     phone: "",
     password_root: "",
@@ -20,14 +22,49 @@ const UserRestPassword = () => {
     initialValues: dataPassword,
     validationSchema: validateUpdateNewPassword,
     onSubmit(values, formikHelpers) {
+      setIsRestPass(true);
       dispatch(updatePasswordUser(values));
     },
   });
   const onUpdatePassword = () => {
     formik.handleSubmit();
   };
+  useEffect(() => {
+    console.log("1 : ", isRestPass);
+    console.log("2 : ", dataUpdatePassword);
+    if (
+      isRestPass &&
+      !dataUpdatePassword.error &&
+      !dataUpdatePassword.loading
+    ) {
+      formik.resetForm();
+      toast.success(`Thay đổi mật khẩu thành công`, {
+        position: "bottom-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+    //eslint-disable-next-line
+  }, [dataUpdatePassword.loading]);
   return (
     <div className="content">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
       <div className="title">
         <h4>
           <i className="fa-solid fa-key fa-size" />

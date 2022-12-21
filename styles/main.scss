@@ -321,6 +321,20 @@ html {
                   display: block;
                 }
               }
+              h4 {
+                position: absolute;
+                background: #e54545;
+                width: 20px;
+                height: 20px;
+                text-align: center;
+                border-radius: 50%;
+                font-size: 0.9rem;
+                line-height: 21px;
+                font-weight: 500;
+                font-weight: 500;
+                right: -12px;
+                top: -6px;
+              }
               .owp-w1 {
                 display: flex;
                 position: relative;
@@ -352,6 +366,7 @@ html {
 
                   top: 35px;
                   &__item {
+                    position: relative;
                     padding: 8px;
                     line-height: 1.5;
                     display: flex;
@@ -3065,7 +3080,7 @@ html {
                 }
                 &__list {
                   margin-top: 10px;
-                  height: 138px;
+                  max-height: 138px;
                   overflow-y: scroll;
                   &::-webkit-scrollbar-thumb {
                     background: $sp-background-color-primary-2;

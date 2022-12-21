@@ -50,6 +50,7 @@ const UserInfo = () => {
   };
   useEffect(() => {
     if (data) {
+      console.log(data);
       const file_name_1 = `IMAGE_SUPER_FOOD-${randomLengthText(15)}`;
       fetch(data.avatar)
         .then(async (res) => {
@@ -96,7 +97,7 @@ const UserInfo = () => {
         });
     }
     //eslint-disable-next-line
-  }, []);
+  }, [data]);
   const onSettingData = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
@@ -170,6 +171,7 @@ const UserInfo = () => {
       });
     }
   };
+
   return (
     <div className="content">
       <div className="title">

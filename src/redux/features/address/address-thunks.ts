@@ -101,3 +101,28 @@ export const getAllProvinces = createAsyncThunk(
     };
   }
 );
+
+export const removeAddressUserByCode = createAsyncThunk(
+  "address/remove-address-user-by-code",
+  async (data: { code_address: string }, thunkAPI) => {
+    try {
+      const responsive = await RequestServices.del({
+        method: "DELETE",
+        authorization: "",
+        isAuthRequired: true,
+        contentType: "application/json",
+        url: `${
+          URL +
+          `/address/remove-address-user-by-code?code_address=${data.code_address}`
+        }`,
+      });
+      return {
+        data: responsive.data,
+      };
+    } catch (error) {
+      return thunkAPI.rejectWithValue({
+        message: error,
+      });
+    }
+  }
+);

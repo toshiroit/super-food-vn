@@ -269,12 +269,6 @@ const CartPay = () => {
             </>
           </div>
           <div className="main">
-            <span className="l1">#1 : {locationShip?.latitude.toFixed(4)}</span>
-            <span className="l1">
-              #2 : {locationShip?.longitude.toFixed(4)}
-            </span>
-          </div>
-          <div className="main">
             <div className="main__gift">
               <span>
                 <i className="fa-solid fa-gift fa-size" /> Mã giảm giá
@@ -306,7 +300,15 @@ const CartPay = () => {
                   );
                 })
               ) : (
-                <span>Không có mã giảm giá nào</span>
+                <h4
+                  style={{
+                    textAlign: "center",
+                    fontWeight: 500,
+                    padding: "20px",
+                  }}
+                >
+                  Không có mã giảm giá nào
+                </h4>
               )}
               {/* {dataCartLocal.map((item, key) => {
                 return (

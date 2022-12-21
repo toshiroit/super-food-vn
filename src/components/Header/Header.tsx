@@ -10,16 +10,19 @@ import { onDisplayLogin } from "@/redux/features/display/display-slice";
 import { useAppDispatch, useAppSelector } from "@/redux/hooks/hooks";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 import { useAuthContext } from "src/contexts/Auth/AuthContext";
+import { useSocketContext } from "src/contexts/Auth/SocketContext";
 import Login from "../Login/Login";
 import LoginPhone from "../Login/LoginPhone";
 
 const Header = () => {
   const { data, isLogged, toggleLogged } = useAuthContext();
+  const { socket } = useSocketContext();
   const authError = useAppSelector(selectAuthError);
   const dataCartLocal = useAppSelector(selectCartSliceDataLocal);
   const dispatch = useAppDispatch();
+  const [countNotification, setCountNotification] = useState<number>(0);
   const [localCart, setLocalCart] = useState<number>(0);
   const isDisplayLogin = useAppSelector(selectDisplayIsShowLogin);
   const onFormLogin = () => {
@@ -39,6 +42,29 @@ const Header = () => {
       }
     }
   }, [dataCartLocal]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on("notification_new_product_to_user", (data) => {
+        console.log(data);
+        let result = countNotification + 1;
+        setCountNotification(result);
+        toast.info(`Cửa hàng ${data.name_shop} vừa đăng sản phẩm mới lên  `, {
+          position: "bottom-right",
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
+        socket.off("notification_new_product_to_user");
+      });
+    }
+    //eslint-disable-next-line
+  }, [socket]);
+
   return (
     <>
       <ToastContainer
@@ -218,6 +244,11 @@ const Header = () => {
                             </div>
                           </a>
                         </Link>
+                        {countNotification > 0 ? (
+                          <h4>{countNotification}</h4>
+                        ) : (
+                          ""
+                        )}
                         <ul className="info">
                           <li className="info__item">
                             <i className="fa-solid fa-info fa-size-1" />
@@ -235,10 +266,24 @@ const Header = () => {
                             <i className="fa-solid fa-credit-card fa-size-1" />
                             <p>Quản lí thông tin</p>
                           </li>
-                          <li className="info__item">
-                            <i className="fa-solid fa-credit-card fa-size-1" />
-                            <p>Đồng bộ</p>
-                          </li>
+                          <Link href={clientRoutes.USER_NOTIFY}>
+                            <a>
+                              <li className="info__item">
+                                <i className="fa-solid fa-credit-card fa-size-1" />
+                                <p>Thông báo </p>
+                                {countNotification > 0 ? (
+                                  <h4
+                                    style={{ left: 0, top: "-6px" }}
+                                    className="w"
+                                  >
+                                    {countNotification}
+                                  </h4>
+                                ) : (
+                                  ""
+                                )}
+                              </li>
+                            </a>
+                          </Link>
                           <li className="info__item">
                             <i className="fa-solid fa-credit-card fa-size-1" />
                             <p>Nạp tiền +</p>

@@ -1,12 +1,21 @@
+import { useState } from "react";
+
 const CompletionPhone = ({
   title,
   phone,
+  error,
   back,
+  onSuccess,
 }: {
   title: string;
   phone: string;
+  error: string;
   back: (value: boolean) => void;
+  onSuccess: (value: string) => void;
 }) => {
+  const [code, setCode] = useState<string>("");
+  const onCheckPhone = (value: string) => {};
+  const onBack = (value: boolean) => {};
   return (
     <div className="content">
       <div className="title">
@@ -28,9 +37,15 @@ const CompletionPhone = ({
               {phone.slice(0, 5) + "******"}
             </p>
           </div>
+
           <div className="ipn">
-            <input type="password" name="" id="" />
-            <button>Xác nhận</button>
+            <input
+              type="password"
+              onChange={(e) => setCode(e.target.value)}
+              name=""
+              id=""
+            />
+            <button onClick={() => onSuccess(code)}>Xác nhận</button>
             <button onClick={() => back(false)} type="button">
               Huỷ
             </button>
