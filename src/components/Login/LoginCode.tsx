@@ -78,6 +78,7 @@ const LoginCode = () => {
   };
 
   useEffect(() => {
+    console.log(dataCheckPhone);
     if (dataCheckPhone) {
       if (dataCheckPhone.data === 0) {
         dispatch(

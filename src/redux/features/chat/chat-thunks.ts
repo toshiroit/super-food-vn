@@ -13,7 +13,7 @@ export const getAllMessengerUserByShop = createAsyncThunk(
       contentType: "application/json",
       url: `${
         URL +
-        `messenger/get-all-messenger?code_shop=${data.code_shop}&limit=${data.limit}`
+        `/messenger/get-all-messenger?code_shop=${data.code_shop}&limit=${data.limit}`
       }`,
     });
     return {
@@ -30,7 +30,7 @@ export const sendMessengerChatByUser = createAsyncThunk(
       authorization: "",
       isAuthRequired: true,
       contentType: "application/json",
-      url: `${URL + `messenger/send-messenger?code_shop=${data.code_shop}`}`,
+      url: `${URL + `/messenger/send-messenger?code_shop=${data.code_shop}`}`,
       body: {
         text_chat: data.text_chat,
         type_chat: data.type_chat,
