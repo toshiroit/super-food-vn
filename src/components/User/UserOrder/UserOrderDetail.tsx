@@ -28,11 +28,12 @@ import {
   selectEvaluateSliceDataAdd,
   selectEvaluateSliceDataCheckEvaluate,
 } from "@/redux/features/evaluate/evaluate-selects";
+import { useSocketContext } from "src/contexts/Auth/SocketContext";
 
 const UserOrderDetail = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  const socketRdx = useAppSelector(selectSocketSliceSocket);
+  const { socket } = useSocketContext();
   const dataOrderDetail = useAppSelector(selectOrderSliceDataOrderDetail);
   const dataCheckEvaluate = useAppSelector(
     selectEvaluateSliceDataCheckEvaluate
@@ -70,8 +71,8 @@ const UserOrderDetail = () => {
     //eslint-disable-next-line
   }, [router.query, showEvaluate.is_show, dataOrderAction]);
   useEffect(() => {
-    if (socketRdx) {
-      socketRdx.on("notification_progress", (data) => {
+    if (socket) {
+      socket.on("notification_progress", (data) => {
         if (data.code_order && router.query.code) {
           if (data.code_order === router.query.code) {
             dispatch(
@@ -81,9 +82,11 @@ const UserOrderDetail = () => {
             );
           }
         }
+        socket.off("notification_progress");
       });
     }
-  }, [socketRdx]);
+    //eslint-disable-next-line
+  }, [socket]);
   useEffect(() => {}, [dataOrderAction]);
   const onEvaluate = (is_show: boolean, code_product: string) => {
     setShowEvaluate({
