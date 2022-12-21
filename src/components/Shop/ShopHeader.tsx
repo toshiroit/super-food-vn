@@ -175,10 +175,6 @@ const ShopHeader = () => {
               Theo dõi
             </button>
           )}
-          <button className="follow">
-            <i className="fa-solid fa-user-plus" />
-            Nhắn tin với shop
-          </button>
         </div>
       </div>
       <div className="shopIf__menu">

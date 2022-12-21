@@ -90,49 +90,14 @@ const Footer = () => {
                 </div>
                 <div className="content__main___col">
                   <h4 className="title">Dịch vụ</h4>
-                  <ul className="main">
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                  </ul>
                 </div>
                 <div className="content__main___col">
                   <div className="col_w1">
                     <h4 className="title">Hợp tác</h4>
-                    <ul className="main">
-                      <li className="main__item">Điền dich vụ của bạn vào</li>
-                      <li className="main__item">Điền dich vụ của bạn vào</li>
-                      <li className="main__item">Điền dich vụ của bạn vào</li>
-                      <li className="main__item">Điền dich vụ của bạn vào</li>
-                      <li className="main__item">Điền dich vụ của bạn vào</li>
-                      <li className="main__item">Điền dich vụ của bạn vào</li>
-                      <li className="main__item">Điền dich vụ của bạn vào</li>
-                    </ul>
                   </div>
                 </div>
                 <div className="content__main___col">
                   <h4 className="title">Khu vực</h4>
-                  <ul className="main">
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                    <li className="main__item">Điền dich vụ của bạn vào</li>
-                  </ul>
                 </div>
                 <div className="content__main___col">
                   <h4 className="title">Hỗ trợ / Báo lỗi</h4>

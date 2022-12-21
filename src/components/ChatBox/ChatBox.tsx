@@ -10,8 +10,12 @@ import { ChatDataSend } from "@/types/chat/chat";
 import { selectSocketSliceSocket } from "@/redux/features/socket/socket-selects";
 import { useSocketContext } from "src/contexts/Auth/SocketContext";
 import { useRef } from "react";
+import { useAuthContext } from "src/contexts/Auth/AuthContext";
+import { onDisplayLogin } from "@/redux/features/display/display-slice";
 const ChatBox = ({ data_shop }: { data_shop: any }) => {
   const router = useRouter();
+  const { isLogged } = useAuthContext();
+
   const divMessengerChatRef = useRef<HTMLDivElement>(null);
   const { socket } = useSocketContext();
   const dispatch = useAppDispatch();
@@ -39,7 +43,11 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
     //eslint-disable-next-line
   }, [showBox, statusSend]);
   const onShowChatBox = () => {
-    setShowBox(!showBox);
+    if (isLogged) {
+      setShowBox(!showBox);
+    } else {
+      dispatch(onDisplayLogin({ isShowFixed: true, isShowPhone: true }));
+    }
   };
   const onSendMessengerUser = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
