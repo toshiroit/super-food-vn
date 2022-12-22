@@ -17,7 +17,7 @@ import { useAuthContext } from "src/contexts/Auth/AuthContext";
 import { onDisplayLogin } from "@/redux/features/display/display-slice";
 const ChatBox = ({ data_shop }: { data_shop: any }) => {
   const router = useRouter();
-  const { isLogged } = useAuthContext();
+  const { isLogged, data } = useAuthContext();
   const dataSendChat = useAppSelector(selectChatSliceSendChat);
   const divMessengerChatRef = useRef<HTMLDivElement>(null);
   const { socket } = useSocketContext();
@@ -55,6 +55,7 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
   };
   const onSendMessengerUser = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") {
+      const code_user = data.code_user;
       const query_code = (router.query.code as string) || "";
       if (query_code && query_code) {
         const code_shop = query_code.split(".")[0] || "";
@@ -68,7 +69,7 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
           socket.emit("messenger_send_to_shop", {
             message: "Bạn nhận được 1 tín nhắn mới",
             code_shop: code_shop,
-            code_user: "",
+            code_user: code_user,
           });
         }
       }
