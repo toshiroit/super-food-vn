@@ -5,7 +5,13 @@ export type ChatState = {
     loading: boolean;
     error: SerializedError | null;
   };
+  dataSendMessenger: {
+    data: any;
+    error: any;
+    loading: boolean;
+  };
 };
+
 export type ChatDataSend = {
   type_chat: "1";
   text_chat: string;

@@ -22,15 +22,15 @@ const Checkout = () => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { isLogged } = useAuthContext();
-  useEffect(() => {
-    if (dataCartLocal.length === 0) {
-      router.replace("/cart");
-    } else {
-      if (!isLogged) {
-        router.replace("/cart");
-      }
-    }
-  }, [dataCartLocal, router, isLogged]);
+  // useEffect(() => {
+  //   if (dataCartLocal.length === 0) {
+  //     router.replace("/cart");
+  //   } else {
+  //     if (!isLogged) {
+  //       router.replace("/cart");
+  //     }
+  //   }
+  // }, [dataCartLocal, router, isLogged]);
   useEffect(() => {
     dispatch(getAllPayment());
   }, [dispatch]);

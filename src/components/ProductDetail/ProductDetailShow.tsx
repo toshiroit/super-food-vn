@@ -102,6 +102,7 @@ const ProductDetailShow = () => {
       image: data.image,
     });
   };
+  console.log(data);
   return (
     <>
       <ToastContainer
@@ -426,10 +427,6 @@ const ProductDetailShow = () => {
                         </button>
                       </a>
                     </Link>
-                    <button type="button">
-                      <i className="fa-solid fa-plus fa-size" />
-                      Theo dõi
-                    </button>
                   </div>
                 </div>
               </div>

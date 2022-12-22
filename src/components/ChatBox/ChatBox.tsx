@@ -1,4 +1,7 @@
-import { selectChatSliceDataMessenger } from "@/redux/features/chat/chat-selects";
+import {
+  selectChatSliceDataMessenger,
+  selectChatSliceSendChat,
+} from "@/redux/features/chat/chat-selects";
 import {
   getAllMessengerUserByShop,
   sendMessengerChatByUser,
@@ -15,7 +18,7 @@ import { onDisplayLogin } from "@/redux/features/display/display-slice";
 const ChatBox = ({ data_shop }: { data_shop: any }) => {
   const router = useRouter();
   const { isLogged } = useAuthContext();
-
+  const dataSendChat = useAppSelector(selectChatSliceSendChat);
   const divMessengerChatRef = useRef<HTMLDivElement>(null);
   const { socket } = useSocketContext();
   const dispatch = useAppDispatch();
@@ -28,7 +31,8 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
   };
   useEffect(scrollIntoViewChat, [dataMessenger]);
   useEffect(() => {
-    if (showBox) {
+    console.log(dataSendChat);
+    if (showBox && !dataSendChat.loading) {
       const query_code = (router.query.code as string) || "";
       if (query_code) {
         const code_shop = query_code.split(".");
@@ -41,7 +45,7 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
       }
     }
     //eslint-disable-next-line
-  }, [showBox, statusSend]);
+  }, [showBox, statusSend, dataSendChat]);
   const onShowChatBox = () => {
     if (isLogged) {
       setShowBox(!showBox);
@@ -59,13 +63,13 @@ const ChatBox = ({ data_shop }: { data_shop: any }) => {
           text_chat: textChat || "",
           type_chat: "1",
         };
+        dispatch(sendMessengerChatByUser(dataChat));
         if (socket) {
           socket.emit("messenger_send_to_shop", {
             message: "Bạn nhận được 1 tín nhắn mới",
             code_shop: code_shop,
             code_user: "",
           });
-          dispatch(sendMessengerChatByUser(dataChat));
         }
       }
       setStatusSend(!statusSend);
