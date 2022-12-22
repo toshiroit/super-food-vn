@@ -31,24 +31,6 @@ const Container = ({ children }: ContainerProps) => {
     }
     return result;
   };
-  // useEffect(() => {
-  //   const setupSocketIO = () => {
-  //     if (!socketRdx) {
-  //       const socket = io(configAPI.URL_SOCKET_IO as string, {
-  //         transports: ["websocket", "polling", "flashsocket"],
-  //       });
-  //       socket.on("disconnect", () => {
-  //         dispatch(setSocket({ data_socket: null }));
-  //         setTimeout(setupSocketIO, 3000);
-  //       });
-  //       dispatch(setSocket({ data_socket: socket }));
-  //     }
-  //     socketRdx?.close();
-  //   };
-  //   setupSocketIO();
-  //   // eslint-disable-next-line
-  // }, [isLogged, dispatch]);
-
   useEffect(() => {
     if (socket) {
       socket.on("notification_order_all", (data: any) => {
@@ -67,6 +49,7 @@ const Container = ({ children }: ContainerProps) => {
   }, [socket]);
   useEffect(() => {
     if (socket) {
+      console.log(socket);
       socket.on("notification_progress", (data) => {
         if (data.status === -1) {
           toast.error(`${data.message}`, {

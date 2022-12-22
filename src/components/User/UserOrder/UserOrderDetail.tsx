@@ -82,7 +82,7 @@ const UserOrderDetail = () => {
             );
           }
         }
-        socket.off("notification_progress");
+        //socket.off("notification_progress");
       });
     }
     //eslint-disable-next-line

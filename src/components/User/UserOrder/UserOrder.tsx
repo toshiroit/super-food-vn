@@ -167,16 +167,7 @@ const UserOrder = () => {
         getListOrderByCodeUser({
           page: current_page,
           date_filter: {
-            status_order: "-2",
-          },
-        })
-      );
-    } else if (router.query.type === "5") {
-      dispatch(
-        getListOrderByCodeUser({
-          page: current_page,
-          date_filter: {
-            status_order: "-2",
+            status_order: "-3",
           },
         })
       );
@@ -185,7 +176,7 @@ const UserOrder = () => {
         getListOrderByCodeUser({
           page: current_page,
           date_filter: {
-            status_order: "-3",
+            status_order: "-2",
           },
         })
       );
