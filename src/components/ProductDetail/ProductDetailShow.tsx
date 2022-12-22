@@ -118,7 +118,7 @@ const ProductDetailShow = () => {
         theme="colored"
       />
       <div className="common">
-        <div className="photo">
+        <div style={{ width: "100%" }} className="photo">
           {data && !loading ? (
             <div className="photo__box">
               <div className="image">
